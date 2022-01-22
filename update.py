@@ -5,8 +5,6 @@ import shutil
 from time import sleep
 from zipfile import ZipFile
 
-#fabricurl = requests.get('https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.10.2/fabric-installer-0.10.2.jar', allow_redirects=True)
-
 ################
 ###   Load   ###
 ################
@@ -202,7 +200,7 @@ def backup():
 def downloadInstall():
     print(E+"Note: Due to GitHub limitations, download ETA is not available."+W)
     print("Downloading build" + E+ " (this can take up to 6 minutes)" + W + "...", end='')
-    leb_zip = requests.get('https://github.com/DBTDerpbox/Legacy-Edition-Battle/archive/refs/heads/main.zip', allow_redirects=True)
+    leb_zip = requests.get('https://github.com/DBTDerpbox/Legacy-Edition-Battle/archive/refs/heads/' + cfg_branch+ '.zip', allow_redirects=True)
     open("leb_update_cache/leb.zip", "wb").write(leb_zip.content)
     print(G+"DONE"+W)
     print("Removing old files...", end='')
@@ -230,6 +228,7 @@ def downloadInstall():
     try:
         for filename in os.listdir('Legacy-Edition-Battle-' + cfg_branch):
             shutil.move('Legacy-Edition-Battle-' + cfg_branch + "/" + filename, filename)
+        shutil.rmtree('Legacy-Edition-Battle-' + cfg_branch)
     except Exception:
         pass
     print(G+"DONE"+W)
@@ -238,6 +237,11 @@ def downloadInstall():
 def restore():
     print("Restoring backup...", end='')
     sleep(0.05)
+    try:
+        shutil.rmtree('world/advancements')
+    except OSError as error:
+        print("", end='')
+    
     try:
         shutil.copytree('leb_update_cache/world/advancements', 'world/advancements')
     except OSError as error:
