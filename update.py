@@ -64,6 +64,7 @@ def mainMenu():
         changeBranch()
     elif action == "4":
         webbrowser.open('http://example.com')
+        mainMenu()
     elif action == "5":
         exit()
     else:
@@ -88,9 +89,11 @@ def updater():
     else:
         updater()
     print("")
+    prepare()
     backup()
     downloadInstall()
     restore()
+    clean()
     print()
     print(G+"*** Update successful! ***"+W)
     print("")
@@ -109,7 +112,7 @@ def cleanUpdater():
     print("")
     print(P+"Are you sure you want to ERASE everything and install again?"+W)
     print("")
-    action = input(B+"Input [Y/N]: "+W)
+    action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
     if action.lower() == "y":
         print(E+"User authorised operation, executing..."+W)
          #continue execution
@@ -118,7 +121,9 @@ def cleanUpdater():
     else:
         cleanUpdater()
     print("")
+    prepare()
     downloadInstall()
+    clean()
     print()
     print(G+"*** Clean Update successful! ***"+W)
     print("")
@@ -179,8 +184,8 @@ def changeBranch():
 ###   Functions  ###
 ####################
 
-def backup():
-    print("Backing up...", end='')
+def prepare():
+    print("Preparing files...", end='')
     sleep(0.05)
     try:
         shutil.rmtree("leb_update_cache")
@@ -188,7 +193,12 @@ def backup():
     except OSError as error:
         os.mkdir("leb_update_cache")
         print("", end='')
-        
+    finally:
+        print(G+"DONE"+W)
+
+def backup():
+    print("Backing up...", end='')
+    sleep(0.05)      
     try:
         shutil.copytree('world/advancements', 'leb_update_cache/world/advancements')
     except OSError as error:
@@ -245,16 +255,18 @@ def restore():
     try:
         shutil.copytree('leb_update_cache/world/advancements', 'world/advancements')
     except OSError as error:
-        print(R+error, end='')
+        print("", end='')
+    finally:
+        print(G+"DONE"+W)
         
+    
+def clean():
     try:
         shutil.rmtree("leb_update_cache")
     except OSError as error:
         print(R+error, end='')
-        
-    print(G+"DONE"+W)
-
-
+    finally:
+        print(G+"DONE"+W)
 
 
 mainMenu()
