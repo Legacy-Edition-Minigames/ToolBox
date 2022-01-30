@@ -61,9 +61,9 @@ def readConfig():
         motd_sync = int(file_split[1])
         current_hash = file_split[2]
     except:
-        f = open("updater.cfg", "w")
-        f.write("main#/#1#/#unknown")
-        f.close()
+        raw = open("updater.cfg", "w")
+        raw.write("main#/#1#/#unknown")
+        raw.close()
     finally:
         raw.close()
 
