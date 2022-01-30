@@ -9,7 +9,7 @@ File Info:
     - Safe (backup) update install
     - Clean (erase all) update intall
     - Custom branch download
-    - Color terminal
+    - Color terminal~~
 - LEB-ToolBox.py: Script that contains all-in-one tools to manage your own LEB server.
     Features:
     - Complete Install of LEB setup, including dependencies, enchancements, and LEB resources.
