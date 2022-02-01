@@ -82,55 +82,60 @@ def mainMenu():
     print("")
     print(P+"Choose an action below:"+W)
     print("")
-    print("1. Start LEB Server")
     try:
         f = open("fabric-server-launch.jar")
-        print("2. Update LEB " + E +"(current commit instaled: " +G+current_hash+E+")"+W)
+        print("0. Start LEB Server")
+        print("1. Update LEB " + E +"(current commit instaled: " +G+current_hash+E+")"+W)
         f.close()
     except IOError:
-        print("2. Install LEB")     
-    print("3. Settings")
-    print("4. Change branch (current selected branch: ", B+cfg_branch+W, ")")
+        print("1. Install LEB")     
+    print("2. Settings")
+    print("3. Change branch (current selected branch: ", B+cfg_branch+W, ")")
     print("")
-    print("5. Open GitHub project page")
+    print("4. Open GitHub project page")
     print("")
-    print("6. Exit")
+    print("5. Exit")
     print("")
     action = input(B+"Input: "+W)
-    if action == "1":
-        cls()
-        print(G+"****************************")
-        print("*** LEB Server Launching ***")
-        print("****************************"+W)
-        print("")
-        if platform.system() == "Linux":
-            os.popen('"Run Linux.sh"')
-        elif platform.system() == "Darwin":
-            os.popen('"Run MacOS.sh"')
-        elif platform.system() == "Windows":
-            os.system('"Run Windows.cmd"')
-        print("")
-        print(R+"***************************")
-        print("*** LEB Server Stopping ***")
-        print("***************************"+W)
-        print("")
-        action = input(B+"Press ENTER to return to the main menu . . ."+W)
-        mainMenu()
-    elif action == "2":
+    if action == "0":
+        try:
+            f = open("fabric-server-launch.jar")
+            f.close()
+            cls()
+            print(G+"****************************")
+            print("*** LEB Server Launching ***")
+            print("****************************"+W)
+            print("")
+            if platform.system() == "Linux":
+                os.system("./Run-Linux.sh")
+            elif platform.system() == "Darwin":
+                os.system("Run-MacOS.sh")
+            elif platform.system() == "Windows":
+                os.system("Run-Windows.cmd")
+            print("")
+            print(R+"***************************")
+            print("*** LEB Server Stopping ***")
+            print("***************************"+W)
+            print("")
+            action = input(B+"Press ENTER to return to the main menu . . ."+W)
+            mainMenu()
+        except IOError:
+            mainMenu()  
+    elif action == "1":
         try:
             f = open("fabric-server-launch.jar")
             f.close()
             updateMenu()
         except IOError:
             installMenu()  
-    elif action == "3":
+    elif action == "2":
         settingsMenu()
-    elif action == "4":
+    elif action == "3":
         changeBranch()
-    elif action == "5":
+    elif action == "4":
         webbrowser.open('https://github.com/DBTDerpbox/Legacy-Edition-Battle')
         mainMenu()
-    elif action == "6":
+    elif action == "5":
         exit()
     elif action == "debug download":
         global lebDebugDisableDownloadContent
@@ -146,6 +151,8 @@ def mainMenu():
         reinstall()
     elif action == "debug install":
         installMenu()
+    elif action == "setmotd":
+        setMOTD()
     else:
         mainMenu()
 
@@ -674,15 +681,15 @@ def installMenu_12():
         print("No")
     try:
         if server_scripts == 1:
-            scriptgui = "nogui"
-        else:
             scriptgui = ""
+        else:
+            scriptgui = "nogui"
         #Windows
-        winscript = open("Run Windows.cmd","w")
+        winscript = open("Run-Windows.cmd","w")
         #MacOS
-        macscript = open("Run MacOS.sh","w")
+        macscript = open("Run-MacOS.sh","w")
         #Linux
-        linuxscript = open("Run Linux.sh","w")
+        linuxscript = open("Run-Linux.sh","w")
                            
         winscript.write("@ECHO OFF\njava -Xmx"+ram+"G -Xms"+ram+"G -jar fabric-server-launch.jar "+scriptgui+"\nPAUSE")
         macscript.write("exec java -Xmx"+ram+"G -Xms"+ram+"G -jar fabric-server-launch.jar "+scriptgui)
@@ -691,6 +698,10 @@ def installMenu_12():
         winscript.close()
         macscript.close()
         linuxscript.close()
+
+        #linux chmod
+        if platform.system() == "Linux":
+            os.system("chmod +x Run-Linux.sh")
     except OSError as error:
         print(R+"FAIL (" + str(error) + ")"+W)
     print(B+"] "+W+"Creating server scripts "+G+"DONE"+W)
@@ -834,7 +845,7 @@ def cleanUpdater():
     prepare()
     downloadInstall()
     setMOTD()
-    clean()   
+    clean()
     print()
     print(G+"*** Clean Update successful! ***"+W)
     print("")
@@ -1016,21 +1027,26 @@ def downloadInstall():
         leb_zip = requests.get('https://github.com/DBTDerpbox/Legacy-Edition-Battle/archive/refs/heads/' + cfg_branch+ '.zip', allow_redirects=True)
         open("leb_update_cache/leb.zip", "wb").write(leb_zip.content)
         print(G+"DONE"+W)
-        print("Removing old files...", end='')
-        sleep(0.05)
-        try:
-            shutil.rmtree("world")
-            shutil.rmtree("images")
-            shutil.rmtree("config")
-            os.remove(".gitignore")
-            os.remove("INSTALLATION.md")
-            os.remove("INSTALLATION-MINEHUT.md")
-            os.remove("LICENSE")
-            os.remove("README.md")
-            os.remove("SCREENSHOTS.md")
-        except Exception:
-            pass
-        print(G+"DONE"+W)
+    print("Removing old files "+B+"["+W)
+    sleep(0.05)
+    files = [".gitignore","INSTALLATION.md","INSTALLATION-MINEHUT.md","LICENSE","README.md","SCREENSHOTS.md","CUSTOMPACK.md"]
+    directories = ["world","images","config",".github"]
+    try:
+        #crear arrays uno de archivos y otro de carpetas y hacer loop
+        for file in files:
+            if os.path.isfile(file):
+                print ("Removing " + str(file) + " ...", end='')
+                os.remove(file)
+                print(G+"DONE"+W)
+        for directory in directories:
+            if os.path.isdir(directory):
+                print ("Removing " + str(directory) + " ...", end='')
+                shutil.rmtree(directory)
+                print(G+"DONE"+W)
+    except Exception as error:
+        print (R+"FAIL ("+str(error)+"), stopping code..."+W, end='')
+        pass
+    print(B+"] "+W+"Removing old files"+G+"DONE"+W)
     print("Extracting files...", end='')
     sleep(0.05)
     with ZipFile('leb_update_cache/leb.zip', 'r') as zipObj:
@@ -1042,8 +1058,8 @@ def downloadInstall():
         for filename in os.listdir('Legacy-Edition-Battle-' + cfg_branch):
             shutil.move('Legacy-Edition-Battle-' + cfg_branch + "/" + filename, filename)
         shutil.rmtree('Legacy-Edition-Battle-' + cfg_branch)
-    except Exception:
-        pass
+    except Exception as error:
+        str(error)
     print(G+"DONE"+W)
     
 
@@ -1093,26 +1109,25 @@ def setMOTD():
                 motd_file.write("\nmotd=\u00A79Legacy Edition Battle Public Server \u00A7r\u00A7r\\n" + git_hash)
             motd_file.close()
 
-            minimotd_file = open("config\MiniMOTD\main.conf", "r")
+            minimotd_file = open("config/MiniMOTD/main.conf", "r")
             content = minimotd_file.read()
             old_motd = stringTF("<gradient:#d8d8d8:#2bc7ac><italic>","</gradient>",content)
             new_motd = content.replace(old_motd, git_hash)
-
-            minimotd_file = open("config\MiniMOTD\main.conf", "w")
+            minimotd_file.close()
+            
+            minimotd_file = open("config/MiniMOTD/main.conf", "w")
             minimotd_file.write(new_motd)
             minimotd_file.close()
-
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ") >>> Did leb_update_cache/leb.zip erase itself, or does this branch not contain a miniMOTD/server.properties config file?"+W)
-            pass
         finally:
             writeConfig(cfg_branch,motd_sync,leb_zip.comment.decode("utf-8")[:6])
 
 def reinstall():
     print("Removing "+R+"ALL FILES"+B+" ["+W)
     sleep(0.05)
-    files = [".gitignore","INSTALLATION.md","INSTALLATION-MINEHUT.md","LICENSE","README.md","SCREENSHOTS.md","CUSTOMPACK.md","installer.py","banned-ips.json","banned-players.json","eula.txt","fabric-server-launch.jar","fabric-server-launcher.properties","ops.json", '"Run Linux.sh"','"Run MacOS.sh"','"Run Windows.cmd"',"server.jar","server.properties","usercache.json","whitelist.json"]
+    files = [".gitignore","INSTALLATION.md","INSTALLATION-MINEHUT.md","LICENSE","README.md","SCREENSHOTS.md","CUSTOMPACK.md","installer.py","banned-ips.json","banned-players.json","eula.txt","fabric-server-launch.jar","fabric-server-launcher.properties","ops.json","Run-Linux.sh","Run-MacOS.sh","Run-Windows.cmd","server.jar","server.properties","usercache.json","whitelist.json"]
     directories = ["world","images","config",".github",".fabric","libraries","logs","mods"]
     try:
         #crear arrays uno de archivos y otro de carpetas y hacer loop
@@ -1130,6 +1145,7 @@ def reinstall():
         print (R+"FAIL ("+str(error)+"), stopping code..."+W, end='')
         pass
     print(B+"] "+W+"Removing "+R+"ALL FILES "+G+"DONE"+W)
+    sleep(2)
 
 
 
