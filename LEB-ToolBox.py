@@ -31,7 +31,7 @@ E  = '\033[30;1m' #gray
 
 
 ####### PROGRAM VERSION #######
-ver_program = R+"Pre-Release 1"+W
+ver_program = R+"Pre-Release 3"+W
 ####### PROGRAM VERSION #######
 
 cfg_branch = "main"
@@ -39,6 +39,7 @@ current_hash = R+"unknown"
 
 fabric = 0
 dependencies = 0
+optimize = 0
 upnp = 0
 viafabric = 0
 minimotd = 0
@@ -192,6 +193,7 @@ def installMenu_2():
 
     global fabric
     global dependencies
+    global optimize
     global upnp
     global viafabric
     global server_scripts
@@ -205,6 +207,7 @@ def installMenu_2():
     if action == "1":
         fabric = 1
         dependencies = 1
+        optimize = 1
         upnp = 1
         viafabric = 1
         minimotd = 1
@@ -214,6 +217,7 @@ def installMenu_2():
     elif action == "2":
         fabric = 1
         dependencies = 1
+        optimize = 2
         upnp = 2
         viafabric = 2
         minimotd = 2
@@ -223,6 +227,7 @@ def installMenu_2():
     elif action == "3":
         fabric = 0
         dependencies = 0
+        optimize = 0
         upnp = 0
         viafabric = 0
         minimotd = 0
@@ -289,21 +294,53 @@ def installMenu_4():
         action = input(B+"Input " + G + "[Y/N]" + B + ": "+W) 
         if action.lower() == "y":
             dependencies = 1
-            installMenu_5()
+            installMenu_4_B()
         elif action.lower() == "n":
             dependencies = 2
-            installMenu_5()
+            installMenu_4_B()
         else:
             installMenu_4()
     else:
-        installMenu_5()
+        installMenu_4_B()
 
+def installMenu_4_B():
+    cls()
+    print("=======================================================")
+    print(G+"Install LEB"+W)
+    print(G+"Enchancements (1/7)"+W)
+    print("=======================================================")
+    print("")
+    print(B+"Do you want to install "+G+"Optimization mods"+B+"?"+W)
+    print("LEB Lobby loading delay and memory usage can be reduced with the help of some lightweight modifications to the server-side code.")
+    print("Using this will optimize the server to use less of your system's resources without any drawbacks.")
+    print(B+"The list of optimization mods contains:")
+    print(G+"- FerriteCore")
+    print("- Hydrogen")
+    print("- Lithium"+W)
+    print("")
+    print(E+"This is an optional enchancement."+W)
+    print("")
+    print(P+"Do you want to install this component?:"+W)
+    print("")
+    global optimize
+    if optimize == 0:
+        action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
+        if action.lower() == "y":
+            optimize = 1
+            installMenu_5()
+        elif action.lower() == "n":
+            optimize = 2
+            installMenu_5()
+        else:
+            installMenu_4_B()
+    else:
+        installMenu_5()
 
 def installMenu_5():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (1/6)"+W)
+    print(G+"Enchancements (2/7)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"UPnP"+B+"?"+W)
@@ -334,7 +371,7 @@ def installMenu_6():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (2/6)"+W)
+    print(G+"Enchancements (3/7)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"ViaFabric"+B+"?"+W)
@@ -363,7 +400,7 @@ def installMenu_6_2():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (3/6)"+W)
+    print(G+"Enchancements (4/6)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"MiniMOTD"+B+"?"+W)
@@ -393,7 +430,7 @@ def installMenu_7():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (4/6)"+W)
+    print(G+"Enchancements (5/7)"+W)
     print("=======================================================")
     print("")
     print(B+"How much "+G+"RAM"+B+" do you want to allocate to LEB?"+W)
@@ -418,7 +455,7 @@ def installMenu_8():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (5/6)"+W)
+    print(G+"Enchancements (6/7)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"MOTD Sync"+B+"?"+W)
@@ -453,7 +490,7 @@ def installMenu_9():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (6/6)"+W)
+    print(G+"Enchancements (7/7)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"Server GUI"+B+"?"+W)
@@ -530,6 +567,7 @@ def installMenu_11():
 def installMenu_12():
     global fabric
     global dependencies
+    global optimize
     global upnp
     global viafabric
     global minimotd
@@ -624,6 +662,43 @@ def installMenu_12():
         print(B+"] "+W+"Dependencies "+G+"DONE"+W)
     else:
         print(R+"Skipping Dependencies... DEPENDENCIES ARE REQUIRED COMPONENTS, BE SURE TO INSTALL THEM MUNUALLY AFTERWARDS"+W)
+        sleep(0.05)
+    #optimize
+    if optimize == 1:
+        print("Downloading Optimizations "+B+"["+W)
+        sleep(0.05)
+        try:
+            os.mkdir('mods')
+        except OSError as error:
+            print("", end='')
+            pass
+        try:
+            print("Downloading FerriteCore...", end='')
+            sleep(0.05)
+            ferritecoreurl = requests.get('https://cdn.modrinth.com/data/uXXizFIs/versions/3.1.0/ferritecore-3.1.0-fabric.jar', allow_redirects=True)
+            open('mods/ferritecore-3.1.0-fabric.jar', 'wb').write(ferritecoreurl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        try:
+            print("Downloading Hydrogen...", end='')
+            sleep(0.05)
+            hydrogenurl = requests.get('https://cdn.modrinth.com/data/AZomiSrC/versions/mc1.17.1-0.3.1/hydrogen-fabric-mc1.17.1-0.3.jar', allow_redirects=True)
+            open('mods/hydrogen-fabric-mc1.17.1-0.3.jar', 'wb').write(hydrogenurl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        try:
+            print("Downloading Lithium...", end='')
+            sleep(0.05)
+            lithiumurl = requests.get('https://cdn.modrinth.com/data/gvQqBUqZ/versions/mc1.17.1-0.7.5/lithium-fabric-mc1.17.1-0.7.5.jar', allow_redirects=True)
+            open('mods/lithium-fabric-mc1.17.1-0.7.5.jar', 'wb').write(lithiumurl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        print(B+"] "+W+"Optimizations "+G+"DONE"+W)
+    else:
+        print(E+"Skipping Optimizations..."+W)
         sleep(0.05)
     #upnp
     if upnp == 1:
@@ -1046,7 +1121,7 @@ def downloadInstall():
     except Exception as error:
         print (R+"FAIL ("+str(error)+"), stopping code..."+W, end='')
         pass
-    print(B+"] "+W+"Removing old files"+G+"DONE"+W)
+    print(B+"] "+W+"Removing old files "+G+"DONE"+W)
     print("Extracting files...", end='')
     sleep(0.05)
     with ZipFile('leb_update_cache/leb.zip', 'r') as zipObj:
