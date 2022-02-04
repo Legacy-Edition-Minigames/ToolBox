@@ -14,6 +14,7 @@ File Info:
     Features:
     - Complete Install of LEB setup, including dependencies, enchancements, and LEB resources.
     - Multiple Install presets
+    - Step-to-step confirmation download and install for every component available
     - RAM configuration (during setup)
     - Auto MOTD Sync (featuring commit version)
     - Update (safe) server with backups, Clean (destructive) update and Reinstall LEB scripts
