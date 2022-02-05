@@ -6,6 +6,7 @@ from time import sleep
 from zipfile import ZipFile
 import os.path
 import platform
+from sys import exit
 
 
 def stringTF(start,end,s):
