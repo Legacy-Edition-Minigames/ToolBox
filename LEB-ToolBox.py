@@ -32,7 +32,7 @@ E  = '\033[30;1m' #gray
 
 
 ####### PROGRAM VERSION #######
-ver_program = R+"Pre-Release 3"+W
+ver_program = R+"Pre-Release 4"+W
 ####### PROGRAM VERSION #######
 
 cfg_branch = "main"
