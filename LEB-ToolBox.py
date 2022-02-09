@@ -21,7 +21,7 @@ def cls():
 ################
 ###   Load   ###
 ################
-    
+
 W  = '\033[0m'  # white
 R  = '\033[31m' # red
 G  = '\033[32m' # green
@@ -73,43 +73,16 @@ def readConfig():
         raw.close()
     finally:
         raw.close()
+if os.name=='nt':
+    os.system('title LEB-ToolBox v'+str(cnt_program))
 
 readConfig()
-
-req = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.py', allow_redirects=True)
-data = (req.content).decode("utf-8")
-info = data.split("\n")
-for line in info:
-    if "cnt_program =" in line:
-        print(line)
-        ver1 = float(line.split("= ",1)[1])
-        print(ver1)
-        if ver1 > cnt_program:
-            online_count_program = ver1
-            print("1")
-        else:
-            print("0")
-
-input("")
-
 ################
 ###   GUIs   ###
 ################
 
 def mainMenu():
-    cls()
-    rmOldVer()
     readConfig()
-    if check_for_updates == 1:
-        result = checkForUpdates()
-        if result == 1:
-            print(G+"New LEB-ToolBox v"+online_count_program+" update has been found!"+W)
-            print("")
-            print(P+"Do you want to go to the LEB-ToolBox update Menu?"+W)
-            print("")
-            action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
-            if action.lower() == "y":
-                updateLEBTB()
     cls()
     print("=======================================================")
     print(G+"Legacy Edition Battle (LEB) ToolBox"+W)
@@ -191,6 +164,8 @@ def mainMenu():
     elif action == "debug cfu":
         var111 = checkForUpdates()
         print(str(var111))
+        input("")
+        mainMenu()
     else:
         mainMenu()
 
@@ -1037,7 +1012,7 @@ def changeBranch():
         cfg_branch = "vanilla"
     else:
         changeBranch()
-    writeConfig(cfg_branch,motd_sync,current_hash)
+    writeConfig(cfg_branch,motd_sync,current_hash,check_for_updates)
     mainMenu()
 
 
@@ -1048,6 +1023,10 @@ def settingsMenu():
         response_motd = G+"TRUE"+W
     else:
         response_motd = R+"FALSE"+W
+    if check_for_updates == 1:
+        response_cfu = G+"TRUE"+W
+    else:
+        response_cfu = R+"FALSE"+W
     cls()
     print("=======================================================")
     print(G+"Settings"+W)
@@ -1062,14 +1041,16 @@ def settingsMenu():
     print(E+"   Allows you to change the build branch the server is running on."+W)
     print("2. Update LEB-ToolBox (current version: "+ver_program+W+")")
     print(E+"   Update LEB-ToolBox to the latest stable version available at GitHub."+W)
+    print("3. Check for LEB-ToolBox updates at startup ("+response_cfu+")"+W)
+    print(E+"   This will check if there are any updates available for LEB-ToolBox when you start the application."+W)
     print("")
     print(B+"Server Settings:"+W)
     print("")
-    print("3. Use MOTD Sync ("+response_motd+")"+W)
+    print("4. Use MOTD Sync ("+response_motd+")"+W)
     print(E+"   Automatically syncs the MOTD of the server with the commit version currently installed."+W)
     print("")
     print("")
-    print("4. Exit")
+    print("5. Exit")
     print("")
     print(P+"Choose an action below:"+W)
     print("")
@@ -1079,22 +1060,38 @@ def settingsMenu():
     else:
         response_motd = 0
         
+    if check_for_updates == 1:
+        response_cfu = 1
+    else:
+        response_cfu = 0
+        
     if action == "1":
         changeBranch()
     elif action == "2":
         updateLEBTB()
     elif action == "3":
         print("")
-        if response_motd == 1:
-            writeConfig(cfg_branch,"0",current_hash)
-            print("MOTD Sync has been "+R+"disabled"+W+" successfully.")
+        if response_cfu == 1:
+            writeConfig(cfg_branch,motd_sync,current_hash,"0")
+            print("CFU at startup has been "+R+"disabled"+W+" successfully.")
         else:
-            writeConfig(cfg_branch,"1",current_hash)
-            print("MOTD Sync has been "+G+"enabled"+W+" successfully.")   
+            writeConfig(cfg_branch,motd_sync,current_hash,"1")
+            print("CFU at startup has been "+G+"enabled"+W+" successfully.")   
         print("")
         sleep(2)
         settingsMenu()
     elif action == "4":
+        print("")
+        if response_motd == 1:
+            writeConfig(cfg_branch,"0",current_hash,check_for_updates)
+            print("MOTD Sync has been "+R+"disabled"+W+" successfully.")
+        else:
+            writeConfig(cfg_branch,"1",current_hash,check_for_updates)
+            print("MOTD Sync has been "+G+"enabled"+W+" successfully.")   
+        print("")
+        sleep(2)
+        settingsMenu()
+    elif action == "5":
         mainMenu()
     else:
         settingsMenu()
@@ -1133,15 +1130,14 @@ def updateLEBTB():
         action = input(R+"Press ENTER to return . . ."+W)
         settingsMenu()
     elif result == 1:
-        print(G+"New update v."+online_count_program+" available!")
+        print(G+"New update v"+str(online_count_program)+" available!")
         print("")
         print(P+"Do you want to update now?"+W)
         print("")
         action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
         if action.lower() == "y":
             ### LEB-ToolBox update
-            print(E+"User authorised operation, executing..."+W)
-            print("Preparing to update LEB-ToolBox...")
+            print(E+"Preparing to update LEB-ToolBox..."+W)
             print("Downloading LEB-ToolBox...", end="")
             pgrmfile = ""
             try:
@@ -1154,14 +1150,15 @@ def updateLEBTB():
                 elif platform.system() == "Windows":
                     prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.exe', allow_redirects=True)
                     open("LEB-ToolBox-new.exe", "wb").write(prgrmfile.content)
+                print(G+"DONE"+W)
             except Exception as error:
-                print(R+"FAIL ("+error+")"+W)
-
+                print(R+"FAIL ("+str(error)+")"+W)
             print(P+"Do you want to keep the old version (in case the newer version breaks)?"+W)
             print("")
             action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
             try:
                 if action.lower() == "y":
+                    print("Keeping old version...", end="")
                     if platform.system() == "Linux":
                         os.rename("LEB-ToolBox.sh", "LEB-ToolBox_old.sh")
                     elif platform.system() == "Darwin":
@@ -1169,16 +1166,26 @@ def updateLEBTB():
                     elif platform.system() == "Windows":
                         os.rename("LEB-ToolBox.exe", "LEB-ToolBox_old.exe")
                 else:
+                    print("Marking DELETE_ME to old version...", end="")
                     if platform.system() == "Linux":
                         os.rename("LEB-ToolBox.sh", "LEB-ToolBox_DELETE_ME.sh")
                     elif platform.system() == "Darwin":
                         os.rename("LEB-ToolBox.sh", "LEB-ToolBox_DELETE_ME.sh")
                     elif platform.system() == "Windows":
                         os.rename("LEB-ToolBox.exe", "LEB-ToolBox_DELETE_ME.exe")
+                    print(G+"DONE"+W)
             except Exception as error:
-                print(R+"FAIL ("+error+")"+W)
-            
-            print(G+"DONE"+W)
+                print(R+"FAIL ("+str(error)+")"+W)
+            try:
+                print("Renaming new update file...", end="")
+                if platform.system() == "Linux":
+                    os.rename("LEB-ToolBox-new.sh", "LEB-ToolBox.sh")
+                elif platform.system() == "Darwin":
+                    os.rename("LEB-ToolBox-new.sh", "LEB-ToolBox.sh")
+                elif platform.system() == "Windows":
+                    os.rename("LEB-ToolBox-new.exe", "LEB-ToolBox.exe")
+            except Exception as error:
+                print(R+"FAIL ("+str(error)+")"+W)
             print("")
             print(O+"***" +W+"LEB-ToolBox will restart in 5 . . ."+O+" ***"+W)
             print("")
@@ -1204,10 +1211,10 @@ def updateLEBTB():
 ####################
 ###   Functions  ###
 ####################
-def writeConfig(var_branch,var_motd_sync,var_hash):
+def writeConfig(var_branch,var_motd_sync,var_hash,var_cfu):
     try:
         f = open("updater.cfg", "w")
-        f.write(var_branch+"#/#"+str(var_motd_sync)+"#/#"+var_hash)
+        f.write(var_branch+"#/#"+str(var_motd_sync)+"#/#"+var_hash+"#/#"+str(var_cfu))
     finally:
         f.close()
 
@@ -1366,19 +1373,20 @@ def reinstall():
 
 def checkForUpdates():
     try:
-        info = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.py', allow_redirects=True)
-        with info.content as py_file:
-            for line in lines:
-                if "cnt_program =" in line:
-                    ver1 = float(line.split("= ",1)[1])
-                    if ver1 > cnt_program:
-                        global online_count_program
-                        online_count_program = ver1
-                        return 1
-                    else:
-                        return 0
+        req = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.py', allow_redirects=True)
+        data = (req.content).decode("utf-8")
+        info = data.split("\n")
+        for line in info:
+            if "cnt_program = " in line:
+                ver1 = float(line.split("cnt_program = ")[1])
+                if ver1 > cnt_program:
+                    global online_count_program
+                    online_count_program = ver1
+                    return 1
+                else:
+                    return 0
     except Exception as error:
-        return error
+        return -1
 
 
 def rmOldVer():
@@ -1386,18 +1394,34 @@ def rmOldVer():
         try:
             os.remove("LEB-ToolBox_DELETE_ME.exe")
         except Exception as error:
-            print(R+error+W)
+            print(R+str(error)+W)
             print("")
             sleep(3)
     if os.path.isfile('LEB-ToolBox_DELETE_ME.sh'):
         try:
             os.remove("LEB-ToolBox_DELETE_ME.sh")
         except Exception as error:
-            print(R+error+W)
+            print(R+str(error)+W)
             print("")
             sleep(3)
 
-    
+
+#pre-initialization check for updates (cfu) routine
+rmOldVer()
+cls()
+if check_for_updates == 1:
+    result = checkForUpdates()
+    if result == 1:
+        print(O+"*******************************************************"+W)
+        print(G+"New LEB-ToolBox v"+str(online_count_program)+" update has been found!"+W)
+        print(O+"*******************************************************"+W)
+        print("")
+        print(P+"Do you want to go to the LEB-ToolBox update Menu?"+W)
+        print("")
+        action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
+        if action.lower() == "y":
+            updateLEBTB()
+
 # The one line of code that makes this all work #
 mainMenu()
 
