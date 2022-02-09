@@ -22,3 +22,4 @@ File Info:
     - Save and reading functions to cfg file, to keep track of user settings.
     - Multiple OS support (launching and creating run files)
     - Multi-Color terminal support
+    - Auto-updater for LEB-ToolBox
