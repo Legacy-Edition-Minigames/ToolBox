@@ -1143,10 +1143,10 @@ def updateLEBTB():
             try:
                 if platform.system() == "Linux":
                     prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.sh', allow_redirects=True)
-                    open("LEB-ToolBox-new.sh", "wb").write(prgrmfile.content)
+                    open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Darwin":
                     prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.sh', allow_redirects=True)
-                    open("LEB-ToolBox-new.sh", "wb").write(prgrmfile.content)
+                    open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Windows":
                     prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.exe', allow_redirects=True)
                     open("LEB-ToolBox-new.exe", "wb").write(prgrmfile.content)
@@ -1160,17 +1160,17 @@ def updateLEBTB():
                 if action.lower() == "y":
                     print("Keeping old version...", end="")
                     if platform.system() == "Linux":
-                        os.rename("LEB-ToolBox.sh", "LEB-ToolBox_old.sh")
+                        os.rename("LEB-ToolBox", "LEB-ToolBox_old")
                     elif platform.system() == "Darwin":
-                        os.rename("LEB-ToolBox.sh", "LEB-ToolBox_old.sh")
+                        os.rename("LEB-ToolBox", "LEB-ToolBox_old")
                     elif platform.system() == "Windows":
                         os.rename("LEB-ToolBox.exe", "LEB-ToolBox_old.exe")
                 else:
                     print("Marking DELETE_ME to old version...", end="")
                     if platform.system() == "Linux":
-                        os.rename("LEB-ToolBox.sh", "LEB-ToolBox_DELETE_ME.sh")
+                        os.rename("LEB-ToolBox", "LEB-ToolBox_DELETE_ME")
                     elif platform.system() == "Darwin":
-                        os.rename("LEB-ToolBox.sh", "LEB-ToolBox_DELETE_ME.sh")
+                        os.rename("LEB-ToolBox", "LEB-ToolBox_DELETE_ME")
                     elif platform.system() == "Windows":
                         os.rename("LEB-ToolBox.exe", "LEB-ToolBox_DELETE_ME.exe")
                     print(G+"DONE"+W)
@@ -1179,9 +1179,9 @@ def updateLEBTB():
             try:
                 print("Renaming new update file...", end="")
                 if platform.system() == "Linux":
-                    os.rename("LEB-ToolBox-new.sh", "LEB-ToolBox.sh")
+                    os.rename("LEB-ToolBox-new", "LEB-ToolBox")
                 elif platform.system() == "Darwin":
-                    os.rename("LEB-ToolBox-new.sh", "LEB-ToolBox.sh")
+                    os.rename("LEB-ToolBox-new", "LEB-ToolBox")
                 elif platform.system() == "Windows":
                     os.rename("LEB-ToolBox-new.exe", "LEB-ToolBox.exe")
             except Exception as error:
@@ -1192,9 +1192,9 @@ def updateLEBTB():
             sleep(5)
             print(E+"Restarting..."+W)
             if platform.system() == "Linux":
-                os.startfile("LEB-ToolBox.sh")
+                os.startfile("LEB-ToolBox")
             elif platform.system() == "Darwin":
-                os.startfile("LEB-ToolBox.sh")
+                os.startfile("LEB-ToolBox")
             elif platform.system() == "Windows":
                 os.startfile("LEB-ToolBox.exe")
             exit()
@@ -1397,9 +1397,9 @@ def rmOldVer():
             print(R+str(error)+W)
             print("")
             sleep(3)
-    if os.path.isfile('LEB-ToolBox_DELETE_ME.sh'):
+    if os.path.isfile('LEB-ToolBox_DELETE_ME'):
         try:
-            os.remove("LEB-ToolBox_DELETE_ME.sh")
+            os.remove("LEB-ToolBox_DELETE_ME")
         except Exception as error:
             print(R+str(error)+W)
             print("")
