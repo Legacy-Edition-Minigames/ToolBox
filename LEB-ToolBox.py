@@ -32,7 +32,7 @@ E  = '\033[30;1m' #gray
 
 
 ####### PROGRAM VERSION #######
-cnt_program = 0.9
+cnt_program = 1.0
 ver_program = G+"v"+str(cnt_program)+W
 ####### PROGRAM VERSION #######
 
@@ -40,7 +40,7 @@ cfg_branch = "main"
 current_hash = R+"unknown"
 check_for_updates = 0
 
-online_cnt_program = 0
+online_count_program = 0
 fabric = 0
 dependencies = 0
 optimize = 0
@@ -80,13 +80,12 @@ req = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/m
 data = (req.content).decode("utf-8")
 info = data.split("\n")
 for line in info:
-    print(line)
     if "cnt_program =" in line:
         print(line)
         ver1 = float(line.split("= ",1)[1])
         print(ver1)
         if ver1 > cnt_program:
-            online_cnt_program = ver1
+            online_count_program = ver1
             print("1")
         else:
             print("0")
@@ -104,7 +103,7 @@ def mainMenu():
     if check_for_updates == 1:
         result = checkForUpdates()
         if result == 1:
-            print(G+"New LEB-ToolBox v"+online_cnt_program+" update has been found!"+W)
+            print(G+"New LEB-ToolBox v"+online_count_program+" update has been found!"+W)
             print("")
             print(P+"Do you want to go to the LEB-ToolBox update Menu?"+W)
             print("")
@@ -1134,7 +1133,7 @@ def updateLEBTB():
         action = input(R+"Press ENTER to return . . ."+W)
         settingsMenu()
     elif result == 1:
-        print(G+"New update v."+online_cnt_program+" available!")
+        print(G+"New update v."+online_count_program+" available!")
         print("")
         print(P+"Do you want to update now?"+W)
         print("")
@@ -1373,8 +1372,8 @@ def checkForUpdates():
                 if "cnt_program =" in line:
                     ver1 = float(line.split("= ",1)[1])
                     if ver1 > cnt_program:
-                        global online_cnt_program
-                        online_cnt_program = ver1
+                        global online_count_program
+                        online_count_program = ver1
                         return 1
                     else:
                         return 0
