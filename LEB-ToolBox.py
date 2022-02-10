@@ -32,7 +32,7 @@ E  = '\033[30;1m' #gray
 
 
 ####### PROGRAM VERSION #######
-cnt_program = 1.0
+cnt_program = 0.9
 ver_program = G+"v"+str(cnt_program)+W
 ####### PROGRAM VERSION #######
 
@@ -1180,6 +1180,7 @@ def updateLEBTB():
                 print("Renaming new update file...", end="")
                 if platform.system() == "Linux":
                     os.rename("LEB-ToolBox-new", "LEB-ToolBox")
+                    os.system("chmod +x LEB-ToolBox")
                 elif platform.system() == "Darwin":
                     os.rename("LEB-ToolBox-new", "LEB-ToolBox")
                 elif platform.system() == "Windows":
@@ -1408,6 +1409,7 @@ def rmOldVer():
 
 #pre-initialization check for updates (cfu) routine
 rmOldVer()
+readConfig()
 cls()
 if check_for_updates == 1:
     result = checkForUpdates()
