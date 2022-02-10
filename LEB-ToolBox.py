@@ -1346,7 +1346,7 @@ def setMOTD():
         except OSError as error:
             print(R+"FAIL (" + str(error) + ") >>> Did leb_update_cache/leb.zip erase itself, or does this branch not contain a miniMOTD/server.properties config file?"+W)
         finally:
-            writeConfig(cfg_branch,motd_sync,leb_zip.comment.decode("utf-8")[:6])
+            writeConfig(cfg_branch,motd_sync,leb_zip.comment.decode("utf-8")[:6],check_for_updates)
 
 def reinstall():
     print("Removing "+R+"ALL FILES"+B+" ["+W)
