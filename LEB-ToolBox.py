@@ -32,7 +32,7 @@ E  = '\033[30;1m' #gray
 
 
 ####### PROGRAM VERSION #######
-cnt_program = 0.9
+cnt_program = 1.0
 ver_program = G+"v"+str(cnt_program)+W
 ####### PROGRAM VERSION #######
 
