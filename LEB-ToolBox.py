@@ -32,7 +32,7 @@ E  = '\033[30;1m' #gray
 
 
 ####### PROGRAM VERSION #######
-cnt_program = 1.0
+cnt_program = 0.9
 ver_program = G+"v"+str(cnt_program)+W
 ####### PROGRAM VERSION #######
 
@@ -1142,10 +1142,10 @@ def updateLEBTB():
             pgrmfile = ""
             try:
                 if platform.system() == "Linux":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.sh', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox', allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Darwin":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.sh', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox', allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Windows":
                     prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.exe', allow_redirects=True)
