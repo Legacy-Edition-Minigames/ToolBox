@@ -32,7 +32,7 @@ E  = '\033[30;1m' #gray
 
 
 ####### PROGRAM VERSION #######
-cnt_program = 1.0
+cnt_program = 0.9
 ver_program = G+"v"+str(cnt_program)+W
 ####### PROGRAM VERSION #######
 
@@ -1193,9 +1193,9 @@ def updateLEBTB():
             sleep(5)
             print(E+"Restarting..."+W)
             if platform.system() == "Linux":
-                os.startfile("LEB-ToolBox")
+                os.system("./LEB-ToolBox")
             elif platform.system() == "Darwin":
-                os.startfile("LEB-ToolBox")
+                os.system("./LEB-ToolBox")
             elif platform.system() == "Windows":
                 os.startfile("LEB-ToolBox.exe")
             exit()
