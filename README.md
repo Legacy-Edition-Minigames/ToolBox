@@ -13,3 +13,9 @@ All-in-one tools to manage your own LEB server..
 - Multiple OS support (launching and creating run files)
 - Multi-Color terminal support
 - Auto-updater for LEB-ToolBox
+
+##Authors
+
+Orginial LEB Installer and LEB - [DBTDerpbox](https://github.com/DBTDerpbox)
+
+Updating the installer to ToolBox, making it generally easier to use - [PiporGames](https://github.com/PiporGames)
