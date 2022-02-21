@@ -1142,13 +1142,13 @@ def updateLEBTB():
             pgrmfile = ""
             try:
                 if platform.system() == "Linux":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/DBTDerpbox/LEB-ToolBox/main/LEB-ToolBox', allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Darwin":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/DBTDerpbox/LEB-ToolBox/main/LEB-ToolBox', allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Windows":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.exe', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/DBTDerpbox/LEB-ToolBox/main/LEB-ToolBox.exe', allow_redirects=True)
                     open("LEB-ToolBox-new.exe", "wb").write(prgrmfile.content)
                 print(G+"DONE"+W)
             except Exception as error:
@@ -1374,7 +1374,7 @@ def reinstall():
 
 def checkForUpdates():
     try:
-        req = requests.get('https://raw.githubusercontent.com/PiporGames/LEB-Installer/main/LEB-ToolBox.py', allow_redirects=True)
+        req = requests.get('https://raw.githubusercontent.com/DBTDerpbox/LEB-ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
         data = (req.content).decode("utf-8")
         info = data.split("\n")
         for line in info:
