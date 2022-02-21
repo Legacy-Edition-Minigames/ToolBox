@@ -1,5 +1,5 @@
 # LEB ToolBox
-All-in-one tools to manage your own LEB server..
+All-in-one tools to manage your own LEB server.
 
 ## Features
 - Complete Install of LEB setup, including dependencies, enchancements, and LEB resources.
@@ -14,7 +14,7 @@ All-in-one tools to manage your own LEB server..
 - Multi-Color terminal support
 - Auto-updater for LEB-ToolBox
 
-##Authors
+## Authors
 
 Orginial LEB Installer and LEB - [DBTDerpbox](https://github.com/DBTDerpbox)
 
