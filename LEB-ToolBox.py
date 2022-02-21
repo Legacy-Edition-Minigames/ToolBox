@@ -293,6 +293,7 @@ def installMenu_4():
     print(G+"- Fabric API")
     print("- Switchable Resource Packs")
     print("- Extended Structures")
+    print("- Take Everything")
     print("- SnowballKB")
     print("- Starlight"+W)
     print("Besides upgrading the dependencies version for extraordinary circumstances, you should always install this component.")
@@ -652,6 +653,14 @@ def installMenu_12():
             sleep(0.05)
             extstructureurl = requests.get('https://github.com/kyrptonaught/Extended-Structures/releases/download/1.0.0/extendedstructures-1.0.0-1.17.1.jar', allow_redirects=True)
             open('mods/extendedstructures-1.0.0-1.17.1.jar', 'wb').write(extstructureurl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        try:
+            print("Downloading Take Everything...", end='')
+            sleep(0.05)
+            takeallurl = requests.get('https://github.com/kyrptonaught/Take-Everything/releases/download/1.0.1/takeeverything-1.0.1-1.17.1.jar', allow_redirects=True)
+            open('mods/takeeverything-1.0.1-1.17.1.jar', 'wb').write(takeallurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
