@@ -32,13 +32,15 @@ E  = '\033[30;1m' #gray
 
 
 ####### PROGRAM VERSION #######
-cnt_program = 0.9
+cnt_program = 1.0
 ver_program = G+"v"+str(cnt_program)+W
+
+ver_info = O+"LEB-ToolBox "+ver_program+" changelog:\n"+W+"-"+G+" NEW "+W+"configuration file upgrader; no more settings lost when updating the program.\n"+W+"-"+G+" NEW"+W+" Legacy Resetter option is now avilable. Read the documentation or make a new server install to know more.\n"+W+"-"+G+" NEW "+W+"Dependecies required.\n"+W+"-"+G+" NEW "+W+"Now every update displays the changelog when launching for the first time, or before updating to a new version.\n"+W+"-"+G+" NEW "+W+"Welcome message.\n"+W+"-"+G+" NEW "+W+"See Changelog option in Main Menu.\n"+W
 ####### PROGRAM VERSION #######
 
 cfg_branch = "main"
 current_hash = R+"unknown"
-check_for_updates = 0
+check_for_updates = -1
 
 online_count_program = 0
 fabric = 0
@@ -49,7 +51,8 @@ viafabric = 0
 minimotd = 0
 server_scripts = 0
 ram = 0
-motd_sync = 1
+motd_sync = -1
+legacy_resetter = -1
 eula = 0
 lebDebugDisableDownloadContent = 0
 lebDebugKeepCache = 0
@@ -59,18 +62,85 @@ def readConfig():
     global current_hash
     global motd_sync
     global check_for_updates
-    try:
-        raw = open("updater.cfg", "r")
-        f = raw.read()
-        file_split = f.split("#/#")
-        cfg_branch = file_split[0]
-        motd_sync = int(file_split[1])
-        current_hash = file_split[2]
-        check_for_updates = int(file_split[3])
+    global legacy_resetter
+    isUpdating = 0
+    try:      
+        if os.path.isfile('LEB-ToolBox_old.exe') or os.path.isfile('LEB-ToolBox_old') or os.path.isfile('LEB-ToolBox_DELETE_ME.exe') or os.path.isfile('LEB-ToolBox_DELETE_ME'):
+            isUpdating = 1
+        if os.path.isfile('updater.cfg'):
+            raw = open("updater.cfg", "r")
+            f = raw.read()
+            file_split = f.split("#/#")
+            cfg_branch = file_split[0]
+            motd_sync = int(file_split[1])
+            current_hash = file_split[2]
+            check_for_updates = int(file_split[3])
+            legacy_resetter = int(file_split[4])
+        else:
+            print(O+"*******************************************************"+W)
+            print(G+"Welcome to LEB-ToolBox "+ver_program+"!"+W)
+            print(O+"*******************************************************"+W)
+            print("Thanks for choosing LEB-ToolBox!")
+            print("")
+            print("LEB-ToolBox is a tool designed to make it easy for users to install, update and customize their own LEB installation.")
+            print("To navigate through the program, wait until a blue <Input:> message appears and then use the numbers displayed onscreen to select your choice and press ENTER.")
+            print("")
+            print("If you encounter any problem, try doing a clean reinstall of everything or contact us on out Discord.")
+            print(B+"LEB"+W+"-"+G+"ToolBox "+W+"created by Pi"+R+"por"+O+"Games"+W)
+            print(E+"Legacy Edition"+O+" Battle"+W+" created by "+R+"DBTDerpbox "+E+"+"+B+" contributors"+W)
+            print("Consider donating at"+O+" Patreon"+W+"! "+O+"patreon.com/DBTDerpbox"+W)
+            print("")
+            print("Have fun!")
+            print("")
+            action = input(B+"Press ENTER to continue . . .")
+            raw = open("updater.cfg", "w")
+            raw.write("main#/#1#/#unknown#/#1#/#0")
+            raw.close()
     except:
-        raw = open("updater.cfg", "w")
-        raw.write("main#/#1#/#unknown#/#1")
-        raw.close()
+        if isUpdating == 0:
+            print(R+"An error has ocurred while trying to load the configuration file.")
+            print(W+"If you have updated the program recently, it might mean that the program requires a configuration upgrade.")
+            print("The program will try to convert the old configuration version to the new format required.")
+            print("")
+            print(P+"Do you want to continue?")
+            action = input(B+"Input [Y/N] (defualt=Yes): "+W)
+        else:
+            action = "y"
+        if action.lower() == "y":
+            try:
+                print("")
+                print("Trying to convert old configuration...")
+                raw = open("updater.cfg", "r")
+                f = raw.read()
+                file_split = f.split("#/#")
+                cfg_branch = file_split[0]
+                motd_sync = int(file_split[1])
+                current_hash = file_split[2]
+                check_for_updates = int(file_split[3])
+            except:
+                pass
+            finally:
+                if cfg_branch == "":
+                    cfg_branch = "main"
+                if motd_sync == -1:
+                    motd_sync = 1
+                if current_hash == "":
+                    current_hash = R+"unknown"
+                if check_for_updates == -1:
+                    check_for_updates = 1
+                raw.close()
+                raw = open("updater.cfg", "w")
+                print(str(motd_sync))
+                raw.write(cfg_branch+"#/#"+str(motd_sync)+"#/#"+current_hash+"#/#"+str(check_for_updates)+"#/#0")
+                raw.close()
+                print("Conversion finished.")
+                readConfig()
+        elif action.lower() == "n":
+            print("")
+        else:
+            raw = open("updater.cfg", "w")
+            raw.write("main#/#1#/#unknown#/#1#/#0")
+            raw.close()
     finally:
         raw.close()
 if os.name=='nt':
@@ -85,7 +155,7 @@ def mainMenu():
     readConfig()
     cls()
     print("=======================================================")
-    print(G+"Legacy Edition Battle (LEB) ToolBox"+W)
+    print(G+"Legacy Edition Battle (LEB) ToolBox " + ver_program +W)
     print("=======================================================")
     print("")
     print(P+"Choose an action below:"+W)
@@ -101,8 +171,9 @@ def mainMenu():
     print("3. Change branch (current selected branch: ", B+cfg_branch+W, ")")
     print("")
     print("4. Open GitHub project page")
+    print("5. See the Changelog")
     print("")
-    print("5. Exit")
+    print("6. Exit")
     print("")
     action = input(B+"Input: "+W)
     if action == "0":
@@ -144,6 +215,8 @@ def mainMenu():
         webbrowser.open('https://github.com/DBTDerpbox/Legacy-Edition-Battle')
         mainMenu()
     elif action == "5":
+        changeLog()
+    elif action == "6":
         exit()
     elif action == "debug download":
         global lebDebugDisableDownloadContent
@@ -320,7 +393,7 @@ def installMenu_4_B():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (1/7)"+W)
+    print(G+"Enchancements (1/8)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to install "+G+"Optimization mods"+B+"?"+W)
@@ -353,7 +426,7 @@ def installMenu_5():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (2/7)"+W)
+    print(G+"Enchancements (2/8)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"UPnP"+B+"?"+W)
@@ -384,7 +457,7 @@ def installMenu_6():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (3/7)"+W)
+    print(G+"Enchancements (3/8)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"ViaFabric"+B+"?"+W)
@@ -413,7 +486,7 @@ def installMenu_6_2():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (4/6)"+W)
+    print(G+"Enchancements (4/8)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"MiniMOTD"+B+"?"+W)
@@ -443,7 +516,7 @@ def installMenu_7():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (5/7)"+W)
+    print(G+"Enchancements (5/8)"+W)
     print("=======================================================")
     print("")
     print(B+"How much "+G+"RAM"+B+" do you want to allocate to LEB?"+W)
@@ -461,14 +534,42 @@ def installMenu_7():
             break;
         except ValueError:
             installMenu_7()
-    installMenu_8()
+    installMenu_7_B()
 
+def installMenu_7_B():
+    cls()
+    print("=======================================================")
+    print(G+"Install LEB"+W)
+    print(G+"Enchancements (6/8)"+W)
+    print("=======================================================")
+    print("")
+    print(B+"Do you want to use "+G+"Legacy Resetter"+B+"?"+W)
+    print("When enabled, LEB will revert to the old legacy map resetter system. ")
+    print("This is somewhat more unstable and buggier, but require less RAM overall.")
+    print("")
+    print(R+"This is an alternative option. On normal circumstances, you shouldn't use this option."+W)
+    print("")
+    print(P+"Do you want to install this component?:"+W)
+    print("")
+    global legacy_resetter
+    if legacy_resetter == 0:
+        action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
+        if action.lower() == "y":
+            legacy_resetter = 1
+            installMenu_8()
+        elif action.lower() == "n":
+            legacy_resetter = 2
+            installMenu_8()
+        else:
+            installMenu_7_B()
+    else:
+        installMenu_8()
 
 def installMenu_8():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (6/7)"+W)
+    print(G+"Enchancements (7/8)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"MOTD Sync"+B+"?"+W)
@@ -503,7 +604,7 @@ def installMenu_9():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (7/7)"+W)
+    print(G+"Enchancements (8/8)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"Server GUI"+B+"?"+W)
@@ -659,7 +760,7 @@ def installMenu_12():
         try:
             print("Downloading Take Everything...", end='')
             sleep(0.05)
-            takeallurl = requests.get('https://github.com/kyrptonaught/Take-Everything/releases/download/1.0.3/takeeverything-1.0.3-1.17.1.jar', allow_redirects=True)
+            takeallurl = requests.get('https://github.com/kyrptonaught/Take-Everything/releases/download/1.0.1/takeeverything-1.0.1-1.17.1.jar', allow_redirects=True)
             open('mods/takeeverything-1.0.1-1.17.1.jar', 'wb').write(takeallurl.content)
             print(G+"DONE"+W)
         except OSError as error:
@@ -824,6 +925,7 @@ def installMenu_12():
     prepare()
     downloadInstall()
     setMOTD()
+    setLR()
     clean()
     print("")
     print(G+"***************************")
@@ -909,6 +1011,7 @@ def updater():
     backup()
     downloadInstall()
     setMOTD()
+    setLR()
     restore()
     clean()
     print()
@@ -941,6 +1044,7 @@ def cleanUpdater():
     prepare()
     downloadInstall()
     setMOTD()
+    setLR()
     clean()
     print()
     print(G+"*** Clean Update successful! ***"+W)
@@ -1021,13 +1125,15 @@ def changeBranch():
         cfg_branch = "vanilla"
     else:
         changeBranch()
-    writeConfig(cfg_branch,motd_sync,current_hash,check_for_updates)
+    writeConfig(cfg_branch,motd_sync,current_hash,check_for_updates,legacy_resetter)
     mainMenu()
 
 
 def settingsMenu():
     readConfig()
     response_motd = ""
+    response_cfu = ""
+    response_lr = ""
     if motd_sync == 1:
         response_motd = G+"TRUE"+W
     else:
@@ -1036,6 +1142,10 @@ def settingsMenu():
         response_cfu = G+"TRUE"+W
     else:
         response_cfu = R+"FALSE"+W
+    if legacy_resetter == 1:
+        response_lr = G+"TRUE"+W
+    else:
+        response_lr = R+"FALSE"+W
     cls()
     print("=======================================================")
     print(G+"Settings"+W)
@@ -1057,9 +1167,11 @@ def settingsMenu():
     print("")
     print("4. Use MOTD Sync ("+response_motd+")"+W)
     print(E+"   Automatically syncs the MOTD of the server with the commit version currently installed."+W)
+    print("5. Use Legacy Resetter ("+response_lr+")"+W)
+    print(E+"   Use alternative map resetter system; requires less resources but it's more unestable."+W)
     print("")
     print("")
-    print("5. Exit")
+    print("6. Exit")
     print("")
     print(P+"Choose an action below:"+W)
     print("")
@@ -1073,6 +1185,11 @@ def settingsMenu():
         response_cfu = 1
     else:
         response_cfu = 0
+
+    if legacy_resetter == 1:
+        response_lr = 1
+    else:
+        response_lr = 0
         
     if action == "1":
         changeBranch()
@@ -1081,10 +1198,10 @@ def settingsMenu():
     elif action == "3":
         print("")
         if response_cfu == 1:
-            writeConfig(cfg_branch,motd_sync,current_hash,"0")
+            writeConfig(cfg_branch,motd_sync,current_hash,"0",legacy_resetter)
             print("CFU at startup has been "+R+"disabled"+W+" successfully.")
         else:
-            writeConfig(cfg_branch,motd_sync,current_hash,"1")
+            writeConfig(cfg_branch,motd_sync,current_hash,"1",legacy_resetter)
             print("CFU at startup has been "+G+"enabled"+W+" successfully.")   
         print("")
         sleep(2)
@@ -1092,15 +1209,30 @@ def settingsMenu():
     elif action == "4":
         print("")
         if response_motd == 1:
-            writeConfig(cfg_branch,"0",current_hash,check_for_updates)
+            writeConfig(cfg_branch,"0",current_hash,check_for_updates,legacy_resetter)
             print("MOTD Sync has been "+R+"disabled"+W+" successfully.")
         else:
-            writeConfig(cfg_branch,"1",current_hash,check_for_updates)
-            print("MOTD Sync has been "+G+"enabled"+W+" successfully.")   
+            writeConfig(cfg_branch,"1",current_hash,check_for_updates,legacy_resetter)
+            print("MOTD Sync has been "+G+"enabled"+W+" successfully.")
+            print(W+"To apply the changes, you must <Update to the last commit> from the Update page."+W)
+        print("")
+        sleep(3)
+        settingsMenu()
+    elif action == "5":
+        print("")
+        if response_lr == 1:
+            writeConfig(cfg_branch,motd_sync,current_hash,check_for_updates,"0")
+            print("Legacy Resetter has been "+R+"disabled"+W+" successfully.")
+        else:
+            writeConfig(cfg_branch,motd_sync,current_hash,check_for_updates,"1")
+            print("Legacy Resetter has been "+G+"enabled"+W+" successfully.")   
+        print("")
+        readConfig()
+        setLR()
         print("")
         sleep(2)
         settingsMenu()
-    elif action == "5":
+    elif action == "6":
         mainMenu()
     else:
         settingsMenu()
@@ -1119,6 +1251,7 @@ def updateLEBTB():
     print(E+"Searching for updates . . ."+W)
     print("")
     result = checkForUpdates()
+    result2 = checkForChangeLog()
     cls()
     print("=======================================================")
     print(G+"Update LEB-ToolBox"+W)
@@ -1140,6 +1273,9 @@ def updateLEBTB():
         settingsMenu()
     elif result == 1:
         print(G+"New update v"+str(online_count_program)+" available!")
+        print("")
+        print(B+"CHANGELOG:"+W)
+        print(result2)
         print("")
         print(P+"Do you want to update now?"+W)
         print("")
@@ -1214,17 +1350,30 @@ def updateLEBTB():
             updateLEBTB()
 
 
-
+def changeLog():
+    cls()
+    print("=======================================================")
+    print(B+"CHANGELOG"+W)
+    print("=======================================================")
+    print("")
+    print("You are now watching the LEB-ToolBox "+ver_program+" "+B+"changelog"+W+".")
+    print("")
+    print(B+"CHANGELOG:"+W)
+    print(ver_info)
+    print("")
+    print("")
+    action = input(B+"Press ENTER to return . . ."+W)
+    mainMenu()
             
 
     
 ####################
 ###   Functions  ###
 ####################
-def writeConfig(var_branch,var_motd_sync,var_hash,var_cfu):
+def writeConfig(var_branch,var_motd_sync,var_hash,var_cfu,var_lr):
     try:
         f = open("updater.cfg", "w")
-        f.write(var_branch+"#/#"+str(var_motd_sync)+"#/#"+var_hash+"#/#"+str(var_cfu))
+        f.write(var_branch+"#/#"+str(var_motd_sync)+"#/#"+var_hash+"#/#"+str(var_cfu)+"#/#"+str(var_lr))
     finally:
         f.close()
 
@@ -1354,8 +1503,28 @@ def setMOTD():
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ") >>> Did leb_update_cache/leb.zip erase itself, or does this branch not contain a miniMOTD/server.properties config file?"+W)
+            pass
         finally:
-            writeConfig(cfg_branch,motd_sync,leb_zip.comment.decode("utf-8")[:6],check_for_updates)
+            writeConfig(cfg_branch,motd_sync,leb_zip.comment.decode("utf-8")[:6],check_for_updates,legacy_resetter)
+
+def setLR():
+    try:
+        if legacy_resetter == 1:
+            print("Patching Legacy Resetter fix...", end='')         
+        with open("world/datapacks/4jbattle/data/4jbattle/functions/start.mcfunction", "r") as lr_file:
+            lines = lr_file.readlines()
+        with open("world/datapacks/4jbattle/data/4jbattle/functions/start.mcfunction", "w") as lr_file:
+            for line in lines:
+                if "scoreboard players set #Store 4j.legacyreset 1" not in line:
+                    lr_file.write(line)
+            if legacy_resetter == 1:
+                lr_file.write("\nscoreboard players set #Store 4j.legacyreset 1")
+        lr_file.close()
+        if legacy_resetter == 1:
+            print(G+"DONE"+W)
+    except OSError as error:
+        print(R+"FAIL (" + str(error) + ")"+W)
+        pass
 
 def reinstall():
     print("Removing "+R+"ALL FILES"+B+" ["+W)
@@ -1363,7 +1532,6 @@ def reinstall():
     files = [".gitignore","INSTALLATION.md","INSTALLATION-MINEHUT.md","LICENSE","README.md","SCREENSHOTS.md","CUSTOMPACK.md","installer.py","banned-ips.json","banned-players.json","eula.txt","fabric-server-launch.jar","fabric-server-launcher.properties","ops.json","Run-Linux.sh","Run-MacOS.sh","Run-Windows.cmd","server.jar","server.properties","usercache.json","whitelist.json"]
     directories = ["world","images","config",".github",".fabric","libraries","logs","mods"]
     try:
-        #crear arrays uno de archivos y otro de carpetas y hacer loop
         for file in files:
             if os.path.isfile(file):
                 print ("Removing " + str(file) + " ...", end='')
@@ -1397,7 +1565,18 @@ def checkForUpdates():
                     return 0
     except Exception as error:
         return -1
-
+    
+def checkForChangeLog():
+    try:
+        req = requests.get('https://raw.githubusercontent.com/DBTDerpbox/LEB-ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
+        data = (req.content).decode("utf-8")
+        info = data.split("\n")
+        for line in info:
+            if "ver_info = " in line:
+                changelog = float(line.split("ver_info = ")[1])
+                return changelog
+    except Exception as error:
+        return R+"Error when retrieving changelog."
 
 def rmOldVer():
     if os.path.isfile('LEB-ToolBox_DELETE_ME.exe'):
@@ -1407,6 +1586,7 @@ def rmOldVer():
             print(R+str(error)+W)
             print("")
             sleep(3)
+            pass
     if os.path.isfile('LEB-ToolBox_DELETE_ME'):
         try:
             os.remove("LEB-ToolBox_DELETE_ME")
@@ -1414,6 +1594,7 @@ def rmOldVer():
             print(R+str(error)+W)
             print("")
             sleep(3)
+            pass
 
 
 #pre-initialization check for updates (cfu) routine
@@ -1422,10 +1603,14 @@ readConfig()
 cls()
 if check_for_updates == 1:
     result = checkForUpdates()
+    result2 = checkForChangeLog()
     if result == 1:
         print(O+"*******************************************************"+W)
         print(G+"New LEB-ToolBox v"+str(online_count_program)+" update has been found!"+W)
         print(O+"*******************************************************"+W)
+        print("")
+        print(B+"CHANGELOG:"+W)
+        print(result2)
         print("")
         print(P+"Do you want to go to the LEB-ToolBox update Menu?"+W)
         print("")
