@@ -2,20 +2,25 @@
 All-in-one tools to manage your own LEB server.
 
 ## Features
-- Complete Install of LEB setup, including dependencies, enchancements, and LEB resources.
-- Multiple Install presets
-- Step-to-step confirmation download and install for every component available
-- RAM configuration (during setup)
-- Auto MOTD Sync (featuring commit version)
-- Update (safe) server with backups, Clean (destructive) update and Reinstall LEB scripts
-- Multiple branch selector
-- Save and reading functions to cfg file, to keep track of user settings.
-- Multiple OS support (launching and creating run files)
-- Multi-Color terminal support
-- Auto-updater for LEB-ToolBox
+### Main Features
+- Install Wizard: Complete install of LEB instances, including dependencies, enchancements, and LEB resources.
+- Update Manager: Features safe update (with backups) installing, clean update (destructive) installing and LEB reinstall scripts.
+- Auto MOTD Sync: Sync your own LEB instance server MOTD with the official public LEB server MOTD, featuring the commit version you are running.
+- Step-to-step Guide: Allows you to customize as you wish your own LEB instance.
+
+### Other useful features
+- Multiple install presets: Full (Recommended), Minimal and Customized.
+- Server RAM configuration (during setup): Allows you to set the amount of RAM to be used by the server.
+- Multiple branch selector: Allows the install and update of diferent LEB branches.
+- App configuration file: Keeps track of user settings.
+- Multiple OS support: Can be ran directly from the Phython source code, or from the compiled OS-Specific binaries (Windows/Linux).
+- Launch Scripts: Adds scripts to launch your server with your custom configuration.
+- Multi-Color terminal support: Pretty!
+- Auto-updater for LEB-ToolBox: The program will automatically search for updates and changelogs.
+- Settings page: Customize how the program and server behaves.
 
 ## Authors
 
-Orginial LEB Installer and LEB - [DBTDerpbox](https://github.com/DBTDerpbox)
+Orginal LEB-Installer script and LEB - [DBTDerpbox](https://github.com/DBTDerpbox)
 
-Updating the installer to ToolBox, making it generally easier to use - [PiporGames](https://github.com/PiporGames)
+GUI, Updates and maintenance - [PiporGames](https://github.com/PiporGames)
