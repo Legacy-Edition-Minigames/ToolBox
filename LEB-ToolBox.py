@@ -30,13 +30,25 @@ B  = '\033[36m' # blue
 P  = '\033[35m' # purple
 E  = '\033[30;1m' #gray
 
+def colorize(string):
+    string = string.replace("$W",W)
+    string = string.replace("$R",R)
+    string = string.replace("$G",G)
+    string = string.replace("$O",O)
+    string = string.replace("$B",B)
+    string = string.replace("$P",P)
+    string = string.replace("$E",E)
+    return string
 
+    
 ####### PROGRAM VERSION #######
-cnt_program = 1.0
+cnt_program = 0.9
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = O+"LEB-ToolBox "+ver_program+" changelog:\n"+W+"-"+G+" NEW "+W+"configuration file upgrader; no more settings lost when updating the program.\n"+W+"-"+G+" NEW"+W+" Legacy Resetter option is now avilable. Read the documentation or make a new server install to know more.\n"+W+"-"+G+" NEW "+W+"Dependecies required.\n"+W+"-"+G+" NEW "+W+"Now every update displays the changelog when launching for the first time, or before updating to a new version.\n"+W+"-"+G+" NEW "+W+"Welcome message.\n"+W+"-"+G+" NEW "+W+"See Changelog option in Main Menu.\n"+W
+ver_info = "$OLEB-ToolBox v1.0 changelog:\n$W-$G NEW $Wconfiguration file upgrader; no more settings lost when updating the program.\n$W-$G NEW$W Legacy Resetter option is now avilable. Read the documentation or make a new server install to know more.\n$W-$G NEW $WDependecies required.\n$W-$G NEW $WNow every update displays the changelog when launching for the first time, or before updating to a new version.\n$W-$G NEW $WWelcome message.\n$W-$G NEW $WSee Changelog option in Main Menu.\n$W"
 ####### PROGRAM VERSION #######
+
+repo = "DBTDerpbox"
 
 cfg_branch = "main"
 current_hash = R+"unknown"
@@ -92,7 +104,7 @@ def readConfig():
             print("")
             print("Have fun!")
             print("")
-            action = input(B+"Press ENTER to continue . . .")
+            action = input(B+"Press ENTER to continue . . ."+W)
             raw = open("updater.cfg", "w")
             raw.write("main#/#1#/#unknown#/#1#/#0")
             raw.close()
@@ -234,6 +246,13 @@ def mainMenu():
         installMenu()
     elif action == "debug setmotd":
         setMOTD()
+    elif action == "debug setlr":
+        setLR()
+    elif action == "debug repo":
+        global repo
+        repo = "PiporGames"
+        action = input(B+"changed repo fetching to PiporGames"+W)
+        mainMenu()
     elif action == "debug cfu":
         var111 = checkForUpdates()
         print(str(var111))
@@ -1287,13 +1306,13 @@ def updateLEBTB():
             pgrmfile = ""
             try:
                 if platform.system() == "Linux":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/DBTDerpbox/LEB-ToolBox/main/LEB-ToolBox', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox', allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Darwin":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/DBTDerpbox/LEB-ToolBox/main/LEB-ToolBox', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox', allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Windows":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/DBTDerpbox/LEB-ToolBox/main/LEB-ToolBox.exe', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox.exe', allow_redirects=True)
                     open("LEB-ToolBox-new.exe", "wb").write(prgrmfile.content)
                 print(G+"DONE"+W)
             except Exception as error:
@@ -1359,7 +1378,7 @@ def changeLog():
     print("You are now watching the LEB-ToolBox "+ver_program+" "+B+"changelog"+W+".")
     print("")
     print(B+"CHANGELOG:"+W)
-    print(ver_info)
+    print(colorize(ver_info))
     print("")
     print("")
     action = input(B+"Press ENTER to return . . ."+W)
@@ -1551,7 +1570,7 @@ def reinstall():
 
 def checkForUpdates():
     try:
-        req = requests.get('https://raw.githubusercontent.com/DBTDerpbox/LEB-ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
+        req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
         data = (req.content).decode("utf-8")
         info = data.split("\n")
         for line in info:
@@ -1568,15 +1587,16 @@ def checkForUpdates():
     
 def checkForChangeLog():
     try:
-        req = requests.get('https://raw.githubusercontent.com/DBTDerpbox/LEB-ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
+        req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
         data = (req.content).decode("utf-8")
         info = data.split("\n")
         for line in info:
             if "ver_info = " in line:
-                changelog = float(line.split("ver_info = ")[1])
-                return changelog
+                changelog = line.split("ver_info = ")[1]
+                return colorize(changelog)
+            
     except Exception as error:
-        return R+"Error when retrieving changelog."
+        return R+"Error when retrieving changelog ("+str(error)+")."
 
 def rmOldVer():
     if os.path.isfile('LEB-ToolBox_DELETE_ME.exe'):
