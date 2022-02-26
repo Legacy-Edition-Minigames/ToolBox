@@ -38,6 +38,7 @@ def colorize(string):
     string = string.replace("$B",B)
     string = string.replace("$P",P)
     string = string.replace("$E",E)
+    string = string.replace(r"\n","\n")
     return string
 
     
@@ -303,6 +304,7 @@ def installMenu_2():
     global server_scripts
     global minimotd
     global motd_sync
+    global legacy_resetter
     global EULA
     eula = 0
     # set 0 / nothing = user choice
@@ -317,6 +319,7 @@ def installMenu_2():
         minimotd = 1
         server_scripts = 1
         motd_sync = 1
+        legacy_resetter = 2
         installMenu_3()
     elif action == "2":
         fabric = 1
@@ -327,6 +330,7 @@ def installMenu_2():
         minimotd = 2
         server_scripts = 2
         motd_sync = 2
+        legacy_resetter = 0
         installMenu_3()
     elif action == "3":
         fabric = 0
@@ -337,6 +341,7 @@ def installMenu_2():
         minimotd = 0
         server_scripts = 0
         motd_sync = 0
+        legacy_resetter = 0
         installMenu_3()
     else:
         installMenu_2()
@@ -1593,7 +1598,7 @@ def checkForChangeLog():
         for line in info:
             if "ver_info = " in line:
                 changelog = line.split("ver_info = ")[1]
-                return colorize(changelog)
+                return colorize(str(changelog))
             
     except Exception as error:
         return R+"Error when retrieving changelog ("+str(error)+")."
