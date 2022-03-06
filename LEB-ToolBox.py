@@ -784,7 +784,7 @@ def installMenu_12():
         try:
             print("Downloading Take Everything...", end='')
             sleep(0.05)
-            takeallurl = requests.get('https://github.com/kyrptonaught/Take-Everything/releases/download/1.0.1/takeeverything-1.0.1-1.17.1.jar', allow_redirects=True)
+            takeallurl = requests.get('https://github.com/kyrptonaught/Take-Everything/releases/download/1.0.3/takeeverything-1.0.3-1.17.1.jar', allow_redirects=True)
             open('mods/takeeverything-1.0.1-1.17.1.jar', 'wb').write(takeallurl.content)
             print(G+"DONE"+W)
         except OSError as error:
