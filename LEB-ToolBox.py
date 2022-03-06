@@ -1419,6 +1419,7 @@ def backup():
     sleep(0.05)      
     try:
         shutil.copytree('world/advancements', 'leb_update_cache/world/advancements')
+        shutil.copytree('world/stats', 'leb_update_cache/world/stats')
     except OSError as error:
         print(error, end='')
         pass
@@ -1474,11 +1475,13 @@ def restore():
     sleep(0.05)
     try:
         shutil.rmtree('world/advancements')
+        shutil.rmtree('world/stats')
     except OSError as error:
         print("", end='')
     
     try:
         shutil.copytree('leb_update_cache/world/advancements', 'world/advancements')
+        shutil.copytree('leb_update_cache/world/stats', 'world/stats')
     except OSError as error:
         print("", end='')
         pass
