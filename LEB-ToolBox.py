@@ -43,10 +43,10 @@ def colorize(string):
 
     
 ####### PROGRAM VERSION #######
-cnt_program = 1.0
+cnt_program = 1.1
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.0 changelog:\n$W-$G NEW $Wconfiguration file upgrader; no more settings lost when updating the program.\n$W-$G NEW$W Legacy Resetter option is now avilable. Read the documentation or make a new server install to know more.\n$W-$G NEW $WDependecies required.\n$W-$G NEW $WNow every update displays the changelog when launching for the first time, or before updating to a new version.\n$W-$G NEW $WWelcome message.\n$W-$G NEW $WSee Changelog option in Main Menu.\n$W"
+ver_info = "$OLEB-ToolBox v1.1 changelog:\n$W-$G NEW $WTake All dependecy and R26 compatibility.$W"
 ####### PROGRAM VERSION #######
 
 repo = "DBTDerpbox"
