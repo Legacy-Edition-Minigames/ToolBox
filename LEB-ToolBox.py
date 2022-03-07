@@ -43,11 +43,10 @@ def colorize(string):
 
     
 ####### PROGRAM VERSION #######
-cnt_program = 1.0.1
-
+cnt_program = 1.0
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.0.1 changelog:\n$W-$G NEW $Wdependencies added. You must perform an update.$W"
+ver_info = "$OLEB-ToolBox v1.0 changelog:\n$W-$G NEW $Wconfiguration file upgrader; no more settings lost when updating the program.\n$W-$G NEW$W Legacy Resetter option is now avilable. Read the documentation or make a new server install to know more.\n$W-$G NEW $WDependecies required.\n$W-$G NEW $WNow every update displays the changelog when launching for the first time, or before updating to a new version.\n$W-$G NEW $WWelcome message.\n$W-$G NEW $WSee Changelog option in Main Menu.\n$W"
 ####### PROGRAM VERSION #######
 
 repo = "DBTDerpbox"
@@ -1584,7 +1583,9 @@ def checkForUpdates():
         info = data.split("\n")
         for line in info:
             if "cnt_program = " in line:
-                ver1 = float(line.split("cnt_program = ")[1])
+                value = line.split("cnt_program = ")[1]
+                value = value.replace("\r","")
+                ver1 = float(value)
                 if ver1 > cnt_program:
                     global online_count_program
                     online_count_program = ver1
@@ -1592,6 +1593,8 @@ def checkForUpdates():
                 else:
                     return 0
     except Exception as error:
+        print(str(error))
+        input()
         return -1
     
 def checkForChangeLog():
@@ -1601,7 +1604,9 @@ def checkForChangeLog():
         info = data.split("\n")
         for line in info:
             if "ver_info = " in line:
-                changelog = line.split("ver_info = ")[1]
+                value = line.split("ver_info = ")[1]
+                value = value.replace("\r","")
+                changelog = value
                 return colorize(str(changelog))
             
     except Exception as error:
