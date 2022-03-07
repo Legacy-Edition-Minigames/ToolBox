@@ -44,6 +44,7 @@ def colorize(string):
     
 ####### PROGRAM VERSION #######
 cnt_program = 1.0.1
+
 ver_program = G+"v"+str(cnt_program)+W
 
 ver_info = "$OLEB-ToolBox v1.0.1 changelog:\n$W-$G NEW $Wdependencies added. You must perform an update.$W"
