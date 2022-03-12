@@ -1192,7 +1192,7 @@ def settingsMenu():
     print("4. Use MOTD Sync ("+response_motd+")"+W)
     print(E+"   Automatically syncs the MOTD of the server with the commit version currently installed."+W)
     print("5. Use Legacy Resetter ("+response_lr+")"+W)
-    print(E+"   Use alternative map resetter system; requires less resources but it's more unestable."+W)
+    print(E+"   Use alternative map resetter system; requires less resources but it's more unstable."+W)
     print("")
     print("")
     print("6. Exit")
