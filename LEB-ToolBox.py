@@ -864,7 +864,7 @@ def installMenu_12():
         print("Downloading ViaFabric...", end='')
         sleep(0.05)
         try:
-            viafabricurl = requests.get('https://media.forgecdn.net/files/3544/467/viafabric-0.4.5%2B244-main.jar', allow_redirects=True)
+            viafabricurl = requests.get('https://media.forgecdn.net/files/3667/489/viafabric-0.4.6%2B266-main.jar', allow_redirects=True)
             open('mods/viafabric-0.4.5+244-main.jar', 'wb').write(viafabricurl.content)
             print(G+"DONE"+W)
         except OSError as error:
