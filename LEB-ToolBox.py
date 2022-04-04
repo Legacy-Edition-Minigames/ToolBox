@@ -739,7 +739,7 @@ def installMenu_12():
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
     else:
-        print(R+"Skipping Fabric install... FABRIC IS A REQUIRED COMPONENT, BE SURE TO INSTALL IT MUNUALLY AFTERWARDS"+W)
+        print(R+"Skipping Fabric install... FABRIC IS A REQUIRED COMPONENT, BE SURE TO INSTALL IT MANUALLY AFTERWARDS"+W)
         sleep(0.05)
     #dependencies
     if dependencies == 1:
@@ -807,7 +807,7 @@ def installMenu_12():
             print(R+"FAIL (" + str(error) + ")"+W)
         print(B+"] "+W+"Dependencies "+G+"DONE"+W)
     else:
-        print(R+"Skipping Dependencies... DEPENDENCIES ARE REQUIRED COMPONENTS, BE SURE TO INSTALL THEM MUNUALLY AFTERWARDS"+W)
+        print(R+"Skipping Dependencies... DEPENDENCIES ARE REQUIRED COMPONENTS, BE SURE TO INSTALL THEM MANUALLY AFTERWARDS"+W)
         sleep(0.05)
     #optimize
     if optimize == 1:
