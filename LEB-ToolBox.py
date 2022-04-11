@@ -43,10 +43,10 @@ def colorize(string):
 
     
 ####### PROGRAM VERSION #######
-cnt_program = 1.1
+cnt_program = 1.2
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.1 changelog:\n$W-$G NEW $WTake All dependecy and R26 compatibility.$W"
+ver_info = "$OLEB-ToolBox v1.2 changelog:\n$W-$G NEW $WMinor spelling corrections and dependencies updated.$W"
 ####### PROGRAM VERSION #######
 
 repo = "DBTDerpbox"
@@ -95,10 +95,10 @@ def readConfig():
             print(O+"*******************************************************"+W)
             print("Thanks for choosing LEB-ToolBox!")
             print("")
-            print("LEB-ToolBox is a tool designed to make it easy for users to install, update and customize their own LEB installation.")
-            print("To navigate through the program, wait until a blue <Input:> message appears and then use the numbers displayed onscreen to select your choice and press ENTER.")
+            print("LEB-ToolBox is a tool designed to make it easy for users to install, update and customize their own LEB instance.")
+            print("To navigate through the program, wait until a blue <Input:> message appears. Then, use the numbers displayed on screen to select your choice and press ENTER.")
             print("")
-            print("If you encounter any problem, try doing a clean reinstall of everything or contact us on out Discord.")
+            print("If you encounter any problem, try performing a clean reinstall or contact us on out Discord.")
             print(B+"LEB"+W+"-"+G+"ToolBox "+W+"created by Pi"+R+"por"+O+"Games"+W)
             print(E+"Legacy Edition"+O+" Battle"+W+" created by "+R+"DBTDerpbox "+E+"+"+B+" contributors"+W)
             print("Consider donating at"+O+" Patreon"+W+"! "+O+"patreon.com/DBTDerpbox"+W)
@@ -270,12 +270,12 @@ def installMenu():
     print("")
     print(G+"Welcome to the LEB setup wizard!"+W)
     print("Thank you for downloading LEB. This wizard will help you setup your own LEB server instance.")
-    print("The setup will ask you some questions before proceeding to install everything.")
+    print("The setup will ask you some questions before proceeding to setup everything.")
     print("")
-    print("Consider donating if you want to support this project. More info at the README file.")
+    print("Consider donating if you want to support this project.")
     print("We hope you have fun!")
     print("")
-    print(P+"Press " + B+ "ENTER " + P+ "to start the setup  . . ." + W)
+    print(P+"Press " + B+ "ENTER " + P+ "to continue  . . ." + W)
     print("")
     action = input("")
     installMenu_2()
@@ -290,7 +290,7 @@ def installMenu_2():
     print(G+"Install type:"+W)
     print("1. Full Install"+W+":"+E+" This option will install every dependency and enchancement needed for LEB to work as intended."+W)
     print("2. Minimal Install"+W+":"+E+" This option will install only necesary dependencies for LEB to work, without any enchancements."+W)
-    print("3. Custom Install"+W+":"+E+" You will be asked to allow the install of each component individually."+W)
+    print("3. Custom Install"+W+":"+E+" You will be asked what components to install individually."+W)
     print("")
     print(P+"Choose a install type from above:"+W)
     print("")
@@ -355,8 +355,8 @@ def installMenu_3():
     print("=======================================================")
     print("")
     print(B+"Do you want to install "+G+"Fabric"+B+"?"+W)
-    print("Fabric is the core server component of the server and it " +R+"MUST"+W+" be installed not just make LEB work, but to actually have a server.")
-    print("Besides upgrading the Fabric version for extraordinary circumstances, you should always install this component.")
+    print("Fabric is the core server component of the server and it " +R+"MUST"+W+" be installed, not just to make LEB work, but to actually be able to run the server itself.")
+    print("Besides upgrading the Fabric version because of extraordinary circumstances, you should always install this component.")
     print("")
     print(R+"WARNING: LEB WON'T WORK IF THIS COMPONENT IS NOT INSTALLED!")
     print("")
@@ -393,7 +393,7 @@ def installMenu_4():
     print("- Take Everything")
     print("- SnowballKB")
     print("- Starlight"+W)
-    print("Besides upgrading the dependencies version for extraordinary circumstances, you should always install this component.")
+    print("Besides upgrading the dependencies version because of extraordinary circumstances, you should always install this component.")
     print("")
     print(R+"WARNING: LEB WON'T WORK IF THIS COMPONENT IS NOT INSTALLED!")
     print("")
@@ -454,8 +454,8 @@ def installMenu_5():
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"UPnP"+B+"?"+W)
-    print("The Universal PlugAndPlay (UPnP) is a custom port forwarding protocol used to automatically open your router's port to the outside Internet.")
-    print("This is a neat feature to have if you have problems with Port Forwarding or you don't know much about it, and your friends want to connect to your computer"+E+" (asuming you are not playing LAN)"+W+".")
+    print("Universal PlugAndPlay (UPnP) is a custom port forwarding protocol used to automatically open your router's port to the outside Internet.")
+    print("This is a neat feature to have if you have problems with Port Forwarding or you don't know much about it, and your friends want to connect to your computer"+E+" (asuming you are not playing in a LAN)"+W+".")
     print("This enchancement doesn't work with all types and models of routers out there, check if yours have UPnP before installing!.")
     print("")
     print(E+"This is an optional enchancement."+W)
@@ -485,8 +485,8 @@ def installMenu_6():
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"ViaFabric"+B+"?"+W)
-    print("ViaFabric is a mod that provides cross-version compatibility, allowing 1.18 client users to join the server.")
-    print("This is a neat feature to have if you use mods, resourcepacks, or modified clients that require especifically version 1.18.")
+    print("ViaFabric is a mod that provides cross-version compatibility, allowing 1.18.X client users to join the server.")
+    print("This is a neat feature to have if your players use mods, resourcepacks, or modified clients that are designed specifically version 1.18.")
     print("")
     print(E+"This is an optional enchancement."+W)
     print("")
@@ -514,7 +514,7 @@ def installMenu_6_2():
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"MiniMOTD"+B+"?"+W)
-    print("MiniMOTD is a mod that provides fancy looking server status messages (MOTDs), featuring cool looking gradients, amoung other things.")
+    print("MiniMOTD is a mod that provides fancy looking server status messages (MOTDs), featuring cool looking gradients, among other things.")
     print("This is a neat feature to have if you want to have cool looking server stats.")
     print("")
     print(E+"This is an optional enchancement."+W)
@@ -633,7 +633,7 @@ def installMenu_9():
     print("")
     print(B+"Do you want to use "+G+"Server GUI"+B+"?"+W)
     print("With Server GUI enabled, upon server start, a detailed window will apear containg a memory graph, player list and command console.")
-    print("This is a nice way of managing the LEB server, but it consumes some (not that much) resources.")
+    print("This is a nice way of managing your LEB server, but it consumes some (not that much) resources and might not show error logs properly.")
     print("Disabling this component will output instead a black terminal window with lots of debugging logs.")
     print("")
     print(E+"This is an optional enchancement."+W)
@@ -697,7 +697,7 @@ def installMenu_11():
     print("You are now ready to install LEB.")
     print("This program will now connect to the internet to download the required files.")
     print("")
-    print(P+"Press " + B+ "ENTER " + P+ "to start installing . . ." + W)
+    print(P+"Press " + B+ "ENTER " + P+ "to start downloading . . ." + W)
     print("")
     action = input("")
     installMenu_12()
@@ -938,7 +938,7 @@ def installMenu_12():
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
     else:
-        print(R+"Skipping Minecraft's EULA agreement... MINECRAFT'S EULA AGREEMENT IS REQUIERED, BE SURE TO SET EULA=TRUE OR IT WON'T RUN"+W)
+        print(R+"Skipping Minecraft's EULA agreement... MINECRAFT'S EULA AGREEMENT IS REQUIERED, BE SURE TO SET EULA=TRUE AT server.properties OR IT WON'T RUN"+W)
         sleep(0.05)
     print("")
     print("")
@@ -967,9 +967,9 @@ def installMenu_13():
     print(G+"Finish setup"+W)
     print("=======================================================")
     print("")
-    print(G+"LEB has been intalled successfully!"+W)
+    print(G+"LEB has been installed successfully!"+W)
     print("You are now ready to run your own LEB server.")
-    print("To run your server, execute the file called <<Run ...>> and your OS of preference.")
+    print("To run your server, select the option <<0. Start LEB Server>> at the LEB-ToolBox main menu, or execute the file called <<Run ...>> and your OS of preference.")
     print("You can change your LEB ToolBox and server settings at the Settings page.")
     print("")
     print(B+"LEB"+W+"-"+G+"ToolBox "+W+"created by Pi"+R+"por"+O+"Games"+W)
@@ -1050,9 +1050,9 @@ def cleanUpdater():
     print(G+"Update LEB > Perform a Clean update to the latest commit available"+W)
     print("=======================================================")
     print("")
-    print(R+"WARNING!: Performing a Clean Update will erase all player data save data (ex: achievements).")
-    print("It's recommended to backup playerdata to avoid loosing player-specific-settings, custom presets, achievements,...")
-    print("If you are troubleshooting problems, feel free to continue." +W)
+    print(R+"WARNING!: Performing a Clean Update will erase all player save data (ex: advancements).")
+    print("It's recommended to backup playerdata to avoid loosing player-specific-settings, custom presets, advancements,...")
+    print("If you are troubleshooting problems on a mirrored server, feel free to continue." +W)
     print("")
     print(P+"Are you sure you want to ERASE everything and install again?"+W)
     print("")
@@ -1083,8 +1083,8 @@ def reinstallMenu():
     print("=======================================================")
     print("")
     print(R+"WARNING!: Reinstalling LEB will erase ALL DATA, including server files, player data and LEB resources.")
-    print("It's recommended to backup playerdata to avoid loosing player-specific-settings, custom presets, achievements,...")
-    print("If you are troubleshooting problems, feel free to continue." +W)
+    print("It's recommended to backup playerdata to avoid loosing player-specific-settings, custom presets, advancements,...")
+    print("If you are troubleshooting problems on a mirrored serve, feel free to continue." +W)
     print("")
     print(P+"Are you sure you want to TRULY ERASE EVERYTHING NO JOKES and install again?"+W)
     print("")
@@ -1175,7 +1175,7 @@ def settingsMenu():
     print(G+"Settings"+W)
     print("=======================================================")
     print("")
-    print("Welcome to the Settings page, you can change your ToolBox/Server settings here.")
+    print("Welcome to the Settings page: Change your ToolBox/Server settings here.")
     print(E+"Program version: "+ver_program+W)
     print("")
     print(G+"LEB-ToolBox Settings:"+W)
@@ -1192,7 +1192,7 @@ def settingsMenu():
     print("4. Use MOTD Sync ("+response_motd+")"+W)
     print(E+"   Automatically syncs the MOTD of the server with the commit version currently installed."+W)
     print("5. Use Legacy Resetter ("+response_lr+")"+W)
-    print(E+"   Use alternative map resetter system; requires less resources but it's more unstable."+W)
+    print(E+"   Use alternative map resetter system; requires less resources but it's unstable."+W)
     print("")
     print("")
     print("6. Exit")
@@ -1380,7 +1380,7 @@ def changeLog():
     print(B+"CHANGELOG"+W)
     print("=======================================================")
     print("")
-    print("You are now watching the LEB-ToolBox "+ver_program+" "+B+"changelog"+W+".")
+    print("You are now reading the LEB-ToolBox "+ver_program+" "+B+"changelog"+W+".")
     print("")
     print(B+"CHANGELOG:"+W)
     print(colorize(ver_info))
@@ -1388,7 +1388,8 @@ def changeLog():
     print("")
     action = input(B+"Press ENTER to return . . ."+W)
     mainMenu()
-            
+
+
 
     
 ####################
@@ -1651,6 +1652,11 @@ if check_for_updates == 1:
         action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
         if action.lower() == "y":
             updateLEBTB()
+
+
+
+
+
 
 # The one line of code that makes this all work #
 mainMenu()
