@@ -80,8 +80,8 @@ def readConfig():
     try:      
         if os.path.isfile('LEB-ToolBox_old.exe') or os.path.isfile('LEB-ToolBox_old') or os.path.isfile('LEB-ToolBox_DELETE_ME.exe') or os.path.isfile('LEB-ToolBox_DELETE_ME'):
             isUpdating = 1
-        if os.path.isfile('updater.cfg'):
-            raw = open("updater.cfg", "r")
+        if os.path.isfile('LEB-ToolBox.cfg'):
+            raw = open("LEB-ToolBox.cfg", "r")
             f = raw.read()
             file_split = f.split("#/#")
             cfg_branch = file_split[0]
@@ -106,7 +106,7 @@ def readConfig():
             print("Have fun!")
             print("")
             action = input(B+"Press ENTER to continue . . ."+W)
-            raw = open("updater.cfg", "w")
+            raw = open("LEB-ToolBox.cfg", "w")
             raw.write("main#/#1#/#unknown#/#1#/#0")
             raw.close()
     except:
@@ -123,7 +123,7 @@ def readConfig():
             try:
                 print("")
                 print("Trying to convert old configuration...")
-                raw = open("updater.cfg", "r")
+                raw = open("LEB-ToolBox.cfg", "r")
                 f = raw.read()
                 file_split = f.split("#/#")
                 cfg_branch = file_split[0]
@@ -142,7 +142,7 @@ def readConfig():
                 if check_for_updates == -1:
                     check_for_updates = 1
                 raw.close()
-                raw = open("updater.cfg", "w")
+                raw = open("LEB-ToolBox.cfg", "w")
                 print(str(motd_sync))
                 raw.write(cfg_branch+"#/#"+str(motd_sync)+"#/#"+current_hash+"#/#"+str(check_for_updates)+"#/#0")
                 raw.close()
@@ -151,7 +151,7 @@ def readConfig():
         elif action.lower() == "n":
             print("")
         else:
-            raw = open("updater.cfg", "w")
+            raw = open("LEB-ToolBox.cfg", "w")
             raw.write("main#/#1#/#unknown#/#1#/#0")
             raw.close()
     finally:
@@ -610,7 +610,7 @@ def installMenu_8():
         action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
         if action.lower() == "y":
             try:
-                f = open("updater.cfg", "w")
+                f = open("LEB-ToolBox.cfg", "w")
                 f.write(cfg_branch+"#/#1")
             finally:
                 f.close()
@@ -1397,7 +1397,7 @@ def changeLog():
 ####################
 def writeConfig(var_branch,var_motd_sync,var_hash,var_cfu,var_lr):
     try:
-        f = open("updater.cfg", "w")
+        f = open("LEB-ToolBox.cfg", "w")
         f.write(var_branch+"#/#"+str(var_motd_sync)+"#/#"+var_hash+"#/#"+str(var_cfu)+"#/#"+str(var_lr))
     finally:
         f.close()
