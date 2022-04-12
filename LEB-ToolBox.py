@@ -938,7 +938,7 @@ def installMenu_12():
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
     else:
-        print(R+"Skipping Minecraft's EULA agreement... MINECRAFT'S EULA AGREEMENT IS REQUIERED, BE SURE TO SET EULA=TRUE AT server.properties OR IT WON'T RUN"+W)
+        print(R+"Skipping Minecraft's EULA agreement... MINECRAFT'S EULA AGREEMENT IS REQUIERED, BE SURE TO SET EULA=TRUE AT eula.txt OR IT WON'T RUN"+W)
         sleep(0.05)
     print("")
     print("")
@@ -1084,7 +1084,7 @@ def reinstallMenu():
     print("")
     print(R+"WARNING!: Reinstalling LEB will erase ALL DATA, including server files, player data and LEB resources.")
     print("It's recommended to backup playerdata to avoid loosing player-specific-settings, custom presets, advancements,...")
-    print("If you are troubleshooting problems on a mirrored serve, feel free to continue." +W)
+    print("If you are troubleshooting problems on a mirrored server, feel free to continue." +W)
     print("")
     print(P+"Are you sure you want to TRULY ERASE EVERYTHING NO JOKES and install again?"+W)
     print("")
