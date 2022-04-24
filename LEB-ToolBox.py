@@ -43,13 +43,12 @@ def colorize(string):
 
     
 ####### PROGRAM VERSION #######
-cnt_program = 1.2
+cnt_program = 1.3
 #indev 1.3
 
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.2 changelog:\n$W-$G NEW $WMinor spelling corrections and dependencies updated.$W"
-#"$OLEB-ToolBox v1.3 changelog:\n$W-$G NEW $WProper MacOS support.$W\n$W-$G NEW $WFix for server os-specific build missmatch notification.$W"
+ver_info = "$OLEB-ToolBox v1.3 changelog:\n$W-$G NEW $WProper MacOS support.$W\n$W-$G NEW $WFix for server os-specific build missmatch notification.$W"
 
 ####### PROGRAM VERSION #######
 
