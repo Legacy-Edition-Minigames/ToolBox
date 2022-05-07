@@ -65,6 +65,7 @@ optimize = 0
 upnp = 0
 viafabric = 0
 minimotd = 0
+styledplayerlist = 0
 server_scripts = 0
 ram = 0
 motd_sync = -1
@@ -306,6 +307,7 @@ def installMenu_2():
     global viafabric
     global server_scripts
     global minimotd
+    global styledplayerlist
     global motd_sync
     global legacy_resetter
     global EULA
@@ -320,6 +322,7 @@ def installMenu_2():
         upnp = 1
         viafabric = 1
         minimotd = 1
+        styledplayerlist = 1
         server_scripts = 1
         motd_sync = 1
         legacy_resetter = 2
@@ -331,6 +334,7 @@ def installMenu_2():
         upnp = 2
         viafabric = 2
         minimotd = 2
+        styledplayerlist = 2
         server_scripts = 2
         motd_sync = 2
         legacy_resetter = 0
@@ -342,6 +346,7 @@ def installMenu_2():
         upnp = 0
         viafabric = 0
         minimotd = 0
+        styledplayerlist = 0
         server_scripts = 0
         motd_sync = 0
         legacy_resetter = 0
@@ -420,7 +425,7 @@ def installMenu_4_B():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (1/8)"+W)
+    print(G+"Enchancements (1/9)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to install "+G+"Optimization mods"+B+"?"+W)
@@ -453,7 +458,7 @@ def installMenu_5():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (2/8)"+W)
+    print(G+"Enchancements (2/9)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"UPnP"+B+"?"+W)
@@ -484,7 +489,7 @@ def installMenu_6():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (3/8)"+W)
+    print(G+"Enchancements (3/9)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"ViaFabric"+B+"?"+W)
@@ -513,7 +518,7 @@ def installMenu_6_2():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (4/8)"+W)
+    print(G+"Enchancements (4/9)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"MiniMOTD"+B+"?"+W)
@@ -529,12 +534,41 @@ def installMenu_6_2():
         action = input(B+"Input " + G + "[Y/N]" + B + ": "+W) 
         if action.lower() == "y":
             minimotd = 1
-            installMenu_7()
+            installMenu_6_3()
         elif action.lower() == "n":
             minimotd = 2
-            installMenu_7()
+            installMenu_6_3()
         else:
             installMenu_6_2()
+    else:
+        installMenu_6_3()
+
+def installMenu_6_3():
+    cls()
+    print("=======================================================")
+    print(G+"Install LEB"+W)
+    print(G+"Enchancements (5/9)"+W)
+    print("=======================================================")
+    print("")
+    print(B+"Do you want to use "+G+"StyledPlayerList"+B+"?"+W)
+    print("StyledPlayerList is a mod that provides a fancy looking tablist, featuring cool looking gradients, and some useful stats.")
+    print("This is a neat feature to have if you want to make your tablist look a bit less empty.")
+    print("")
+    print(E+"This is an optional enchancement."+W)
+    print("")
+    print(P+"Do you want to install this component?:"+W)
+    print("")
+    global styledplayerlist
+    if styledplayerlist == 0:
+        action = input(B+"Input " + G + "[Y/N]" + B + ": "+W) 
+        if action.lower() == "y":
+            styledplayerlist = 1
+            installMenu_7()
+        elif action.lower() == "n":
+            styledplayerlist = 2
+            installMenu_7()
+        else:
+            installMenu_6_3()
     else:
         installMenu_7()
 
@@ -543,7 +577,7 @@ def installMenu_7():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (5/8)"+W)
+    print(G+"Enchancements (6/9)"+W)
     print("=======================================================")
     print("")
     print(B+"How much "+G+"RAM"+B+" do you want to allocate to LEB?"+W)
@@ -567,7 +601,7 @@ def installMenu_7_B():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (6/8)"+W)
+    print(G+"Enchancements (7/9)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"Legacy Resetter"+B+"?"+W)
@@ -596,7 +630,7 @@ def installMenu_8():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (7/8)"+W)
+    print(G+"Enchancements (8/9)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"MOTD Sync"+B+"?"+W)
@@ -631,7 +665,7 @@ def installMenu_9():
     cls()
     print("=======================================================")
     print(G+"Install LEB"+W)
-    print(G+"Enchancements (8/8)"+W)
+    print(G+"Enchancements (9/9)"+W)
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"Server GUI"+B+"?"+W)
@@ -712,6 +746,7 @@ def installMenu_12():
     global upnp
     global viafabric
     global minimotd
+    global styledplayerlist
     global server_scripts
     global motd_sync
     global ram
@@ -887,6 +922,19 @@ def installMenu_12():
             print(R+"FAIL (" + str(error) + ")"+W)
     else:
         print(E+"Skipping MiniMOTD..."+W)
+        sleep(0.05)
+    #styledplayerlist
+    if styledplayerlist == 1:
+        print("Downloading StyledPlayerList...", end='')
+        sleep(0.05)
+        try:
+            styledplayerlisturl = requests.get('https://cdn.modrinth.com/data/DQIfKUHf/versions/2.1.2/styledplayerlist-2.1.2.jar', allow_redirects=True)
+            open('mods/styledplayerlist-2.1.2.jar', 'wb').write(styledplayerlisturl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+    else:
+        print(E+"Skipping StyledPlayerList..."+W)
         sleep(0.05)
     #scripts
     ram = (str(ram))
