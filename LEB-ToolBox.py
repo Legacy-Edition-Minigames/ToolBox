@@ -1328,7 +1328,7 @@ def updateLEBTB():
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Darwin":
                     prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True) #!# MACOS UPDATE STUFF, AGAIN
-                    open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
+                    open("LEB-ToolBox-new-MacOS", "wb").write(prgrmfile.content)
                 elif platform.system() == "Windows":
                     prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program)+'.exe', allow_redirects=True)
                     open("LEB-ToolBox-new.exe", "wb").write(prgrmfile.content)
@@ -1344,7 +1344,7 @@ def updateLEBTB():
                     if platform.system() == "Linux":
                         os.rename("LEB-ToolBox", "LEB-ToolBox_old")
                     elif platform.system() == "Darwin":
-                        os.rename("LEB-ToolBox", "LEB-ToolBox_old")
+                        os.rename("LEB-ToolBox-MacOS", "LEB-ToolBox_old-MacOS")
                     elif platform.system() == "Windows":
                         os.rename("LEB-ToolBox.exe", "LEB-ToolBox_old.exe")
                 else:
@@ -1352,7 +1352,7 @@ def updateLEBTB():
                     if platform.system() == "Linux":
                         os.rename("LEB-ToolBox", "LEB-ToolBox_DELETE_ME")
                     elif platform.system() == "Darwin":
-                        os.rename("LEB-ToolBox", "LEB-ToolBox_DELETE_ME")
+                        os.rename("LEB-ToolBox-MacOS", "LEB-ToolBox_DELETE_ME-MacOS")
                     elif platform.system() == "Windows":
                         os.rename("LEB-ToolBox.exe", "LEB-ToolBox_DELETE_ME.exe")
                     print(G+"DONE"+W)
@@ -1364,7 +1364,7 @@ def updateLEBTB():
                     os.rename("LEB-ToolBox-new", "LEB-ToolBox")
                     os.system("chmod +x LEB-ToolBox")
                 elif platform.system() == "Darwin":
-                    os.rename("LEB-ToolBox-new", "LEB-ToolBox")
+                    os.rename("LEB-ToolBox-new-MacOS", "LEB-ToolBox-MacOS")
                 elif platform.system() == "Windows":
                     os.rename("LEB-ToolBox-new.exe", "LEB-ToolBox.exe")
             except Exception as error:
@@ -1377,7 +1377,7 @@ def updateLEBTB():
             if platform.system() == "Linux":
                 os.system("./LEB-ToolBox")
             elif platform.system() == "Darwin":
-                os.system("./LEB-ToolBox")
+                os.system("./LEB-ToolBox-MacOS")
             elif platform.system() == "Windows":
                 os.startfile("LEB-ToolBox.exe")
             exit()
@@ -1609,7 +1609,7 @@ def checkForUpdates():
         if platform.system() == "Linux":
             extension = ''
         elif platform.system() == "Darwin":
-            extension = '' #!#NEEDS TO BE CHANGED WHEN FIXING MACOS
+            extension = '-MacOS'
         elif platform.system() == "Windows":
             extension = '.exe'
         try:
