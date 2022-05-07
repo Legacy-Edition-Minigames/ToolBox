@@ -1,5 +1,5 @@
 # Guide-for-Emmie: How to publish a LEB-ToolBox update
-This guide will walk you trough the setps required to succesfully publish to all LEB users a LEB-ToolBox update.
+This guide will walk you through the steps required to successfully publish to all LEB users a LEB-ToolBox update.
 
 
 ## What is a LEB-ToolBox update?
@@ -34,7 +34,7 @@ LEB-ToolBox-vA.B  -----  Linux Builds
 *: not to be updated anymore, do not delete.
 
 
-## Hypotethical Enviroment
+## Hypothetical Environment
 Current version: 1.2
 Target version: 1.3
 
@@ -62,7 +62,7 @@ Now, you must upload all the binaries and the source code (.py) file.
 __Be warned that the moment you upload the source code (.py) file, the version will be published instantly!__
 If for whatever reason, you don't want to publish the update, change the cnt_program value.
 
-Note that, starting from 1.3, you can skip binaries for some operating systems. A message will popup to the user telling them there isn't a build available at the time.
+Note that, starting from 1.3, you can skip binaries for some operating systems. A message will popup to the user telling them there isn't a build available at the time.``
 
 
 # You finished!
