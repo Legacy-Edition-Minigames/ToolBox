@@ -45,9 +45,11 @@ To start, first you need to compile the binaries for your new version.
 The values that need to be changed are:
 
 __cnt_program = 1.2__ ----> __cnt_program = 1.3__
+
 __ver_info = "OLD CHANGELOG"__ ----> __ver_info = "NEW CHANGELOG"__
 
 Once it has been patched, build the files.
+
 The names of the files __must__ be:
 
 __LEB-ToolBox-vA.B__ _+ OS specific extension_
