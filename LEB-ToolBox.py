@@ -43,12 +43,13 @@ def colorize(string):
 
     
 ####### PROGRAM VERSION #######
-cnt_program = 1.3
+cnt_program = 1.2
 #indev 1.3
 
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.3 changelog:\n$W-$G NEW $WProper MacOS support.$W\n$W-$G NEW $WFix for server os-specific build missmatch notification.$W"
+ver_info = "$OLEB-ToolBox v1.2 changelog:\n$W-$G NEW $WMinor spelling corrections and dependencies updated.$W"
+#"$OLEB-ToolBox v1.3 changelog:\n$W-$G NEW $WProper MacOS support.$W\n$W-$G NEW $WFix for server os-specific build missmatch notification.$W"
 
 ####### PROGRAM VERSION #######
 
@@ -1321,13 +1322,13 @@ def updateLEBTB():
             pgrmfile = ""
             try:
                 if platform.system() == "Linux":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(cnt_program), allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Darwin":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(cnt_program), allow_redirects=True) #!# MACOS UPDATE STUFF, AGAIN
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True) #!# MACOS UPDATE STUFF, AGAIN
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Windows":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(cnt_program)+'.exe', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program)+'.exe', allow_redirects=True)
                     open("LEB-ToolBox-new.exe", "wb").write(prgrmfile.content)
                 print(G+"DONE"+W)
             except Exception as error:
@@ -1610,13 +1611,17 @@ def checkForUpdates():
         elif platform.system() == "Windows":
             extension = '.exe'
         try:
-            req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(cnt_program)+str(extension), allow_redirects=True)
-            data = req.content
             global online_count_program
-            online_count_program = ver1
-            return 1
+            req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(ver1)+str(extension), allow_redirects=True)
+            data = req.content
+            if data == b'404: Not Found':
+                return 2
+            else: #unecesary, but whatever             
+                online_count_program = ver1
+                return 1
         except Exception as error:
-            return 2
+                online_count_program = ver1
+                return 1
     else:
         return 0
     
