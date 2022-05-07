@@ -101,7 +101,7 @@ def readConfig():
             print("LEB-ToolBox is a tool designed to make it easy for users to install, update and customize their own LEB instance.")
             print("To navigate through the program, wait until a blue <Input:> message appears. Then, use the numbers displayed on screen to select your choice and press ENTER.")
             print("")
-            print("If you encounter any problem, try performing a clean reinstall or contact us on out Discord.")
+            print("If you encounter any problem, try performing a clean reinstall or contact us on our Discord.")
             print(B+"LEB"+W+"-"+G+"ToolBox "+W+"created by Pi"+R+"por"+O+"Games"+W)
             print(E+"Legacy Edition"+O+" Battle"+W+" created by "+R+"DBTDerpbox "+E+"+"+B+" contributors"+W)
             print("Consider donating at"+O+" Patreon"+W+"! "+O+"patreon.com/DBTDerpbox"+W)
