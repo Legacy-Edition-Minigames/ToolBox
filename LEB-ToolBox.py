@@ -434,7 +434,8 @@ def installMenu_4_B():
     print(B+"The list of optimization mods contains:")
     print(G+"- FerriteCore")
     print("- Hydrogen")
-    print("- Lithium"+W)
+    print("- Lithium")
+    print("- Carpet"+W)
     print("")
     print(E+"This is an optional enhancement."+W)
     print("")
@@ -877,6 +878,14 @@ def installMenu_12():
             sleep(0.05)
             lithiumurl = requests.get('https://cdn.modrinth.com/data/gvQqBUqZ/versions/mc1.17.1-0.7.5/lithium-fabric-mc1.17.1-0.7.5.jar', allow_redirects=True)
             open('mods/lithium-fabric-mc1.17.1-0.7.5.jar', 'wb').write(lithiumurl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        try:
+            print("Downloading Carpet...", end='')
+            sleep(0.05)
+            carpeturl = requests.get('https://media.forgecdn.net/files/3613/865/fabric-carpet-1.17.1-1.4.57%2Bv220119.jar', allow_redirects=True)
+            open('mods/fabric-carpet-1.17.1-1.4.57+v220119.jar', 'wb').write(carpeturl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
