@@ -49,7 +49,7 @@ cnt_program = 1.2
 ver_program = G+"v"+str(cnt_program)+W
 
 ver_info = "$OLEB-ToolBox v1.2 changelog:\n$W-$G NEW $WMinor spelling corrections and dependencies updated.$W"
-#"$OLEB-ToolBox v1.3 changelog:\n$W-$G NEW $WProper MacOS support.$W\n$W-$G NEW $WFix for server os-specific build missmatch notification.$W"
+#"$OLEB-ToolBox v1.3 changelog:\n$W-$G NEW $WProper MacOS support.$W\n$W-$G NEW $WAdded StyledPlayerList to optional enhancements.\n$W-$G NEW $WReplaced multiple dependencies with ServerUtils. See GitHub Releases for more info.\n$W-$G NEW $WAdded Carpet Mod to optimization mods\n$W-$O FIX $WFix for server os-specific build missmatch notification.\n$W-$O FIX $WTypo fixes.\n$W-$R WARNING! $WDependency changes have a high chance of breaking LEB upon updating the server! If you encounter issues, you may need to attempt to use a clean install or ask for help on GitHub issues or our discord server!$W"
 ####### PROGRAM VERSION #######
 
 repo = "DBTDerpbox"
