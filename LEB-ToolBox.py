@@ -204,7 +204,7 @@ def mainMenu():
             if platform.system() == "Linux":
                 os.system("./Run-Linux.sh")
             elif platform.system() == "Darwin":
-                os.system("Run-MacOS.sh")
+                os.system("./Run-MacOS.sh")
             elif platform.system() == "Windows":
                 os.system("Run-Windows.cmd")
             print("")
@@ -926,6 +926,9 @@ def installMenu_12():
         #linux chmod
         if platform.system() == "Linux":
             os.system("chmod +x Run-Linux.sh")
+        #MacOS chmod
+        if platform.system() == "Darwin":
+            os.system("chmod +x Run-MacOS.sh")
     except OSError as error:
         print(R+"FAIL (" + str(error) + ")"+W)
     print(B+"] "+W+"Creating server scripts "+G+"DONE"+W)
