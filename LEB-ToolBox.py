@@ -44,9 +44,12 @@ def colorize(string):
     
 ####### PROGRAM VERSION #######
 cnt_program = 1.2
+#indev 1.3
+
 ver_program = G+"v"+str(cnt_program)+W
 
 ver_info = "$OLEB-ToolBox v1.2 changelog:\n$W-$G NEW $WMinor spelling corrections and dependencies updated.$W"
+#"$OLEB-ToolBox v1.3 changelog:\n$W-$G NEW $WProper MacOS support.$W\n$W-$G NEW $WFix for server os-specific build missmatch notification.$W"
 ####### PROGRAM VERSION #######
 
 repo = "DBTDerpbox"
@@ -1295,6 +1298,13 @@ def updateLEBTB():
         print("")
         action = input(R+"Press ENTER to return . . ."+W)
         settingsMenu()
+    elif result == 2:
+        print(R+"A new version has been detected, but no compatible builds are available at the time for your operating system.")
+        print(W+"Wait until a build is compiled for your version or (for advanced users) build your own using the source code available at GitHub.")
+        print(O+"Be warned that running the program from the source code, without compiling, could make some features unavailable.")
+        print("")
+        action = input(R+"Press ENTER to return . . ."+W)
+        settingsMenu()
     elif result == 1:
         print(G+"New update v"+str(online_count_program)+" available!")
         print("")
@@ -1311,13 +1321,13 @@ def updateLEBTB():
             pgrmfile = ""
             try:
                 if platform.system() == "Linux":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Darwin":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True) #!# MACOS UPDATE STUFF, AGAIN
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Windows":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox.exe', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program)+'.exe', allow_redirects=True)
                     open("LEB-ToolBox-new.exe", "wb").write(prgrmfile.content)
                 print(G+"DONE"+W)
             except Exception as error:
@@ -1576,7 +1586,6 @@ def reinstall():
     print(B+"] "+W+"Removing "+R+"ALL FILES "+G+"DONE"+W)
     sleep(2)
 
-
 def checkForUpdates():
     try:
         req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
@@ -1587,16 +1596,33 @@ def checkForUpdates():
                 value = line.split("cnt_program = ")[1]
                 value = value.replace("\r","")
                 ver1 = float(value)
-                if ver1 > cnt_program:
-                    global online_count_program
-                    online_count_program = ver1
-                    return 1
-                else:
-                    return 0
+                break
     except Exception as error:
-        print(str(error))
+        print('checkForUpdates>>'+str(error))
         input()
         return -1
+    if ver1 > cnt_program:
+        extension = ''
+        if platform.system() == "Linux":
+            extension = ''
+        elif platform.system() == "Darwin":
+            extension = '' #!#NEEDS TO BE CHANGED WHEN FIXING MACOS
+        elif platform.system() == "Windows":
+            extension = '.exe'
+        try:
+            global online_count_program
+            req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(ver1)+str(extension), allow_redirects=True)
+            data = req.content
+            if data == b'404: Not Found':
+                return 2
+            else: #unecesary, but whatever             
+                online_count_program = ver1
+                return 1
+        except Exception as error:
+                online_count_program = ver1
+                return 1
+    else:
+        return 0
     
 def checkForChangeLog():
     try:
@@ -1632,7 +1658,7 @@ def rmOldVer():
             pass
 
 
-#pre-initialization check for updates (cfu) routine
+### pre-initialization check for updates (cfu) routine ###
 rmOldVer()
 readConfig()
 cls()
@@ -1656,11 +1682,11 @@ if check_for_updates == 1:
 
 
 
-
-
-# The one line of code that makes this all work #
+###.#.#.### The one line of code that makes all of this work ###.#.#.###
 mainMenu()
 
-########################################################
-###  Tool created by PiporGames, with love, for LEB  ###
-########################################################
+
+
+##############################################################################
+###  LEB-ToolBox, created by PiporGames, with love, for the LEM Community  ###
+##############################################################################
