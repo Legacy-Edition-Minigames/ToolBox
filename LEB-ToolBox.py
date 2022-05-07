@@ -400,7 +400,8 @@ def installMenu_4():
     print("- Extended Structures")
     print("- Take Everything")
     print("- SnowballKB")
-    print("- Starlight"+W)
+    print("- Starlight")
+    print("- Editable Player NBT Hack"+W)
     print("Besides upgrading the dependencies version because of extraordinary circumstances, you should always install this component.")
     print("")
     print(R+"WARNING: LEB WON'T WORK IF THIS COMPONENT IS NOT INSTALLED!")
@@ -841,6 +842,14 @@ def installMenu_12():
             sleep(0.05)
             starlighturl = requests.get('https://cdn.modrinth.com/data/H8CaAYZC/versions/Starlight%201.0.0%201.17.x/starlight-1.0.0+fabric.73f6d37.jar', allow_redirects=True)
             open('mods/starlight-1.0.0+fabric.73f6d37.jar', 'wb').write(starlighturl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        try:
+            print("Downloading Editable Player NBT Hack...", end='')
+            sleep(0.05)
+            editnbtplayerurl = requests.get('https://cdn.modrinth.com/data/gY2Q7o7X/versions/1.1.0/editableplayernbthack-1.1.0-1.17.1.jar', allow_redirects=True)
+            open('mods/editableplayernbthack-1.1.0-1.17.1.jar', 'wb').write(editnbtplayerurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
