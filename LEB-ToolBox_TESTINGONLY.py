@@ -44,12 +44,9 @@ def colorize(string):
     
 ####### PROGRAM VERSION #######
 cnt_program = 1.2
-#indev 1.3
-
 ver_program = G+"v"+str(cnt_program)+W
 
 ver_info = "$OLEB-ToolBox v1.2 changelog:\n$W-$G NEW $WMinor spelling corrections and dependencies updated.$W"
-#"$OLEB-ToolBox v1.3 changelog:\n$W-$G NEW $WProper MacOS support.$W\n$W-$G NEW $WFix for server os-specific build missmatch notification.$W"
 ####### PROGRAM VERSION #######
 
 repo = "DBTDerpbox"
@@ -83,8 +80,8 @@ def readConfig():
     try:      
         if os.path.isfile('LEB-ToolBox_old.exe') or os.path.isfile('LEB-ToolBox_old') or os.path.isfile('LEB-ToolBox_DELETE_ME.exe') or os.path.isfile('LEB-ToolBox_DELETE_ME'):
             isUpdating = 1
-        if os.path.isfile('LEB-ToolBox.cfg'):
-            raw = open("LEB-ToolBox.cfg", "r")
+        if os.path.isfile('updater.cfg'):
+            raw = open("updater.cfg", "r")
             f = raw.read()
             file_split = f.split("#/#")
             cfg_branch = file_split[0]
@@ -109,7 +106,7 @@ def readConfig():
             print("Have fun!")
             print("")
             action = input(B+"Press ENTER to continue . . ."+W)
-            raw = open("LEB-ToolBox.cfg", "w")
+            raw = open("updater.cfg", "w")
             raw.write("main#/#1#/#unknown#/#1#/#0")
             raw.close()
     except:
@@ -126,7 +123,7 @@ def readConfig():
             try:
                 print("")
                 print("Trying to convert old configuration...")
-                raw = open("LEB-ToolBox.cfg", "r")
+                raw = open("updater.cfg", "r")
                 f = raw.read()
                 file_split = f.split("#/#")
                 cfg_branch = file_split[0]
@@ -145,7 +142,7 @@ def readConfig():
                 if check_for_updates == -1:
                     check_for_updates = 1
                 raw.close()
-                raw = open("LEB-ToolBox.cfg", "w")
+                raw = open("updater.cfg", "w")
                 print(str(motd_sync))
                 raw.write(cfg_branch+"#/#"+str(motd_sync)+"#/#"+current_hash+"#/#"+str(check_for_updates)+"#/#0")
                 raw.close()
@@ -154,7 +151,7 @@ def readConfig():
         elif action.lower() == "n":
             print("")
         else:
-            raw = open("LEB-ToolBox.cfg", "w")
+            raw = open("updater.cfg", "w")
             raw.write("main#/#1#/#unknown#/#1#/#0")
             raw.close()
     finally:
@@ -613,7 +610,7 @@ def installMenu_8():
         action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
         if action.lower() == "y":
             try:
-                f = open("LEB-ToolBox.cfg", "w")
+                f = open("updater.cfg", "w")
                 f.write(cfg_branch+"#/#1")
             finally:
                 f.close()
@@ -941,7 +938,7 @@ def installMenu_12():
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
     else:
-        print(R+"Skipping Minecraft's EULA agreement... MINECRAFT'S EULA AGREEMENT IS REQUIERED, BE SURE TO SET EULA=TRUE AT eula.txt OR IT WON'T RUN"+W)
+        print(R+"Skipping Minecraft's EULA agreement... MINECRAFT'S EULA AGREEMENT IS REQUIERED, BE SURE TO SET EULA=TRUE AT server.properties OR IT WON'T RUN"+W)
         sleep(0.05)
     print("")
     print("")
@@ -1087,7 +1084,7 @@ def reinstallMenu():
     print("")
     print(R+"WARNING!: Reinstalling LEB will erase ALL DATA, including server files, player data and LEB resources.")
     print("It's recommended to backup playerdata to avoid loosing player-specific-settings, custom presets, advancements,...")
-    print("If you are troubleshooting problems on a mirrored server, feel free to continue." +W)
+    print("If you are troubleshooting problems on a mirrored serve, feel free to continue." +W)
     print("")
     print(P+"Are you sure you want to TRULY ERASE EVERYTHING NO JOKES and install again?"+W)
     print("")
@@ -1298,13 +1295,6 @@ def updateLEBTB():
         print("")
         action = input(R+"Press ENTER to return . . ."+W)
         settingsMenu()
-    elif result == 2:
-        print(R+"A new version has been detected, but no compatible builds are available at the time for your operating system.")
-        print(W+"Wait until a build is compiled for your version or (for advanced users) build your own using the source code available at GitHub.")
-        print(O+"Be warned that running the program from the source code, without compiling, could make some features unavailable.")
-        print("")
-        action = input(R+"Press ENTER to return . . ."+W)
-        settingsMenu()
     elif result == 1:
         print(G+"New update v"+str(online_count_program)+" available!")
         print("")
@@ -1321,13 +1311,13 @@ def updateLEBTB():
             pgrmfile = ""
             try:
                 if platform.system() == "Linux":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox', allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Darwin":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True) #!# MACOS UPDATE STUFF, AGAIN
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox', allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Windows":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program)+'.exe', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox.exe', allow_redirects=True)
                     open("LEB-ToolBox-new.exe", "wb").write(prgrmfile.content)
                 print(G+"DONE"+W)
             except Exception as error:
@@ -1407,7 +1397,7 @@ def changeLog():
 ####################
 def writeConfig(var_branch,var_motd_sync,var_hash,var_cfu,var_lr):
     try:
-        f = open("LEB-ToolBox.cfg", "w")
+        f = open("updater.cfg", "w")
         f.write(var_branch+"#/#"+str(var_motd_sync)+"#/#"+var_hash+"#/#"+str(var_cfu)+"#/#"+str(var_lr))
     finally:
         f.close()
@@ -1586,6 +1576,7 @@ def reinstall():
     print(B+"] "+W+"Removing "+R+"ALL FILES "+G+"DONE"+W)
     sleep(2)
 
+
 def checkForUpdates():
     try:
         req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
@@ -1596,33 +1587,16 @@ def checkForUpdates():
                 value = line.split("cnt_program = ")[1]
                 value = value.replace("\r","")
                 ver1 = float(value)
-                break
+                if ver1 > cnt_program:
+                    global online_count_program
+                    online_count_program = ver1
+                    return 1
+                else:
+                    return 0
     except Exception as error:
-        print('checkForUpdates>>'+str(error))
+        print(str(error))
         input()
         return -1
-    if ver1 > cnt_program:
-        extension = ''
-        if platform.system() == "Linux":
-            extension = ''
-        elif platform.system() == "Darwin":
-            extension = '' #!#NEEDS TO BE CHANGED WHEN FIXING MACOS
-        elif platform.system() == "Windows":
-            extension = '.exe'
-        try:
-            global online_count_program
-            req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(ver1)+str(extension), allow_redirects=True)
-            data = req.content
-            if data == b'404: Not Found':
-                return 2
-            else: #unecesary, but whatever             
-                online_count_program = ver1
-                return 1
-        except Exception as error:
-                online_count_program = ver1
-                return 1
-    else:
-        return 0
     
 def checkForChangeLog():
     try:
@@ -1658,7 +1632,7 @@ def rmOldVer():
             pass
 
 
-### pre-initialization check for updates (cfu) routine ###
+#pre-initialization check for updates (cfu) routine
 rmOldVer()
 readConfig()
 cls()
@@ -1682,11 +1656,11 @@ if check_for_updates == 1:
 
 
 
-###.#.#.### The one line of code that makes all of this work ###.#.#.###
+
+
+# The one line of code that makes this all work #
 mainMenu()
 
-
-
-##############################################################################
-###  LEB-ToolBox, created by PiporGames, with love, for the LEM Community  ###
-##############################################################################
+########################################################
+###  Tool created by PiporGames, with love, for LEB  ###
+########################################################
