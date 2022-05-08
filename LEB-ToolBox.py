@@ -396,9 +396,7 @@ def installMenu_4():
     print("LEB ships with a preset of required dependencies for it to work as intended. This dependencies " +R+"MUST"+W+" be installed to make LEB work as intended.")
     print(B+"The list of dependencies contains:")
     print(G+"- Fabric API")
-    print("- Switchable Resource Packs")
-    print("- Extended Structures")
-    print("- Take Everything")
+    print("- ServerUtils")
     print("- SnowballKB")
     print("- Starlight")
     print("- Editable Player NBT Hack"+W)
@@ -798,34 +796,10 @@ def installMenu_12():
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
-            print("Downloading Switchable Resource Packs...", end='')
+            print("Downloading ServerUtils...", end='')
             sleep(0.05)
-            srpurl = requests.get('https://github.com/kyrptonaught/SwitchableResourcepacks/releases/download/1.0.0/switchableresourcepacks-1.0.0-1.17.jar', allow_redirects=True)
-            open('mods/switchableresourcepacks-1.0.0-1.17.jar', 'wb').write(srpurl.content)
-            print(G+"DONE"+W)
-        except OSError as error:
-            print(R+"FAIL (" + str(error) + ")"+W)
-        try:
-            print("Downloading Scoreboard Suffix...", end='')
-            sleep(0.05)
-            scoreboardsuffixurl = requests.get('https://github.com/kyrptonaught/scoreboardsuffix/releases/download/1.0.3/scoreboardsuffix-1.0.3-1.17.jar', allow_redirects=True)
-            open('mods/scoreboardsuffix-1.0.3-1.17.jar', 'wb').write(scoreboardsuffixurl.content)
-            print(G+"DONE"+W)
-        except OSError as error:
-            print(R+"FAIL (" + str(error) + ")"+W)            
-        try:
-            print("Downloading Extended Structures...", end='')
-            sleep(0.05)
-            extstructureurl = requests.get('https://github.com/kyrptonaught/Extended-Structures/releases/download/1.0.0/extendedstructures-1.0.0-1.17.1.jar', allow_redirects=True)
-            open('mods/extendedstructures-1.0.0-1.17.1.jar', 'wb').write(extstructureurl.content)
-            print(G+"DONE"+W)
-        except OSError as error:
-            print(R+"FAIL (" + str(error) + ")"+W)
-        try:
-            print("Downloading Take Everything...", end='')
-            sleep(0.05)
-            takeallurl = requests.get('https://github.com/kyrptonaught/Take-Everything/releases/download/1.0.4/takeeverything-1.0.4-1.17.1.jar', allow_redirects=True)
-            open('mods/takeeverything-1.0.1-1.17.1.jar', 'wb').write(takeallurl.content)
+            serverutilsurl = requests.get('https://github.com/kyrptonaught/Server-Utils/releases/download/1.0.0/ServerUtils-1.0.0-1.17.jar', allow_redirects=True)
+            open('mods/ServerUtils-1.0.0-1.17.jar', 'wb').write(serverutilsurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
