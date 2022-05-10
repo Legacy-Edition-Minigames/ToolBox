@@ -44,12 +44,12 @@ def colorize(string):
     
 ####### PROGRAM VERSION #######
 cnt_program = 1.3
-#indev 1.3
+#indev 1.4
 
 ver_program = G+"v"+str(cnt_program)+W
 
 ver_info = "$OLEB-ToolBox v1.3 changelog:\n$W-$G NEW $WProper MacOS support.$W\n$W-$G NEW $WAdded StyledPlayerList to optional enhancements.\n$W-$G NEW $WReplaced multiple dependencies with ServerUtils. See GitHub Releases for more info.\n$W-$G NEW $WAdded Carpet Mod to optimization mods\n$W-$O FIX $WFix for server os-specific build missmatch notification.\n$W-$O FIX $WMinor spelling corrections.\n$W-$R WARNING! $WDependency changes have a high chance of breaking LEB upon updating the server! If you encounter issues, you may need to attempt to use a clean install or ask for help on GitHub issues or our discord server!$W"
-#"$OLEB-ToolBox v1.3 changelog:\n$W-$G NEW $WProper MacOS support.$W\n$W-$G NEW $WAdded StyledPlayerList to optional enhancements.\n$W-$G NEW $WReplaced multiple dependencies with ServerUtils. See GitHub Releases for more info.\n$W-$G NEW $WAdded Carpet Mod to optimization mods\n$W-$O FIX $WFix for server os-specific build missmatch notification.\n$W-$O FIX $WMinor spelling corrections.\n$W-$R WARNING! $WDependency changes have a high chance of breaking LEB upon updating the server! If you encounter issues, you may need to attempt to use a clean install or ask for help on GitHub issues or our discord server!$W"
+#"$OLEB-ToolBox v1.4 changelog:\n$W-$G NEW $WUpdated ServerUtils to 1.0.1$W"
 ####### PROGRAM VERSION #######
 
 repo = "DBTDerpbox"
@@ -798,7 +798,7 @@ def installMenu_12():
         try:
             print("Downloading ServerUtils...", end='')
             sleep(0.05)
-            serverutilsurl = requests.get('https://github.com/kyrptonaught/Server-Utils/releases/download/1.0.0/ServerUtils-1.0.0-1.17.jar', allow_redirects=True)
+            serverutilsurl = requests.get('https://github.com/kyrptonaught/Server-Utils/releases/download/1.0.1/ServerUtils-1.0.1-1.17.jar', allow_redirects=True)
             open('mods/ServerUtils-1.0.0-1.17.jar', 'wb').write(serverutilsurl.content)
             print(G+"DONE"+W)
         except OSError as error:
