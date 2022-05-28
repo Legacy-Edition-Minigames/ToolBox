@@ -48,7 +48,7 @@ cnt_program = 1.3
 
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.3 changelog:\n$W-$G NEW $WProper MacOS support.$W\n$W-$G NEW $WAdded StyledPlayerList to optional enhancements.\n$W-$G NEW $WReplaced multiple dependencies with ServerUtils. See GitHub Releases for more info.\n$W-$G NEW $WAdded Carpet Mod to optimization mods\n$W-$O FIX $WFix for server os-specific build missmatch notification.\n$W-$O FIX $WMinor spelling corrections.\n$W-$R WARNING! $WDependency changes have a high chance of breaking LEB upon updating the server! If you encounter issues, you may need to attempt to use a clean install or ask for help on GitHub issues or our discord server!$W"
+ver_info = "$OLEB-ToolBox v1.4 changelog:\n$W-$G NEW $WUpdated ServerUtils to 1.0.2\n$W-$G NEW $WUpdated Server to 1.18.2\n$W-$G NEW $WAdded optional 1.16 support$W"
 #"$OLEB-ToolBox v1.4 changelog:\n$W-$G NEW $WUpdated ServerUtils to 1.0.1$W"
 ####### PROGRAM VERSION #######
 
@@ -432,7 +432,6 @@ def installMenu_4_B():
     print("Using this will optimize the server to use less of your system's resources without any drawbacks.")
     print(B+"The list of optimization mods contains:")
     print(G+"- FerriteCore")
-    print("- Hydrogen")
     print("- Lithium")
     print("- Carpet"+W)
     print("")
@@ -769,7 +768,7 @@ def installMenu_12():
             print(G+"DONE"+W)
             print("Installing Fabric...", end='')
             sleep(0.05)
-            os.system('java -jar fabricinstaller.jar server -mcversion 1.17.1 -downloadMinecraft')     
+            os.system('java -jar fabricinstaller.jar server -mcversion 1.18.2 -downloadMinecraft')     
             print(G+"DONE"+W)     
             print("Removing Fabric installer files...", end='')
             os.remove("fabricinstaller.jar")  
@@ -790,40 +789,40 @@ def installMenu_12():
         try:
             print("Downloading FabricAPI...", end='')
             sleep(0.05)
-            fabricapiurl = requests.get('https://github.com/FabricMC/fabric/releases/download/0.45.0%2B1.17/fabric-api-0.45.0+1.17.jar', allow_redirects=True)
-            open('mods/fabric-api-0.45.0+1.17.jar', 'wb').write(fabricapiurl.content)
+            fabricapiurl = requests.get('https://cdn.modrinth.com/data/P7dR8mSH/versions/0.53.4+1.18.2/fabric-api-0.53.4%2B1.18.2.jar', allow_redirects=True)
+            open('mods/fabric-api-0.53.4+1.18.2.jar', 'wb').write(fabricapiurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading ServerUtils...", end='')
             sleep(0.05)
-            serverutilsurl = requests.get('https://github.com/kyrptonaught/Server-Utils/releases/download/1.0.1/ServerUtils-1.0.1-1.17.jar', allow_redirects=True)
-            open('mods/ServerUtils-1.0.0-1.17.jar', 'wb').write(serverutilsurl.content)
+            serverutilsurl = requests.get('https://github.com/kyrptonaught/Server-Utils/releases/download/1.0.2/ServerUtils-1.0.2-1.18.jar', allow_redirects=True)
+            open('mods/ServerUtils-1.0.2-1.18.jar', 'wb').write(serverutilsurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading SnowballKB...", end='')
             sleep(0.05)
-            snowballkburl = requests.get('https://github.com/capitalistspz/SnowballKB/releases/download/1.1/snowballkb-1.1-1.17.jar', allow_redirects=True)
-            open('mods/snowballkb-1.1-1.17.jar', 'wb').write(snowballkburl.content)
+            snowballkburl = requests.get('https://github.com/capitalistspz/SnowballKB/releases/download/1.1-1.18.1/snowballkb-1.1-1.18.1.jar', allow_redirects=True)
+            open('mods/snowballkb-1.1-1.18.1.jar', 'wb').write(snowballkburl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading Starlight...", end='')
             sleep(0.05)
-            starlighturl = requests.get('https://cdn.modrinth.com/data/H8CaAYZC/versions/Starlight%201.0.0%201.17.x/starlight-1.0.0+fabric.73f6d37.jar', allow_redirects=True)
-            open('mods/starlight-1.0.0+fabric.73f6d37.jar', 'wb').write(starlighturl.content)
+            starlighturl = requests.get('https://cdn.modrinth.com/data/H8CaAYZC/versions/1.0.2+1.18.2/starlight-1.0.2+fabric.89b8d9f.jar', allow_redirects=True)
+            open('mods/starlight-1.0.2+fabric.89b8d9f.jar', 'wb').write(starlighturl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading Editable Player NBT Hack...", end='')
             sleep(0.05)
-            editnbtplayerurl = requests.get('https://cdn.modrinth.com/data/gY2Q7o7X/versions/1.1.0/editableplayernbthack-1.1.0-1.17.1.jar', allow_redirects=True)
-            open('mods/editableplayernbthack-1.1.0-1.17.1.jar', 'wb').write(editnbtplayerurl.content)
+            editnbtplayerurl = requests.get('https://cdn.modrinth.com/data/gY2Q7o7X/versions/1.1.0/editableplayernbthack-1.1.0-1.18.2.jar', allow_redirects=True)
+            open('mods/editableplayernbthack-1.1.0-1.18.2.jar', 'wb').write(editnbtplayerurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
@@ -843,32 +842,24 @@ def installMenu_12():
         try:
             print("Downloading FerriteCore...", end='')
             sleep(0.05)
-            ferritecoreurl = requests.get('https://cdn.modrinth.com/data/uXXizFIs/versions/3.1.0/ferritecore-3.1.0-fabric.jar', allow_redirects=True)
-            open('mods/ferritecore-3.1.0-fabric.jar', 'wb').write(ferritecoreurl.content)
-            print(G+"DONE"+W)
-        except OSError as error:
-            print(R+"FAIL (" + str(error) + ")"+W)
-        try:
-            print("Downloading Hydrogen...", end='')
-            sleep(0.05)
-            hydrogenurl = requests.get('https://cdn.modrinth.com/data/AZomiSrC/versions/mc1.17.1-0.3.1/hydrogen-fabric-mc1.17.1-0.3.jar', allow_redirects=True)
-            open('mods/hydrogen-fabric-mc1.17.1-0.3.jar', 'wb').write(hydrogenurl.content)
+            ferritecoreurl = requests.get('https://cdn.modrinth.com/data/uXXizFIs/versions/4.2.1/ferritecore-4.2.1-fabric.jar', allow_redirects=True)
+            open('mods/ferritecore-4.2.1-fabric.jar', 'wb').write(ferritecoreurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading Lithium...", end='')
             sleep(0.05)
-            lithiumurl = requests.get('https://cdn.modrinth.com/data/gvQqBUqZ/versions/mc1.17.1-0.7.5/lithium-fabric-mc1.17.1-0.7.5.jar', allow_redirects=True)
-            open('mods/lithium-fabric-mc1.17.1-0.7.5.jar', 'wb').write(lithiumurl.content)
+            lithiumurl = requests.get('https://cdn.modrinth.com/data/gvQqBUqZ/versions/mc1.18.2-0.7.10/lithium-fabric-mc1.18.2-0.7.10.jar', allow_redirects=True)
+            open('mods/lithium-fabric-mc1.18.2-0.7.10.jar', 'wb').write(lithiumurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading Carpet...", end='')
             sleep(0.05)
-            carpeturl = requests.get('https://media.forgecdn.net/files/3613/865/fabric-carpet-1.17.1-1.4.57%2Bv220119.jar', allow_redirects=True)
-            open('mods/fabric-carpet-1.17.1-1.4.57+v220119.jar', 'wb').write(carpeturl.content)
+            carpeturl = requests.get('https://media.forgecdn.net/files/3725/895/fabric-carpet-1.18.2-1.4.69%2Bv220331.jar', allow_redirects=True)
+            open('mods/fabric-carpet-1.18.2-1.4.69+v220331.jar', 'wb').write(carpeturl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
@@ -907,8 +898,8 @@ def installMenu_12():
         print("Downloading MiniMOTD...", end='')
         sleep(0.05)
         try:
-            minimotdurl = requests.get('https://cdn.modrinth.com/data/16vhQOQN/versions/2.0.4+1.17.1/minimotd-fabric-mc1.17.1-2.0.4.jar', allow_redirects=True)
-            open('mods/minimotd-fabric-mc1.17.1-2.0.4.jar', 'wb').write(minimotdurl.content)
+            minimotdurl = requests.get('https://cdn.modrinth.com/data/16vhQOQN/versions/2.0.7+1.18.2/minimotd-fabric-mc1.18.2-2.0.7.jar', allow_redirects=True)
+            open('mods/minimotd-fabric-mc1.18.2-2.0.7.jar', 'wb').write(minimotdurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
@@ -920,8 +911,8 @@ def installMenu_12():
         print("Downloading StyledPlayerList...", end='')
         sleep(0.05)
         try:
-            styledplayerlisturl = requests.get('https://cdn.modrinth.com/data/DQIfKUHf/versions/2.1.2/styledplayerlist-2.1.2.jar', allow_redirects=True)
-            open('mods/styledplayerlist-2.1.2.jar', 'wb').write(styledplayerlisturl.content)
+            styledplayerlisturl = requests.get('https://cdn.modrinth.com/data/DQIfKUHf/versions/2.1.3+1.18/styledplayerlist-2.1.3+1.18.jar', allow_redirects=True)
+            open('mods/styledplayerlist-2.1.3+1.18.jar', 'wb').write(styledplayerlisturl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
