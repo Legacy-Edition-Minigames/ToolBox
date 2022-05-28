@@ -48,7 +48,7 @@ cnt_program = 1.3
 
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.4 changelog:\n$W-$G NEW $WUpdated ServerUtils to 1.0.2\n$W-$G NEW $WUpdated Server to 1.18.2\n$W-$G NEW $WAdded optional 1.16 support$W"
+ver_info = "$OLEB-ToolBox v1.4 changelog:\n$W-$G NEW $WUpdated ServerUtils to 1.0.2\n$W-$G NEW $WUpdated Server to 1.18.2\n$W-$G NEW $WAdded optional 1.16 support\n$W-$G NEW $WAdded 5 new optimization mods$W"
 #"$OLEB-ToolBox v1.4 changelog:\n$W-$G NEW $WUpdated ServerUtils to 1.0.1$W"
 ####### PROGRAM VERSION #######
 
@@ -433,7 +433,12 @@ def installMenu_4_B():
     print(B+"The list of optimization mods contains:")
     print(G+"- FerriteCore")
     print("- Lithium")
-    print("- Carpet"+W)
+    print("- Carpet")
+    print("- Krypton")
+    print("- ServerCore")
+    print("- Very Many Players")
+    print("- Memory Leak Fix")
+    print("- LazyDFU"+W)
     print("")
     print(E+"This is an optional enhancement."+W)
     print("")
@@ -860,6 +865,46 @@ def installMenu_12():
             sleep(0.05)
             carpeturl = requests.get('https://media.forgecdn.net/files/3725/895/fabric-carpet-1.18.2-1.4.69%2Bv220331.jar', allow_redirects=True)
             open('mods/fabric-carpet-1.18.2-1.4.69+v220331.jar', 'wb').write(carpeturl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        try:
+            print("Downloading Krypton...", end='')
+            sleep(0.05)
+            kryptonurl = requests.get('https://cdn.modrinth.com/data/fQEb0iXm/versions/0.1.9/krypton-0.1.9.jar', allow_redirects=True)
+            open('mods/krypton-0.1.9.jar', 'wb').write(kryptonurl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        try:
+            print("Downloading ServerCore...", end='')
+            sleep(0.05)
+            servercoreurl = requests.get('https://cdn.modrinth.com/data/4WWQxlQP/versions/1.2.9/servercore-1.2.9-1.18.2.jar', allow_redirects=True)
+            open('mods/servercore-1.2.9-1.18.2.jar', 'wb').write(servercoreurl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        try:
+            print("Downloading Very Many Players...", end='')
+            sleep(0.05)
+            vmpurl = requests.get('https://cdn.modrinth.com/data/wnEe9KBa/versions/0.2.0+beta.3.17+1.18.2/vmp-fabric-mc1.18.2-0.2.0%2Bbeta.3.17-all.jar', allow_redirects=True)
+            open('mods/vmp-fabric-mc1.18.2-0.2.0+beta.3.17-all.jar', 'wb').write(vmpurl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        try:
+            print("Downloading Memory Leak Fix...", end='')
+            sleep(0.05)
+            memleakfixurl = requests.get('https://cdn.modrinth.com/data/NRjRiSSD/versions/v0.3.1/memoryleakfix-1.18.2-0.3.1.jar', allow_redirects=True)
+            open('mods/memoryleakfix-1.18.2-0.3.1.jar', 'wb').write(memleakfixurl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        try:
+            print("Downloading LazyDFU...", end='')
+            sleep(0.05)
+            lazydfuurl = requests.get('https://cdn.modrinth.com/data/hvFnDODi/versions/0.1.2/lazydfu-0.1.2.jar', allow_redirects=True)
+            open('mods/lazydfu-0.1.2.jar', 'wb').write(lazydfuurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
