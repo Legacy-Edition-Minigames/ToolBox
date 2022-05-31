@@ -44,12 +44,12 @@ def colorize(string):
     
 ####### PROGRAM VERSION #######
 cnt_program = 1.4
-#indev 1.4
+#indev 1.5
 
 ver_program = G+"v"+str(cnt_program)+W
 
 ver_info = "$OLEB-ToolBox v1.4 changelog:\n$W-$G NEW $WUpdated ServerUtils to 1.0.2\n$W-$G NEW $WUpdated Server to 1.18.2\n$W-$G NEW $WAdded optional 1.16 support\n$W-$G NEW $WAdded 5 new optimization mods\n$W-$R WARNING! $WDependency & Server changes have a high chance of breaking LEB upon updating the server! If you encounter issues, you may need to attempt to reinstall or ask for help on GitHub issues or our discord server!$W"
-#"$OLEB-ToolBox v1.4 changelog:\n$W-$G NEW $WUpdated ServerUtils to 1.0.2\n$W-$G NEW $WUpdated Server to 1.18.2\n$W-$G NEW $WAdded optional 1.16 support\n$W-$G NEW $WAdded 5 new optimization mods\n$W-$R WARNING! $WDependency & Server changes have a high chance of breaking LEB upon updating the server! If you encounter issues, you may need to attempt to reinstall or ask for help on GitHub issues or our discord server!$W"
+#"$OLEB-ToolBox v1.5 changelog:\n$W-$G NEW $WAdded 1.17.1 branch to branch selection$W"
 ####### PROGRAM VERSION #######
 
 repo = "DBTDerpbox"
@@ -1218,9 +1218,10 @@ def changeBranch():
     print("")
     print(R+"Old/Outdated branches:"+W)
     print("5. 1.18.2")
-    print("6. 1.17")
-    print("7. 1.16.5")
-    print("8. vanilla")
+    print("6. 1.17.1")
+    print("7. 1.17")
+    print("8. 1.16.5")
+    print("9. vanilla")
     print("")
     action = input(B+"Input: "+W)
 
@@ -1237,10 +1238,12 @@ def changeBranch():
     elif action == "5":
         cfg_branch = "1.18.2"
     elif action == "6":
-        cfg_branch = "1.17"
+        cfg_branch = "1.17.1"
     elif action == "7":
-        cfg_branch = "1.16.5"
+        cfg_branch = "1.17"
     elif action == "8":
+        cfg_branch = "1.16.5"
+    elif action == "9":
         cfg_branch = "vanilla"
     else:
         changeBranch()
