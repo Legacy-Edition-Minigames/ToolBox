@@ -497,8 +497,8 @@ def installMenu_6():
     print("=======================================================")
     print("")
     print(B+"Do you want to use "+G+"ViaFabric & ViaBackwards"+B+"?"+W)
-    print("ViaFabric & ViaBackwards are mods that provides cross-version compatibility, allowing client versions between 1.16 to 1.18.2 to join the server.")
-    print("This is a neat feature to have if your players use mods, resourcepacks, or modified clients that are designed specifically version 1.16 or 1.17.")
+    print("ViaFabric & ViaBackwards are mods that provides cross-version compatibility, allowing client versions between 1.16 to 1.19 to join the server.")
+    print("This is a neat feature to have if your players use mods, resourcepacks, or modified clients that are designed specifically version 1.16, 1.17 or 1.19.")
     print("")
     print(E+"This is an optional enhancement."+W)
     print("")
@@ -930,16 +930,16 @@ def installMenu_12():
         print("Downloading ViaFabric...", end='')
         sleep(0.05)
         try:
-            viafabricurl = requests.get('https://media.forgecdn.net/files/3667/489/viafabric-0.4.6%2B266-main.jar', allow_redirects=True)
-            open('mods/viafabric-0.4.6+266-main.jar', 'wb').write(viafabricurl.content)
+            viafabricurl = requests.get('https://media.forgecdn.net/files/3820/900/viafabric-0.4.7%2B5-main.jar', allow_redirects=True)
+            open('mods/viafabric-0.4.7+5-main.jar', 'wb').write(viafabricurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         print("Downloading ViaBackwards...", end='')
         sleep(0.05)
         try:
-            viabackwardsurl = requests.get('https://media.forgecdn.net/files/3791/237/ViaBackwards-4.2.1.jar', allow_redirects=True)
-            open('mods/ViaBackwards-4.2.1.jar', 'wb').write(viabackwardsurl.content)
+            viabackwardsurl = requests.get('https://media.forgecdn.net/files/3820/990/ViaBackwards-4.3.0.jar', allow_redirects=True)
+            open('mods/ViaBackwards-4.3.0.jar', 'wb').write(viabackwardsurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
