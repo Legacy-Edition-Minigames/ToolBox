@@ -498,7 +498,7 @@ def installMenu_6():
     print("")
     print(B+"Do you want to use "+G+"ViaFabric & ViaBackwards"+B+"?"+W)
     print("ViaFabric & ViaBackwards are mods that provides cross-version compatibility, allowing client versions between 1.16 to 1.19 to join the server.")
-    print("This is a neat feature to have if your players use mods, resourcepacks, or modified clients that are designed specifically version 1.16, 1.17 or 1.19.")
+    print("This is a neat feature to have if your players use mods, resourcepacks, or modified clients that are designed specifically for versions 1.16, 1.17 or 1.19.")
     print("")
     print(E+"This is an optional enhancement."+W)
     print("")
@@ -1205,48 +1205,56 @@ def changeBranch():
     print("=======================================================")
     print("")
     print("You can choose whatever branch you feel like using by selecting one of the displayed branches below.")
-    print("The default (most stable and updated) branch is MAIN.")
+    print("The default (most stable and updated) branch is "+G+"MAIN"+W+".")
     print("Using experimental or outdated branches might break the savedata of the server. Test with caution!")
+    print("")
+    print("To select a branch, type the corresponding number or type the name of the branch in the text box (be sure it's correctly spelled or LEB-ToolBox will break!).")
     print("")
     print(G+"Default branches:"+W)
     print("1. main (default)")
     print("")
     print(P+"Avaible branches:"+W)
     print("2. testing")
-    print("3. weed (?)")
-    print("4. old-resetter")
     print("")
-    print(R+"Old/Outdated branches:"+W)
+    print(R+"Experimental/Old/Outdated branches:"+W)
     print("5. 1.18.2")
     print("6. 1.17.1")
     print("7. 1.17")
     print("8. 1.16.5")
     print("9. vanilla")
+    print("9. old-resetter")
+    print("9. weed")
+    print("")
+    print("0. Exit")
     print("")
     action = input(B+"Input: "+W)
 
     global cfg_branch
-    
+
+    if action == "0":
+         mainMenu()
     if action == "1":
          cfg_branch = "main"
     elif action == "2":
         cfg_branch = "testing"
     elif action == "3":
-        cfg_branch = "weed"
-    elif action == "4":
-        cfg_branch = "old-resetter"
-    elif action == "5":
         cfg_branch = "1.18.2"
-    elif action == "6":
+    elif action == "4":
         cfg_branch = "1.17.1"
-    elif action == "7":
+    elif action == "5":
         cfg_branch = "1.17"
-    elif action == "8":
+    elif action == "6":
         cfg_branch = "1.16.5"
-    elif action == "9":
+    elif action == "7":
         cfg_branch = "vanilla"
+    elif action == "8":
+        cfg_branch = "old-resetter"
+    elif action == "9":
+        cfg_branch = "weed"
     else:
-        changeBranch()
+        cfg_branch = action
+    print(W+"Branch has been updated to "+P+cfg_branch+W+".")
+    sleep(2.5)
     writeConfig(cfg_branch,motd_sync,current_hash,check_for_updates,legacy_resetter)
     mainMenu()
 
@@ -1419,7 +1427,7 @@ def updateLEBTB():
                     prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Darwin":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True) #!# MACOS UPDATE STUFF, AGAIN
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True)
                     open("LEB-ToolBox-new-MacOS", "wb").write(prgrmfile.content)
                 elif platform.system() == "Windows":
                     prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program)+'.exe', allow_redirects=True)
