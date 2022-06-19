@@ -1536,7 +1536,8 @@ def backup():
 def downloadInstall():
     if lebDebugDisableDownloadContent == 0:
         print(E+"Note: Due to GitHub limitations, download ETA is not available."+W)
-        print("Downloading build" + E+ " (this can take up to 6 minutes)" + W + "...", end='')
+        print("Downloading LEB build" + E+ " (this can take up to 6 minutes)" + W)
+        print("Now downloading...", end='')
         leb_zip = requests.get('https://github.com/DBTDerpbox/Legacy-Edition-Battle/archive/refs/heads/' + cfg_branch+ '.zip', allow_redirects=True)
         open("leb_update_cache/leb.zip", "wb").write(leb_zip.content)
         print(G+"DONE"+W)
