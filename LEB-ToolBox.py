@@ -437,7 +437,6 @@ def installMenu_4_B():
     print("- Krypton")
     print("- ServerCore")
     print("- Very Many Players")
-    print("- Memory Leak Fix")
     print("- LazyDFU"+W)
     print("")
     print(E+"This is an optional enhancement."+W)
@@ -889,14 +888,6 @@ def installMenu_12():
             sleep(0.05)
             vmpurl = requests.get('https://cdn.modrinth.com/data/wnEe9KBa/versions/0.2.0+beta.3.17+1.18.2/vmp-fabric-mc1.18.2-0.2.0%2Bbeta.3.17-all.jar', allow_redirects=True)
             open('mods/vmp-fabric-mc1.18.2-0.2.0+beta.3.17-all.jar', 'wb').write(vmpurl.content)
-            print(G+"DONE"+W)
-        except OSError as error:
-            print(R+"FAIL (" + str(error) + ")"+W)
-        try:
-            print("Downloading Memory Leak Fix...", end='')
-            sleep(0.05)
-            memleakfixurl = requests.get('https://cdn.modrinth.com/data/NRjRiSSD/versions/v0.3.1/memoryleakfix-1.18.2-0.3.1.jar', allow_redirects=True)
-            open('mods/memoryleakfix-1.18.2-0.3.1.jar', 'wb').write(memleakfixurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
