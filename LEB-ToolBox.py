@@ -43,13 +43,13 @@ def colorize(string):
 
     
 ####### PROGRAM VERSION #######
-cnt_program = 1.4
+cnt_program = 1.5
 #indev 1.5
 
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.4 changelog:\n$W-$G NEW $WUpdated ServerUtils to 1.0.2\n$W-$G NEW $WUpdated Server to 1.18.2\n$W-$G NEW $WAdded optional 1.16 support\n$W-$G NEW $WAdded 5 new optimization mods\n$W-$R WARNING! $WDependency & Server changes have a high chance of breaking LEB upon updating the server! If you encounter issues, you may need to attempt to reinstall or ask for help on GitHub issues or our discord server!$W"
-#"$OLEB-ToolBox v1.5 changelog:\n$W-$G NEW $WReworked branch selection system$W\n$W-$O FIX $Wprogram crashes when update server not reacheable$W"
+ver_info = "$OLEB-ToolBox v1.5 changelog:\n$W-$G NEW $WReworked branch selection system\n$W-$G NEW $WAdded support for Minecraft 1.19$W\n$W-$O FIX $WProgram crashes when update server not reacheable$W"
+#"$OLEB-ToolBox v1.5 changelog:\n$W-$G NEW $WReworked branch selection system\n$W-$G NEW $WAdded support for Minecraft 1.19$W\n$W-$O FIX $WProgram crashes when update server not reacheable$W"
 ####### PROGRAM VERSION #######
 
 repo = "DBTDerpbox"
