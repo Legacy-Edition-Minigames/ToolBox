@@ -29,6 +29,7 @@ O  = '\033[33m' # orange
 B  = '\033[36m' # blue
 P  = '\033[35m' # purple
 E  = '\033[30;1m' #gray
+Y  = '\033[0;33m' #yellow
 
 def colorize(string):
     string = string.replace("$W",W)
@@ -38,18 +39,18 @@ def colorize(string):
     string = string.replace("$B",B)
     string = string.replace("$P",P)
     string = string.replace("$E",E)
+    string = string.replace("$Y",Y)
     string = string.replace(r"\n","\n")
     return string
 
     
 ####### PROGRAM VERSION #######
-cnt_program = 1.5
-#indev 1.5
+cnt_program = 1.6
+#indev 1.6
 
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.5 changelog:\n$W-$G NEW $WReworked branch selection system\n$W-$G NEW $WAdded support for Minecraft 1.19$W\n$W-$O FIX $WProgram crashes when update server not reacheable$W"
-#"$OLEB-ToolBox v1.5 changelog:\n$W-$G NEW $WReworked branch selection system\n$W-$G NEW $WAdded support for Minecraft 1.19$W\n$W-$O FIX $WProgram crashes when update server not reacheable$W"
+ver_info = "$OLEB-ToolBox v1.6 changelog:\n$W-$O FIX $WPrevent LEB-ToolBox from being loaded as a library/addon external code.$W\n$W-$G NEW $WAdded better logo and styling improvements.\n$W-$G NEW $WAdded status bar to the Main Menu."
 ####### PROGRAM VERSION #######
 
 repo = "DBTDerpbox"
@@ -57,8 +58,8 @@ repo = "DBTDerpbox"
 cfg_branch = "main"
 current_hash = R+"unknown"
 check_for_updates = -1
-
 online_count_program = 0
+
 fabric = 0
 dependencies = 0
 optimize = 0
@@ -71,8 +72,10 @@ ram = 0
 motd_sync = -1
 legacy_resetter = -1
 eula = 0
+
 lebDebugDisableDownloadContent = 0
 lebDebugKeepCache = 0
+lebTBStatus = 0
 
 def readConfig():
     global cfg_branch
@@ -94,10 +97,16 @@ def readConfig():
             check_for_updates = int(file_split[3])
             legacy_resetter = int(file_split[4])
         else:
-            print(O+"*******************************************************"+W)
-            print(G+"Welcome to LEB-ToolBox "+ver_program+"!"+W)
-            print(O+"*******************************************************"+W)
-            print("Thanks for choosing LEB-ToolBox!")
+            print(O+"***************************************************************************"+W)
+            print(G+r"""    __    __________              ______            ______            
+   / /   / ____/ __ )            /_  __/___  ____  / / __ )____  _  __
+  / /   / __/ / __  |  ______     / / / __ \/ __ \/ / __  / __ \| |/_/
+ / /___/ /___/ /_/ /  /_____/    / / / /_/ / /_/ / / /_/ / /_/ />  <  
+/_____/_____/_____/             /_/  \____/\____/_/_____/\____/_/|_|  
+                                                                      """+ver_program+W)
+            print(O+"***************************************************************************"+W)
+            print("")
+            print("Welcome to LEB-ToolBox!")
             print("")
             print("LEB-ToolBox is a tool designed to make it easy for users to install, update and customize their own LEB instance.")
             print("To navigate through the program, wait until a blue <Input:> message appears. Then, use the numbers displayed on screen to select your choice and press ENTER.")
@@ -163,7 +172,6 @@ def readConfig():
 if os.name=='nt':
     os.system('title LEB-ToolBox v'+str(cnt_program))
 
-readConfig()
 ################
 ###   GUIs   ###
 ################
@@ -171,24 +179,44 @@ readConfig()
 def mainMenu():
     readConfig()
     cls()
-    print("=======================================================")
-    print(G+"Legacy Edition Battle (LEB) ToolBox " + ver_program +W)
-    print("=======================================================")
+    print("=============================================================================")
+    print(G+r"""    __    __________              ______            ______            
+   / /   / ____/ __ )            /_  __/___  ____  / / __ )____  _  __
+  / /   / __/ / __  |  ______     / / / __ \/ __ \/ / __  / __ \| |/_/
+ / /___/ /___/ /_/ /  /_____/    / / / /_/ / /_/ / / /_/ / /_/ />  <  
+/_____/_____/_____/             /_/  \____/\____/_/_____/\____/_/|_|  
+                                                                      """+ver_program+W)
+    if lebTBStatus == 0:
+        print("")
+    elif lebTBStatus == 1:
+        print(E+"(i) The program is fully updated."+W)
+    elif lebTBStatus == -1:
+        print(O+"(!) There are new updates available."+W)
+    elif lebTBStatus == -2:
+        print(Y+"(!) There are new updates, but none are available for your system yet."+W)
+    elif lebTBStatus == -3:
+        print(R+"[!!!] You are running a developer/pre-release version of this program! "+W)
+    print("=============================================================================")
     print("")
     print(P+"Choose an action below:"+W)
     print("")
+    print(Y+"--- Legacy Edition Battle ---"+W)
     try:
         f = open("fabric-server-launch.jar")
         print("0. Start LEB Server")
         print("1. Update LEB " + E +"(current commit instaled: " +G+current_hash+E+")"+W)
         f.close()
     except IOError:
-        print("1. Install LEB")     
+        print("1. Install LEB")
+    print("")
+    print(Y+"--- Customize aspects ---"+W)
     print("2. Settings")
     print("3. Change branch (current selected branch: ", B+cfg_branch+W, ")")
     print("")
+    print(Y+"--- Documentation ---"+W)
     print("4. Open GitHub project page")
     print("5. See the Changelog")
+    print("")
     print("")
     print("6. Exit")
     print("")
@@ -1682,6 +1710,7 @@ def reinstall():
     sleep(2)
 
 def checkForUpdates():
+    global lebTBStatus
     ver1 = 0
     try:
         req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
@@ -1710,13 +1739,21 @@ def checkForUpdates():
             req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(ver1)+str(extension), allow_redirects=True)
             data = req.content
             if data == b'404: Not Found':
+                lebTBStatus = -2
                 return 2
-            else: #unecesary, but whatever             
+            else:            
                 online_count_program = ver1
+                lebTBStatus = -1
                 return 1
         except Exception as error:
                 online_count_program = ver1
-                return 1
+                return -1
+    elif ver1 == cnt_program:
+        lebTBStatus = 1
+        return 0
+    elif ver1 < cnt_program:
+        lebTBStatus = -3
+        return 0
     else:
         return 0
     
@@ -1755,31 +1792,39 @@ def rmOldVer():
 
 
 ### pre-initialization check for updates (cfu) routine ###
-rmOldVer()
-readConfig()
-cls()
-if check_for_updates == 1:
-    result = checkForUpdates()
-    result2 = checkForChangeLog()
-    if result == 1:
-        print(O+"*******************************************************"+W)
-        print(G+"New LEB-ToolBox v"+str(online_count_program)+" update has been found!"+W)
-        print(O+"*******************************************************"+W)
-        print("")
-        print(B+"CHANGELOG:"+W)
-        print(result2)
-        print("")
-        print(P+"Do you want to go to the LEB-ToolBox update Menu?"+W)
-        print("")
-        action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
-        if action.lower() == "y":
-            updateLEBTB()
+def CFU():
+    rmOldVer()
+    readConfig()
+    cls()
+    if check_for_updates == 1:
+        result = checkForUpdates()
+        result2 = checkForChangeLog()
+        if result == 1:
+            print(O+"*******************************************************"+W)
+            print(G+"New LEB-ToolBox v"+str(online_count_program)+" update has been found!"+W)
+            print(O+"*******************************************************"+W)
+            print("")
+            print(B+"CHANGELOG:"+W)
+            print(result2)
+            print("")
+            print(P+"Do you want to go to the LEB-ToolBox update Menu?"+W)
+            print("")
+            action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
+            if action.lower() == "y":
+                updateLEBTB()
 
 
 
 
 ###.#.#.### The one line of code that makes all of this work ###.#.#.###
-mainMenu()
+
+if __name__ == '__main__':
+    readConfig()
+    CFU()
+    mainMenu()
+else:
+    print(R+'LEB-ToolBox is not designed to be loaded as external code, a library or an addon. This thread will now be terminated.')
+    exit
 
 
 
