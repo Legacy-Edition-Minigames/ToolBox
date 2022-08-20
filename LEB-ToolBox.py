@@ -75,6 +75,7 @@ eula = 0
 
 lebDebugDisableDownloadContent = 0
 lebDebugKeepCache = 0
+lebDebugSkipPhase2 = 0
 lebTBStatus = 0
 
 def readConfig():
@@ -263,30 +264,35 @@ def mainMenu():
         changeLog()
     elif action == "6":
         exit()
-    elif action == "debug download":
+    elif action == "debug nodownload": #forces not to download or extract the lebupdatecache/leb.zip file. THIS OPTION WILL MAKE LEB-TOOLBOX UNSTABLE (MIGHT CRASH).
+        global lebDebugSkipPhase2
+        lebDebugSkipPhase2 = 1
+        action = input(B+"forced skip download and install of phase 2"+W)
+        mainMenu()
+    elif action == "debug forcecache": #forces to use local lebupdatecache/leb.zip file instead of downloading it from github.
         global lebDebugDisableDownloadContent
         lebDebugDisableDownloadContent = 1
-        action = input(B+"forced LEB content download at install disabled untill next restart"+W)
+        action = input(B+"forced use local lebupdatecache/leb.zip when on install phase 2 instead of downloading"+W)
         mainMenu()
-    elif action == "debug cache":
+    elif action == "debug keepcache": #forces to use keep lebupdatecache/leb.zip file instead of removing it right after extracting the files.
         global lebDebugKeepCache
         lebDebugKeepCache = 1
-        action = input(B+"forced LEB keep cache folder after installing"+W)
+        action = input(B+"forced keep lebupdatecache/leb.zip folder after installing"+W)
         mainMenu()
-    elif action == "debug reinstall_s":
+    elif action == "debug reinstall": #opens reinstall GUI
         reinstall()
-    elif action == "debug install":
+    elif action == "debug install": #opens install GUI
         installMenu()
-    elif action == "debug setmotd":
+    elif action == "debug setmotd": #executes the set MOTD function. toggles on and off this feature
         setMOTD()
-    elif action == "debug setlr":
+    elif action == "debug setlr": #executes the set legacy resetter function. toggles on and off this feature
         setLR()
-    elif action == "debug repo":
+    elif action == "debug repo": #changes the repo for update checking to the my own. usefull for experimental features that require changes on the main github.
         global repo
         repo = "PiporGames"
         action = input(B+"changed repo fetching to PiporGames"+W)
         mainMenu()
-    elif action == "debug cfu":
+    elif action == "debug cfu": #executes the CFU routine function. kinda experimental for now.
         var111 = checkForUpdates()
         print(str(var111))
         input("")
@@ -1058,10 +1064,11 @@ def installMenu_12():
     print(E+"Preparing to install LEB-Resources in 5 seconds . . ."+W)
     sleep(5)
     prepare()
-    downloadInstall()
-    setMOTD()
-    setLR()
-    clean()
+    if lebDebugSkipPhase2 == 0:
+        downloadInstall()
+        setMOTD()
+        setLR()
+        clean()
     print("")
     print(G+"***************************")
     print("*** Install successful! ***")
@@ -1144,11 +1151,12 @@ def updater():
     print("")
     prepare()
     backup()
-    downloadInstall()
-    setMOTD()
-    setLR()
-    restore()
-    clean()
+    if lebDebugSkipPhase2 == 0:
+        downloadInstall()
+        setMOTD()
+        setLR()
+        restore()
+        clean()
     print()
     print(G+"*** Update successful! ***"+W)
     print("")
@@ -1177,10 +1185,11 @@ def cleanUpdater():
         cleanUpdater()
     print("")
     prepare()
-    downloadInstall()
-    setMOTD()
-    setLR()
-    clean()
+    if lebDebugSkipPhase2 == 0:
+        downloadInstall()
+        setMOTD()
+        setLR()
+        clean()
     print()
     print(G+"*** Clean Update successful! ***"+W)
     print("")
@@ -1561,47 +1570,51 @@ def backup():
 
 
 def downloadInstall():
-    if lebDebugDisableDownloadContent == 0:
-        print(E+"Note: Due to GitHub limitations, download ETA is not available."+W)
-        print("Downloading LEB build" + E+ " (this can take up to 6 minutes)" + W)
-        print("Now downloading...", end='')
-        leb_zip = requests.get('https://github.com/DBTDerpbox/Legacy-Edition-Battle/archive/refs/heads/' + cfg_branch+ '.zip', allow_redirects=True)
-        open("leb_update_cache/leb.zip", "wb").write(leb_zip.content)
+    if lebDebugSkipPhase2 == 0:
+        if lebDebugDisableDownloadContent == 0:
+            print(E+"Note: Due to GitHub limitations, download ETA is not available."+W)
+            print("Downloading LEB build" + E+ " (this can take up to 6 minutes)" + W)
+            print("Now downloading...", end='')
+            leb_zip = requests.get('https://github.com/DBTDerpbox/Legacy-Edition-Battle/archive/refs/heads/' + cfg_branch+ '.zip', allow_redirects=True, stream=True)
+            with open( 'leb_update_cache/leb.zip', "wb" ) as f:
+                for chunk in leb_zip.iter_content( chunk_size = 1024 ):
+                    if chunk:
+                        f.write( chunk )
+            print(G+"DONE"+W)
+        print("Removing old files "+B+"["+W)
+        sleep(0.05)
+        files = [".gitignore","INSTALLATION.md","INSTALLATION-MINEHUT.md","LICENSE","README.md","SCREENSHOTS.md","CUSTOMPACK.md"]
+        directories = ["world","images","config",".github"]
+        try:
+            #crear arrays uno de archivos y otro de carpetas y hacer loop
+            for file in files:
+                if os.path.isfile(file):
+                    print ("Removing " + str(file) + " ...", end='')
+                    os.remove(file)
+                    print(G+"DONE"+W)
+            for directory in directories:
+                if os.path.isdir(directory):
+                    print ("Removing " + str(directory) + " ...", end='')
+                    shutil.rmtree(directory)
+                    print(G+"DONE"+W)
+        except Exception as error:
+            print (R+"FAIL ("+str(error)+"), stopping code..."+W, end='')
+            pass
+        print(B+"] "+W+"Removing old files "+G+"DONE"+W)
+        print("Extracting files...", end='')
+        sleep(0.05)
+        with ZipFile('leb_update_cache/leb.zip', 'r') as zipObj:
+            zipObj.extractall()
         print(G+"DONE"+W)
-    print("Removing old files "+B+"["+W)
-    sleep(0.05)
-    files = [".gitignore","INSTALLATION.md","INSTALLATION-MINEHUT.md","LICENSE","README.md","SCREENSHOTS.md","CUSTOMPACK.md"]
-    directories = ["world","images","config",".github"]
-    try:
-        #crear arrays uno de archivos y otro de carpetas y hacer loop
-        for file in files:
-            if os.path.isfile(file):
-                print ("Removing " + str(file) + " ...", end='')
-                os.remove(file)
-                print(G+"DONE"+W)
-        for directory in directories:
-            if os.path.isdir(directory):
-                print ("Removing " + str(directory) + " ...", end='')
-                shutil.rmtree(directory)
-                print(G+"DONE"+W)
-    except Exception as error:
-        print (R+"FAIL ("+str(error)+"), stopping code..."+W, end='')
-        pass
-    print(B+"] "+W+"Removing old files "+G+"DONE"+W)
-    print("Extracting files...", end='')
-    sleep(0.05)
-    with ZipFile('leb_update_cache/leb.zip', 'r') as zipObj:
-        zipObj.extractall()
-    print(G+"DONE"+W)
-    print("Moving files...", end='')
-    sleep(0.05)
-    try:
-        for filename in os.listdir('Legacy-Edition-Battle-' + cfg_branch):
-            shutil.move('Legacy-Edition-Battle-' + cfg_branch + "/" + filename, filename)
-        shutil.rmtree('Legacy-Edition-Battle-' + cfg_branch)
-    except Exception as error:
-        str(error)
-    print(G+"DONE"+W)
+        print("Moving files...", end='')
+        sleep(0.05)
+        try:
+            for filename in os.listdir('Legacy-Edition-Battle-' + cfg_branch):
+                shutil.move('Legacy-Edition-Battle-' + cfg_branch + "/" + filename, filename)
+            shutil.rmtree('Legacy-Edition-Battle-' + cfg_branch)
+        except Exception as error:
+            str(error)
+        print(G+"DONE"+W)
     
 
 def restore():
