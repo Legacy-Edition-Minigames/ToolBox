@@ -23,21 +23,15 @@ Unlike other name schemes, you cannot, for example, use the scheme A.B.C, as 1.2
 ## GitHub Structure Scheme
 LEB-ToolBox.py  -----  Required to fetch new versions
 
-*LEB-ToolBox.exe (MUST be version 1.3)  -----  Required for older Windows clients (1.2 and older)
-
-*LEB-ToolBox (MUST be version 1.3)  -----  Required for older Linux clients (1.2 and older)
-
 LEB-ToolBox-vA.B.exe  -----  Windows Builds
 
 LEB-ToolBox-vA.B  -----  Linux Builds
 
-*: not to be updated anymore, do not delete.
+LEB-ToolBox-vA.B-MacOS  -----  MacOS Builds
 
 
 ## Hypothetical Environment
-Current version: 1.2
-Target version: 1.3
-
+Current version: 1.2  ||  Target version: 1.3
 
 ## Step 1: Build your __new__ binaries
 To start, first you need to compile the binaries for your new version.
