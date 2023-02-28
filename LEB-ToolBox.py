@@ -433,7 +433,8 @@ def installMenu_4():
     print("- ServerUtils")
     print("- SnowballKB")
     print("- Starlight")
-    print("- Editable Player NBT Hack"+W)
+    print("- Editable Player NBT Hack")
+    print("- No Chat Reports"+W)
     print("Besides upgrading the dependencies version because of extraordinary circumstances, you should always install this component.")
     print("")
     print(R+"WARNING: LEB WON'T WORK IF THIS COMPONENT IS NOT INSTALLED!")
@@ -471,7 +472,6 @@ def installMenu_4_B():
     print("- Krypton")
     print("- ServerCore")
     print("- Very Many Players")
-    print("- LazyDFU"+W)
     print("")
     print(E+"This is an optional enhancement."+W)
     print("")
@@ -801,12 +801,12 @@ def installMenu_12():
         print("Downloading Fabric...", end='')
         sleep(0.05)
         try:
-            fabricurl = requests.get('https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.10.2/fabric-installer-0.10.2.jar', allow_redirects=True)
+            fabricurl = requests.get('https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.11.1/fabric-installer-0.11.1.jar', allow_redirects=True)
             open("fabricinstaller.jar", "wb").write(fabricurl.content)
             print(G+"DONE"+W)
             print("Installing Fabric...", end='')
             sleep(0.05)
-            os.system('java -jar fabricinstaller.jar server -mcversion 1.18.2 -downloadMinecraft')     
+            os.system('java -jar fabricinstaller.jar server -mcversion 1.19.2 -downloadMinecraft')     
             print(G+"DONE"+W)     
             print("Removing Fabric installer files...", end='')
             os.remove("fabricinstaller.jar")  
@@ -827,40 +827,48 @@ def installMenu_12():
         try:
             print("Downloading FabricAPI...", end='')
             sleep(0.05)
-            fabricapiurl = requests.get('https://cdn.modrinth.com/data/P7dR8mSH/versions/0.53.4+1.18.2/fabric-api-0.53.4%2B1.18.2.jar', allow_redirects=True)
-            open('mods/fabric-api-0.53.4+1.18.2.jar', 'wb').write(fabricapiurl.content)
+            fabricapiurl = requests.get('https://cdn.modrinth.com/data/P7dR8mSH/versions/mrB7EiW4/fabric-api-0.70.0%2B1.19.2.jar', allow_redirects=True)
+            open('mods/fabric-api-0.70.0+1.19.2.jar', 'wb').write(fabricapiurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading ServerUtils...", end='')
             sleep(0.05)
-            serverutilsurl = requests.get('https://github.com/kyrptonaught/Server-Utils/releases/download/1.0.2/ServerUtils-1.0.2-1.18.jar', allow_redirects=True)
-            open('mods/ServerUtils-1.0.2-1.18.jar', 'wb').write(serverutilsurl.content)
+            serverutilsurl = requests.get('https://github.com/kyrptonaught/Server-Utils/releases/download/1.0.5/ServerUtils-1.0.5-1.19.jar', allow_redirects=True)
+            open('mods/ServerUtils-1.0.5-1.19.jar', 'wb').write(serverutilsurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading SnowballKB...", end='')
             sleep(0.05)
-            snowballkburl = requests.get('https://github.com/capitalistspz/SnowballKB/releases/download/1.1-1.18.1/snowballkb-1.1-1.18.1.jar', allow_redirects=True)
-            open('mods/snowballkb-1.1-1.18.1.jar', 'wb').write(snowballkburl.content)
+            snowballkburl = requests.get('https://mediafilez.forgecdn.net/files/3885/676/snowballkb-1.2-1.19.jar', allow_redirects=True)
+            open('mods/snowballkb-1.2-1.19.jar', 'wb').write(snowballkburl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading Starlight...", end='')
             sleep(0.05)
-            starlighturl = requests.get('https://cdn.modrinth.com/data/H8CaAYZC/versions/1.0.2+1.18.2/starlight-1.0.2+fabric.89b8d9f.jar', allow_redirects=True)
-            open('mods/starlight-1.0.2+fabric.89b8d9f.jar', 'wb').write(starlighturl.content)
+            starlighturl = requests.get('https://cdn.modrinth.com/data/H8CaAYZC/versions/1.1.1%2B1.19/starlight-1.1.1%2Bfabric.ae22326.jar', allow_redirects=True)
+            open('mods/starlight-1.1.1+fabric.ae22326.jar', 'wb').write(starlighturl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading Editable Player NBT Hack...", end='')
             sleep(0.05)
-            editnbtplayerurl = requests.get('https://cdn.modrinth.com/data/gY2Q7o7X/versions/1.1.0/editableplayernbthack-1.1.0-1.18.2.jar', allow_redirects=True)
-            open('mods/editableplayernbthack-1.1.0-1.18.2.jar', 'wb').write(editnbtplayerurl.content)
+            editnbtplayerurl = requests.get('https://cdn.modrinth.com/data/gY2Q7o7X/versions/EDCQqJQg/editableplayernbthack-1.1.0-1.19.2.jar', allow_redirects=True)
+            open('mods/editableplayernbthack-1.1.0-1.19.2.jar', 'wb').write(editnbtplayerurl.content)
+            print(G+"DONE"+W)
+        except OSError as error:
+            print(R+"FAIL (" + str(error) + ")"+W)
+        try:
+            print("Downloading No Chat Reports...", end='')
+            sleep(0.05)
+            vmpurl = requests.get('https://cdn.modrinth.com/data/qQyHxfxd/versions/YuX53PIA/NoChatReports-FABRIC-1.19.2-v1.13.12.jar', allow_redirects=True)
+            open('mods/NoChatReports-FABRIC-1.19.2-v1.13.12.jar', 'wb').write(vmpurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
@@ -880,56 +888,48 @@ def installMenu_12():
         try:
             print("Downloading FerriteCore...", end='')
             sleep(0.05)
-            ferritecoreurl = requests.get('https://cdn.modrinth.com/data/uXXizFIs/versions/4.2.1/ferritecore-4.2.1-fabric.jar', allow_redirects=True)
-            open('mods/ferritecore-4.2.1-fabric.jar', 'wb').write(ferritecoreurl.content)
+            ferritecoreurl = requests.get('https://cdn.modrinth.com/data/uXXizFIs/versions/kwjHqfz7/ferritecore-5.0.3-fabric.jar', allow_redirects=True)
+            open('mods/ferritecore-5.0.3-fabric.jar', 'wb').write(ferritecoreurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading Lithium...", end='')
             sleep(0.05)
-            lithiumurl = requests.get('https://cdn.modrinth.com/data/gvQqBUqZ/versions/mc1.18.2-0.7.10/lithium-fabric-mc1.18.2-0.7.10.jar', allow_redirects=True)
-            open('mods/lithium-fabric-mc1.18.2-0.7.10.jar', 'wb').write(lithiumurl.content)
+            lithiumurl = requests.get('https://cdn.modrinth.com/data/gvQqBUqZ/versions/7scJ9RTg/lithium-fabric-mc1.19.2-0.10.4.jar', allow_redirects=True)
+            open('mods/lithium-fabric-mc1.19.2-0.10.4.jar', 'wb').write(lithiumurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading Carpet...", end='')
             sleep(0.05)
-            carpeturl = requests.get('https://media.forgecdn.net/files/3725/895/fabric-carpet-1.18.2-1.4.69%2Bv220331.jar', allow_redirects=True)
-            open('mods/fabric-carpet-1.18.2-1.4.69+v220331.jar', 'wb').write(carpeturl.content)
+            carpeturl = requests.get('https://mediafilez.forgecdn.net/files/4033/215/fabric-carpet-1.19.2-1.4.84%2Bv221018.jar', allow_redirects=True)
+            open('mods/fabric-carpet-1.19.2-1.4.84+v221018.jar', 'wb').write(carpeturl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading Krypton...", end='')
             sleep(0.05)
-            kryptonurl = requests.get('https://cdn.modrinth.com/data/fQEb0iXm/versions/0.1.9/krypton-0.1.9.jar', allow_redirects=True)
-            open('mods/krypton-0.1.9.jar', 'wb').write(kryptonurl.content)
+            kryptonurl = requests.get('https://cdn.modrinth.com/data/fQEb0iXm/versions/0.2.1/krypton-0.2.1.jar', allow_redirects=True)
+            open('mods/krypton-0.2.1.jar', 'wb').write(kryptonurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading ServerCore...", end='')
             sleep(0.05)
-            servercoreurl = requests.get('https://cdn.modrinth.com/data/4WWQxlQP/versions/1.2.9/servercore-1.2.9-1.18.2.jar', allow_redirects=True)
-            open('mods/servercore-1.2.9-1.18.2.jar', 'wb').write(servercoreurl.content)
+            servercoreurl = requests.get('https://cdn.modrinth.com/data/4WWQxlQP/versions/kzD8EGTS/servercore-1.3.3-1.19.2.jar', allow_redirects=True)
+            open('mods/servercore-1.3.3-1.19.2.jar', 'wb').write(servercoreurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         try:
             print("Downloading Very Many Players...", end='')
             sleep(0.05)
-            vmpurl = requests.get('https://cdn.modrinth.com/data/wnEe9KBa/versions/0.2.0+beta.3.17+1.18.2/vmp-fabric-mc1.18.2-0.2.0%2Bbeta.3.17-all.jar', allow_redirects=True)
-            open('mods/vmp-fabric-mc1.18.2-0.2.0+beta.3.17-all.jar', 'wb').write(vmpurl.content)
-            print(G+"DONE"+W)
-        except OSError as error:
-            print(R+"FAIL (" + str(error) + ")"+W)
-        try:
-            print("Downloading LazyDFU...", end='')
-            sleep(0.05)
-            lazydfuurl = requests.get('https://cdn.modrinth.com/data/hvFnDODi/versions/0.1.2/lazydfu-0.1.2.jar', allow_redirects=True)
-            open('mods/lazydfu-0.1.2.jar', 'wb').write(lazydfuurl.content)
+            vmpurl = requests.get('https://cdn.modrinth.com/data/wnEe9KBa/versions/2tNVStHO/vmp-fabric-mc1.19.2-0.2.0%2Bbeta.7.23-all.jar', allow_redirects=True)
+            open('mods/vmp-fabric-mc1.19.2-0.2.0+beta.7.23-all.jar', 'wb').write(vmpurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
@@ -942,8 +942,8 @@ def installMenu_12():
         print("Downloading dedicatedUPnP...", end='')
         sleep(0.05)
         try:
-            dedicatedmcupnpurl = requests.get('https://media.forgecdn.net/files/3525/899/dedicatedmcupnp-1.2.0.jar', allow_redirects=True)
-            open('mods/dedicatedmcupnp-1.2.0.jar', 'wb').write(dedicatedmcupnpurl.content)
+            dedicatedmcupnpurl = requests.get('https://mediafilez.forgecdn.net/files/3835/172/dedicatedmcupnp-1.2.1.jar', allow_redirects=True)
+            open('mods/dedicatedmcupnp-1.2.1.jar', 'wb').write(dedicatedmcupnpurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
@@ -955,16 +955,16 @@ def installMenu_12():
         print("Downloading ViaFabric...", end='')
         sleep(0.05)
         try:
-            viafabricurl = requests.get('https://media.forgecdn.net/files/3820/900/viafabric-0.4.7%2B5-main.jar', allow_redirects=True)
-            open('mods/viafabric-0.4.7+5-main.jar', 'wb').write(viafabricurl.content)
+            viafabricurl = requests.get('https://cdn.modrinth.com/data/YlKdE5VK/versions/HDHqNX5V/viafabric-0.4.9%2B19-main.jar', allow_redirects=True)
+            open('mods/viafabric-0.4.9+22-main.jar', 'wb').write(viafabricurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
         print("Downloading ViaBackwards...", end='')
         sleep(0.05)
         try:
-            viabackwardsurl = requests.get('https://media.forgecdn.net/files/3820/990/ViaBackwards-4.3.0.jar', allow_redirects=True)
-            open('mods/ViaBackwards-4.3.0.jar', 'wb').write(viabackwardsurl.content)
+            viabackwardsurl = requests.get('https://github.com/ViaVersion/ViaBackwards/releases/download/4.5.1/ViaBackwards-4.5.1.jar', allow_redirects=True)
+            open('mods/ViaBackwards-4.5.1.jar', 'wb').write(viabackwardsurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
@@ -978,8 +978,8 @@ def installMenu_12():
         print("Downloading MiniMOTD...", end='')
         sleep(0.05)
         try:
-            minimotdurl = requests.get('https://cdn.modrinth.com/data/16vhQOQN/versions/2.0.7+1.18.2/minimotd-fabric-mc1.18.2-2.0.7.jar', allow_redirects=True)
-            open('mods/minimotd-fabric-mc1.18.2-2.0.7.jar', 'wb').write(minimotdurl.content)
+            minimotdurl = requests.get('https://cdn.modrinth.com/data/16vhQOQN/versions/c745jM85/minimotd-fabric-mc1.19.2-2.0.9.jar', allow_redirects=True)
+            open('mods/minimotd-fabric-mc1.19.2-2.0.9.jar', 'wb').write(minimotdurl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
@@ -991,8 +991,8 @@ def installMenu_12():
         print("Downloading StyledPlayerList...", end='')
         sleep(0.05)
         try:
-            styledplayerlisturl = requests.get('https://cdn.modrinth.com/data/DQIfKUHf/versions/2.1.3+1.18/styledplayerlist-2.1.3+1.18.jar', allow_redirects=True)
-            open('mods/styledplayerlist-2.1.3+1.18.jar', 'wb').write(styledplayerlisturl.content)
+            styledplayerlisturl = requests.get('https://cdn.modrinth.com/data/DQIfKUHf/versions/2.2.2%2B1.19.1/styledplayerlist-2.2.2%2B1.19.1.jar', allow_redirects=True)
+            open('mods/styledplayerlist-2.2.2+1.19.1.jar', 'wb').write(styledplayerlisturl.content)
             print(G+"DONE"+W)
         except OSError as error:
             print(R+"FAIL (" + str(error) + ")"+W)
