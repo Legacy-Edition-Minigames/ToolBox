@@ -53,7 +53,7 @@ ver_program = G+"v"+str(cnt_program)+W
 ver_info = "$OLEB-ToolBox v1.6 changelog:\n$W-$O FIX $WPrevent LEB-ToolBox from being loaded as a library/addon external code.$W\n$W-$G NEW $WAdded better logo and styling improvements.\n$W-$G NEW $WAdded status bar to the Main Menu."
 ####### PROGRAM VERSION #######
 
-repo = "DBTDerpbox"
+repo = "Legacy-Edition-Minigames"
 
 cfg_branch = "main"
 current_hash = R+"unknown"
@@ -258,7 +258,7 @@ def mainMenu():
     elif action == "3":
         changeBranch()
     elif action == "4":
-        webbrowser.open('https://github.com/DBTDerpbox/Legacy-Edition-Battle')
+        webbrowser.open('https://github.com/Legacy-Edition-Minigames/Minigames')
         mainMenu()
     elif action == "5":
         changeLog()
@@ -1452,13 +1452,13 @@ def updateLEBTB():
             pgrmfile = ""
             try:
                 if platform.system() == "Linux":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True)
                     open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Darwin":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True)
                     open("LEB-ToolBox-new-MacOS", "wb").write(prgrmfile.content)
                 elif platform.system() == "Windows":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(online_count_program)+'.exe', allow_redirects=True)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox-v'+str(online_count_program)+'.exe', allow_redirects=True)
                     open("LEB-ToolBox-new.exe", "wb").write(prgrmfile.content)
                 print(G+"DONE"+W)
             except Exception as error:
@@ -1575,7 +1575,7 @@ def downloadInstall():
             print(E+"Note: Due to GitHub limitations, download ETA is not available."+W)
             print("Downloading LEB build" + E+ " (this can take up to 6 minutes)" + W)
             print("Now downloading...", end='')
-            leb_zip = requests.get('https://github.com/DBTDerpbox/Legacy-Edition-Battle/archive/refs/heads/' + cfg_branch+ '.zip', allow_redirects=True, stream=True)
+            leb_zip = requests.get('https://github.com/Legacy-Edition-Minigames/Minigames/archive/refs/heads/' + cfg_branch+ '.zip', allow_redirects=True, stream=True)
             with open( 'leb_update_cache/leb.zip', "wb" ) as f:
                 for chunk in leb_zip.iter_content( chunk_size = 1024 ):
                     if chunk:
@@ -1609,9 +1609,9 @@ def downloadInstall():
         print("Moving files...", end='')
         sleep(0.05)
         try:
-            for filename in os.listdir('Legacy-Edition-Battle-' + cfg_branch):
-                shutil.move('Legacy-Edition-Battle-' + cfg_branch + "/" + filename, filename)
-            shutil.rmtree('Legacy-Edition-Battle-' + cfg_branch)
+            for filename in os.listdir('Minigames-' + cfg_branch):
+                shutil.move('Minigames-' + cfg_branch + "/" + filename, filename)
+            shutil.rmtree('Minigames-' + cfg_branch)
         except Exception as error:
             str(error)
         print(G+"DONE"+W)
@@ -1726,7 +1726,7 @@ def checkForUpdates():
     global lebTBStatus
     ver1 = 0
     try:
-        req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
+        req = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
         data = (req.content).decode("utf-8")
         info = data.split("\n")
         for line in info:
@@ -1749,7 +1749,7 @@ def checkForUpdates():
             extension = '.exe'
         try:
             global online_count_program
-            req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox-v'+str(ver1)+str(extension), allow_redirects=True)
+            req = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox-v'+str(ver1)+str(extension), allow_redirects=True)
             data = req.content
             if data == b'404: Not Found':
                 lebTBStatus = -2
@@ -1772,7 +1772,7 @@ def checkForUpdates():
     
 def checkForChangeLog():
     try:
-        req = requests.get('https://raw.githubusercontent.com/'+repo+'/LEB-ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
+        req = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
         data = (req.content).decode("utf-8")
         info = data.split("\n")
         for line in info:
