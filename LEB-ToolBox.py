@@ -1162,13 +1162,15 @@ def reinstallMenu():
     print("=======================================================")
     print("")
     print(R+"WARNING!: Reinstalling LEB will erase ALL DATA, including server files, player data and LEB resources.")
-    print("It's recommended to backup playerdata to avoid loosing player-specific-settings, custom presets, advancements,...")
+    print("It's recommended to backup the folder LEB-ToolBox is installed to to avoid losing player-specific-settings, custom presets, advancements,...")
     print("If you are troubleshooting problems on a mirrored server, feel free to continue." +W)
     print("")
     print(P+"Are you sure you want to TRULY ERASE EVERYTHING NO JOKES and install again?"+W)
     print("")
     action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
     if action.lower() == "y":
+        print("Performing deletion of "+R+"ALL DATA"+W+" in "+E+"10 seconds."+R+" Close the program NOW if you don't want to do this!! (CTRL+C on Linux)")
+        sleep(10)
         print(E+"User authorised operation, executing..."+W)
          #continue execution
     elif action.lower() == "n":
