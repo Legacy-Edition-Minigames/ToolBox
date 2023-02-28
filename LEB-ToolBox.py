@@ -202,7 +202,7 @@ def mainMenu():
     try:
         f = open("fabric-server-launch.jar")
         print("0. Start LEB Server")
-        print("1. Update LEB " + E +"(current commit instaled: " +G+current_hash+E+")"+W)
+        print("1. Update LEB " + E +"(current commit installed: " +G+current_hash+E+")"+W)
         f.close()
     except IOError:
         print("1. Install LEB")
@@ -1067,7 +1067,7 @@ def updateMenu():
     print("")
     print(P+"Choose an action below:"+W)
     print("")
-    print("1. Update to the latest commit available " + E +"(current commit instaled: " +G+current_hash+E+")"+W)
+    print("1. Update to the latest commit available " + E +"(current commit installed: " +G+current_hash+E+")"+W)
     print("2. Perform a Clean update to the latest commit available")
     print("3. Reinstall LEB")
     print("")
