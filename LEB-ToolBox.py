@@ -1193,7 +1193,7 @@ def changeBranch():
     print("")
     print("You can choose whatever branch you feel like using by selecting one of the displayed branches below.")
     print("The default (most stable and updated) branch is "+G+"MAIN"+W+".")
-    print("Using experimental or outdated branches might break the savedata of the server. Test with caution!")
+    print("Using branches other than "+G+"MAIN"+W+" might break the server (which could include player savedata!). "+E+R+"Test with caution!"+E)
     print("")
     print("To select a branch, type the corresponding number or type the name of the branch in the text box (be sure it's correctly spelled or LEB-ToolBox will break!).")
     print("")
@@ -1202,42 +1202,25 @@ def changeBranch():
     print("")
     print(P+"Avaible branches:"+W)
     print("2. testing")
+    print("3. experimental-dev")
+    print("4. experimental-server")
     print("")
-    print(R+"Experimental/Old/Outdated branches:"+W)
-    print("5. 1.18.2")
-    print("6. 1.17.1")
-    print("7. 1.17")
-    print("8. 1.16.5")
-    print("9. vanilla")
-    print("9. old-resetter")
-    print("9. weed")
-    print("")
-    print("0. Exit")
+    print("5. Exit")
     print("")
     action = input(B+"Input: "+W)
 
     global cfg_branch
 
-    if action == "0":
+    if action == "5":
          mainMenu()
     if action == "1":
          cfg_branch = "main"
     elif action == "2":
         cfg_branch = "testing"
     elif action == "3":
-        cfg_branch = "1.18.2"
+        cfg_branch = "experimental-dev"
     elif action == "4":
-        cfg_branch = "1.17.1"
-    elif action == "5":
-        cfg_branch = "1.17"
-    elif action == "6":
-        cfg_branch = "1.16.5"
-    elif action == "7":
-        cfg_branch = "vanilla"
-    elif action == "8":
-        cfg_branch = "old-resetter"
-    elif action == "9":
-        cfg_branch = "weed"
+        cfg_branch = "experimental-server"
     else:
         cfg_branch = action
     print(W+"Branch has been updated to "+P+cfg_branch+W+".")
