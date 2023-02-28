@@ -70,7 +70,6 @@ styledplayerlist = 0
 server_scripts = 0
 ram = 0
 motd_sync = -1
-legacy_resetter = -1
 eula = 0
 
 lebDebugDisableDownloadContent = 0
@@ -83,7 +82,6 @@ def readConfig():
     global current_hash
     global motd_sync
     global check_for_updates
-    global legacy_resetter
     isUpdating = 0
     try:      
         if os.path.isfile('LEB-ToolBox_old.exe') or os.path.isfile('LEB-ToolBox_old') or os.path.isfile('LEB-ToolBox_DELETE_ME.exe') or os.path.isfile('LEB-ToolBox_DELETE_ME'):
@@ -96,7 +94,6 @@ def readConfig():
             motd_sync = int(file_split[1])
             current_hash = file_split[2]
             check_for_updates = int(file_split[3])
-            legacy_resetter = int(file_split[4])
         else:
             print(O+"***************************************************************************"+W)
             print(G+r"""    __    __________              ______            ______            
@@ -285,8 +282,6 @@ def mainMenu():
         installMenu()
     elif action == "debug setmotd": #executes the set MOTD function. toggles on and off this feature
         setMOTD()
-    elif action == "debug setlr": #executes the set legacy resetter function. toggles on and off this feature
-        setLR()
     elif action == "debug repo": #changes the repo for update checking to the my own. usefull for experimental features that require changes on the main github.
         global repo
         repo = "PiporGames"
@@ -343,7 +338,6 @@ def installMenu_2():
     global minimotd
     global styledplayerlist
     global motd_sync
-    global legacy_resetter
     global EULA
     eula = 0
     # set 0 / nothing = user choice
@@ -359,7 +353,6 @@ def installMenu_2():
         styledplayerlist = 1
         server_scripts = 1
         motd_sync = 1
-        legacy_resetter = 2
         installMenu_3()
     elif action == "2":
         fabric = 1
@@ -371,7 +364,6 @@ def installMenu_2():
         styledplayerlist = 2
         server_scripts = 2
         motd_sync = 2
-        legacy_resetter = 0
         installMenu_3()
     elif action == "3":
         fabric = 0
@@ -383,7 +375,6 @@ def installMenu_2():
         styledplayerlist = 0
         server_scripts = 0
         motd_sync = 0
-        legacy_resetter = 0
         installMenu_3()
     else:
         installMenu_2()
@@ -632,36 +623,7 @@ def installMenu_7():
             break;
         except ValueError:
             installMenu_7()
-    installMenu_7_B()
-
-def installMenu_7_B():
-    cls()
-    print("=======================================================")
-    print(G+"Install LEB"+W)
-    print(G+"Enhancements (7/9)"+W)
-    print("=======================================================")
-    print("")
-    print(B+"Do you want to use "+G+"Legacy Resetter"+B+"?"+W)
-    print("When enabled, LEB will revert to the old legacy map resetter system. ")
-    print("This is somewhat more unstable and buggier, but require less RAM overall.")
-    print("")
-    print(R+"This is an alternative option. On normal circumstances, you shouldn't use this option."+W)
-    print("")
-    print(P+"Do you want to install this component?:"+W)
-    print("")
-    global legacy_resetter
-    if legacy_resetter == 0:
-        action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
-        if action.lower() == "y":
-            legacy_resetter = 1
-            installMenu_8()
-        elif action.lower() == "n":
-            legacy_resetter = 2
-            installMenu_8()
-        else:
-            installMenu_7_B()
-    else:
-        installMenu_8()
+    installMenu_8()
 
 def installMenu_8():
     cls()
@@ -1067,7 +1029,6 @@ def installMenu_12():
     if lebDebugSkipPhase2 == 0:
         downloadInstall()
         setMOTD()
-        setLR()
         clean()
     print("")
     print(G+"***************************")
@@ -1154,7 +1115,6 @@ def updater():
     if lebDebugSkipPhase2 == 0:
         downloadInstall()
         setMOTD()
-        setLR()
         restore()
         clean()
     print()
@@ -1188,7 +1148,6 @@ def cleanUpdater():
     if lebDebugSkipPhase2 == 0:
         downloadInstall()
         setMOTD()
-        setLR()
         clean()
     print()
     print(G+"*** Clean Update successful! ***"+W)
@@ -1283,7 +1242,7 @@ def changeBranch():
         cfg_branch = action
     print(W+"Branch has been updated to "+P+cfg_branch+W+".")
     sleep(2.5)
-    writeConfig(cfg_branch,motd_sync,current_hash,check_for_updates,legacy_resetter)
+    writeConfig(cfg_branch,motd_sync,current_hash,check_for_updates)
     mainMenu()
 
 
@@ -1291,7 +1250,6 @@ def settingsMenu():
     readConfig()
     response_motd = ""
     response_cfu = ""
-    response_lr = ""
     if motd_sync == 1:
         response_motd = G+"TRUE"+W
     else:
@@ -1300,10 +1258,6 @@ def settingsMenu():
         response_cfu = G+"TRUE"+W
     else:
         response_cfu = R+"FALSE"+W
-    if legacy_resetter == 1:
-        response_lr = G+"TRUE"+W
-    else:
-        response_lr = R+"FALSE"+W
     cls()
     print("=======================================================")
     print(G+"Settings"+W)
@@ -1325,11 +1279,9 @@ def settingsMenu():
     print("")
     print("4. Use MOTD Sync ("+response_motd+")"+W)
     print(E+"   Automatically syncs the MOTD of the server with the commit version currently installed."+W)
-    print("5. Use Legacy Resetter ("+response_lr+")"+W)
-    print(E+"   Use alternative map resetter system; requires less resources but it's unstable."+W)
     print("")
     print("")
-    print("6. Exit")
+    print("5. Exit")
     print("")
     print(P+"Choose an action below:"+W)
     print("")
@@ -1343,11 +1295,6 @@ def settingsMenu():
         response_cfu = 1
     else:
         response_cfu = 0
-
-    if legacy_resetter == 1:
-        response_lr = 1
-    else:
-        response_lr = 0
         
     if action == "1":
         changeBranch()
@@ -1356,10 +1303,10 @@ def settingsMenu():
     elif action == "3":
         print("")
         if response_cfu == 1:
-            writeConfig(cfg_branch,motd_sync,current_hash,"0",legacy_resetter)
+            writeConfig(cfg_branch,motd_sync,current_hash,"0")
             print("CFU at startup has been "+R+"disabled"+W+" successfully.")
         else:
-            writeConfig(cfg_branch,motd_sync,current_hash,"1",legacy_resetter)
+            writeConfig(cfg_branch,motd_sync,current_hash,"1")
             print("CFU at startup has been "+G+"enabled"+W+" successfully.")   
         print("")
         sleep(2)
@@ -1367,30 +1314,21 @@ def settingsMenu():
     elif action == "4":
         print("")
         if response_motd == 1:
-            writeConfig(cfg_branch,"0",current_hash,check_for_updates,legacy_resetter)
+            writeConfig(cfg_branch,"0",current_hash,check_for_updates)
             print("MOTD Sync has been "+R+"disabled"+W+" successfully.")
         else:
-            writeConfig(cfg_branch,"1",current_hash,check_for_updates,legacy_resetter)
+            writeConfig(cfg_branch,"1",current_hash,check_for_updates)
             print("MOTD Sync has been "+G+"enabled"+W+" successfully.")
             print(W+"To apply the changes, you must <Update to the last commit> from the Update page."+W)
         print("")
         sleep(3)
         settingsMenu()
-    elif action == "5":
-        print("")
-        if response_lr == 1:
-            writeConfig(cfg_branch,motd_sync,current_hash,check_for_updates,"0")
-            print("Legacy Resetter has been "+R+"disabled"+W+" successfully.")
-        else:
-            writeConfig(cfg_branch,motd_sync,current_hash,check_for_updates,"1")
-            print("Legacy Resetter has been "+G+"enabled"+W+" successfully.")   
         print("")
         readConfig()
-        setLR()
         print("")
         sleep(2)
         settingsMenu()
-    elif action == "6":
+    elif action == "5":
         mainMenu()
     else:
         settingsMenu()
@@ -1536,10 +1474,10 @@ def changeLog():
 ####################
 ###   Functions  ###
 ####################
-def writeConfig(var_branch,var_motd_sync,var_hash,var_cfu,var_lr):
+def writeConfig(var_branch,var_motd_sync,var_hash,var_cfu):
     try:
         f = open("LEB-ToolBox.cfg", "w")
-        f.write(var_branch+"#/#"+str(var_motd_sync)+"#/#"+var_hash+"#/#"+str(var_cfu)+"#/#"+str(var_lr))
+        f.write(var_branch+"#/#"+str(var_motd_sync)+"#/#"+var_hash+"#/#"+str(var_cfu))
     finally:
         f.close()
 
@@ -1679,26 +1617,7 @@ def setMOTD():
             print(R+"FAIL (" + str(error) + ") >>> Did leb_update_cache/leb.zip erase itself, or does this branch not contain a miniMOTD/server.properties config file?"+W)
             pass
         finally:
-            writeConfig(cfg_branch,motd_sync,leb_zip.comment.decode("utf-8")[:6],check_for_updates,legacy_resetter)
-
-def setLR():
-    try:
-        if legacy_resetter == 1:
-            print("Patching Legacy Resetter fix...", end='')         
-        with open("world/datapacks/4jbattle/data/4jbattle/functions/start.mcfunction", "r") as lr_file:
-            lines = lr_file.readlines()
-        with open("world/datapacks/4jbattle/data/4jbattle/functions/start.mcfunction", "w") as lr_file:
-            for line in lines:
-                if "scoreboard players set #Store 4j.legacyreset 1" not in line:
-                    lr_file.write(line)
-            if legacy_resetter == 1:
-                lr_file.write("\nscoreboard players set #Store 4j.legacyreset 1")
-        lr_file.close()
-        if legacy_resetter == 1:
-            print(G+"DONE"+W)
-    except OSError as error:
-        print(R+"FAIL (" + str(error) + ")"+W)
-        pass
+            writeConfig(cfg_branch,motd_sync,leb_zip.comment.decode("utf-8")[:6],check_for_updates)
 
 def reinstall():
     print("Removing "+R+"ALL FILES"+B+" ["+W)
