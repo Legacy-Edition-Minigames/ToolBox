@@ -50,7 +50,7 @@ cnt_program = 1.6
 
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.6 changelog:\n$W-$O FIX $WPrevent LEB-ToolBox from being loaded as a library/addon external code.$W\n$W-$G NEW $WAdded better logo and styling improvements.\n$W-$G NEW $WAdded status bar to the Main Menu."
+ver_info = "$OLEB-ToolBox v1.6 changelog:\n$W-$G NEW $WAdded better logo and styling improvements.\n$W-$G NEW $WAdded status bar to the Main Menu.\n$W-$G NEW $WAdded support for Minecraft 1.19.1, 1.19.2, and 1.19.3.\n$W-$G NEW $WAdded delay when reinstalling to prevent accidents\n$W-$G NEW $WAdded support for newer versions of LEB\n$W-$G NEW $WMade branches menu easier to understand\n$W-$O FIX $WPrevent LEB-ToolBox from being loaded as a library/addon external code.$W\n$W-$O FIX $WFixed installer being broken from repo name change\n$W-$R REMOVED $WLegacy Resetter"
 ####### PROGRAM VERSION #######
 
 repo = "Legacy-Edition-Minigames"
