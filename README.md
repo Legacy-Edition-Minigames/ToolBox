@@ -5,6 +5,11 @@
 ![contains-good-enough-unoptimized-code](https://user-images.githubusercontent.com/61473628/185755898-db74d120-a79d-430c-9aa5-66b173cbffd9.svg)
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
 
+
+# **Important Notice**
+
+## This repository is currently **not supported**, you are free to try to use it but don't expect it to work.
+
 All-in-one tools to manage your own LEB server.
 
 ## Features
