@@ -45,17 +45,17 @@ def colorize(string):
 
     
 ####### PROGRAM VERSION #######
-cnt_program = 1.6
-#indev 1.6
+cnt_program = 1.7
+#indev 1.6 -> Hotfix (1.7)
 
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.6 changelog:\n$W-$G NEW $WAdded better logo and styling improvements.\n$W-$G NEW $WAdded status bar to the Main Menu.\n$W-$G NEW $WAdded support for Minecraft 1.19.1, 1.19.2, and 1.19.3.\n$W-$G NEW $WAdded delay when reinstalling to prevent accidents\n$W-$G NEW $WAdded support for newer versions of LEB\n$W-$G NEW $WMade branches menu easier to understand\n$W-$O FIX $WPrevent LEB-ToolBox from being loaded as a library/addon external code.$W\n$W-$O FIX $WFixed installer being broken from repo name change\n$W-$R REMOVED $WLegacy Resetter"
+ver_info = "$OLEB-ToolBox v1.7 (Hotfix) changelog:\n$W-$G Make Default Branch 1.19.2 Untill Full Rewrite (2.0) releases."
 ####### PROGRAM VERSION #######
 
 repo = "Legacy-Edition-Minigames"
 
-cfg_branch = "main"
+cfg_branch = "1.19.2"
 current_hash = R+"unknown"
 check_for_updates = -1
 online_count_program = 0
@@ -118,7 +118,7 @@ def readConfig():
             print("")
             action = input(B+"Press ENTER to continue . . ."+W)
             raw = open("LEB-ToolBox.cfg", "w")
-            raw.write("main#/#1#/#unknown#/#1#/#0")
+            raw.write("1.19.2#/#1#/#unknown#/#1#/#0")
             raw.close()
     except:
         if isUpdating == 0:
@@ -145,7 +145,7 @@ def readConfig():
                 pass
             finally:
                 if cfg_branch == "":
-                    cfg_branch = "main"
+                    cfg_branch = "1.19.2"
                 if motd_sync == -1:
                     motd_sync = 1
                 if current_hash == "":
@@ -1200,28 +1200,31 @@ def changeBranch():
     print("To select a branch, type the corresponding number or type the name of the branch in the text box (be sure it's correctly spelled or LEB-ToolBox will break!).")
     print("")
     print(G+"Default branches:"+W)
-    print("1. main (default)")
+    print("1. 1.19.2 (Default)")
+    print("2. main")
     print("")
     print(P+"Avaible branches:"+W)
-    print("2. testing")
-    print("3. experimental-dev")
-    print("4. experimental-server")
+    print("3. testing")
+    print("4. experimental-dev")
+    print("5. experimental-server")
     print("")
-    print("5. Exit")
+    print("6. Exit")
     print("")
     action = input(B+"Input: "+W)
 
     global cfg_branch
 
-    if action == "5":
+    if action == "6":
          mainMenu()
     if action == "1":
-         cfg_branch = "main"
+        cfg_branch = "1.19.2"
     elif action == "2":
-        cfg_branch = "testing"
+        cfg_branch = "main"
     elif action == "3":
-        cfg_branch = "experimental-dev"
+        cfg_branch = "testing"
     elif action == "4":
+        cfg_branch = "experimental-dev"
+    elif action == "5":
         cfg_branch = "experimental-server"
     else:
         cfg_branch = action
