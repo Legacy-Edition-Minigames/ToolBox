@@ -17,6 +17,11 @@ public class Main {
             OUTKAT.executeScript(args[1]);
         } else if (args[0].equals("gui")){
             mainMenu.GUI();
+        } else {
+            System.out.println("Avalable Args:");
+            System.out.println("empty");
+            System.out.println("--inject (outkat file)");
+            System.out.println("gui");
         }
     }
 }
