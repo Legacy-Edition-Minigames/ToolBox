@@ -18,7 +18,7 @@ public class Main {
         } else if (args[0].equals("gui")){
             mainMenu.GUI();
         } else {
-            System.out.println("Avalable Args:");
+            System.out.println("Available Args:");
             System.out.println("empty");
             System.out.println("--inject (outkat file)");
             System.out.println("gui");
