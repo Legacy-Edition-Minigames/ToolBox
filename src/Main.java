@@ -1,9 +1,18 @@
 import GUIIcons.Floppa;
+import GUIIcons.LEMLogo;
+
+import java.io.IOException;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
+        Conf conf = new Conf();
+        try {
+            conf.createIfNotExists();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         LEMLogo.GUI();
 
         if(args.length == 0){
