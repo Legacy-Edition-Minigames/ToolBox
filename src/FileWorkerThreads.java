@@ -3,12 +3,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class FileWorkerThreads {
-    public static void RUNCRC(String[] args) {
-        if (args.length != 1) {
-            return;
-        }
+    public static void RUNCRC(String args) {
 
-        String filePath = args[0];
+        String filePath = args;
         FileProcessor processor = new FileProcessor(filePath);
         processor.processFile();
     }

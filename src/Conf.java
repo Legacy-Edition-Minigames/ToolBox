@@ -1,8 +1,9 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public class Conf {
 
-    public String get(int[] args){
+    public static String get(int args){
         try {
             createIfNotExists(); // Call the create method if the file doesn't exist
 
@@ -14,29 +15,36 @@ public class Conf {
             }
             reader.close();
 
-            return scriptLines[args[0]];
+            return scriptLines[args];
         } catch (IOException e){
             e.printStackTrace();
             return null;
         }
     }
 
-    public void set(String[] args){
+    public static void set(String key, String value) {
         try {
             createIfNotExists(); // Call the create method if the file doesn't exist
 
             File file = new File("./LEMToolbox.cfg");
             BufferedReader reader = new BufferedReader(new FileReader(file));
+            ArrayList<String> scriptLines = new ArrayList<>();
             String line;
-            String[] scriptLines = new String[0];
             while ((line = reader.readLine()) != null) {
-                scriptLines = append(scriptLines, line);
+                scriptLines.add(line);
             }
             reader.close();
 
-            int lineIndex = Integer.parseInt(args[0]);
-            if (lineIndex >= 0 && lineIndex < scriptLines.length) {
-                scriptLines[lineIndex] = args[1];
+            int lineIndex = Integer.parseInt(key);
+            if (lineIndex >= scriptLines.size()) {
+                // Add new lines up to the specified index
+                while (scriptLines.size() <= lineIndex) {
+                    scriptLines.add("");
+                }
+            }
+
+            if (lineIndex >= 0 && lineIndex < scriptLines.size()) {
+                scriptLines.set(lineIndex, value);
             } else {
                 System.out.println("Invalid line index.");
                 return;
@@ -55,10 +63,18 @@ public class Conf {
         }
     }
 
-    public void createIfNotExists() throws IOException {
+    public static void createIfNotExists() throws IOException {
         File file = new File("./LEMToolbox.cfg");
         if (!file.exists()) {
             file.createNewFile();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write("main");
+            writer.newLine();
+            writer.write("0.0");
+            writer.newLine();
+            writer.write("niceEli.github.io/ToolBox/Branches"); // Change To Emmie's Site After Merge
+            writer.newLine();
+            writer.close();
         }
     }
 
