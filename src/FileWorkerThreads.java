@@ -37,16 +37,18 @@ class FileProcessor {
 }
 
 class WorkerThread implements Runnable {
-    private final String command;
+    private final String input;
 
-    public WorkerThread(String command) {
-        this.command = command;
+    public WorkerThread(String input) {
+        this.input = input;
     }
 
     @Override
     public void run() {
         try {
-            Process process = Runtime.getRuntime().exec(command);
+            System.out.println("Thread: " + Thread.currentThread().getId() + " - Input: " + input);
+
+            Process process = Runtime.getRuntime().exec(input);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             String line;
