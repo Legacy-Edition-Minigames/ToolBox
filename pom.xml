@@ -20,4 +20,17 @@
 
     </ToolBox:properties>
 
+    <ToolBox:dependencies>
+        <ToolBox:dependency>
+            <ToolBox:groupId>com.google.code.gson</ToolBox:groupId>
+            <ToolBox:artifactId>gson</ToolBox:artifactId>
+            <ToolBox:version>2.10.1</ToolBox:version>
+        </ToolBox:dependency>
+        <ToolBox:dependency>
+            <ToolBox:groupId>org.slf4j</ToolBox:groupId>
+            <ToolBox:artifactId>slf4j-simple</ToolBox:artifactId>
+            <ToolBox:version>2.0.7</ToolBox:version>
+        </ToolBox:dependency>
+    </ToolBox:dependencies>
+
 </ToolBox:project>
