@@ -41,7 +41,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>net.lem.toolbox.Main</mainClass>
+                            <mainClass>net.lem.ToolBox.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
