@@ -1,5 +1,7 @@
 import java.io.*;
 import java.net.URL;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class OUTKAT {
     private static int currentLine = 3; // Start from line 3 as specified in your format
@@ -62,6 +64,10 @@ public class OUTKAT {
                 }
                 break;
 
+            case "EXT":
+                extractZipFile(kArgs[0], kArgs[1]);
+                break;
+
             case "STP":
                 stopExecution();
                 break;
@@ -84,6 +90,42 @@ public class OUTKAT {
             default:
                 System.out.println("Unknown command: " + command);
                 break;
+        }
+    }
+
+    private static void extractZipFile(String sourceZip, String destination) {
+        try {
+            File destDir = new File(destination);
+            if (!destDir.exists()) {
+                destDir.mkdirs();
+            }
+
+            byte[] buffer = new byte[1024];
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(sourceZip));
+            ZipEntry zipEntry = zis.getNextEntry();
+
+            while (zipEntry != null) {
+                String entryFileName = zipEntry.getName();
+                File entryFile = new File(destDir, entryFileName);
+
+                if (zipEntry.isDirectory()) {
+                    entryFile.mkdirs();
+                } else {
+                    FileOutputStream fos = new FileOutputStream(entryFile);
+                    int len;
+                    while ((len = zis.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
+                    }
+                    fos.close();
+                }
+
+                zipEntry = zis.getNextEntry();
+            }
+
+            zis.closeEntry();
+            zis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
