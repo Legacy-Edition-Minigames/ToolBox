@@ -9,7 +9,7 @@ public class noGUI {
             FileDownloader.main(new String[]{Conf.get(2) + "/" + Conf.get(0) + "/main.ok", "./main.ok"});
 
             String confValue = ReadSpecificLine.main(new String[]{"./main.ok", "1"});
-            if (Objects.equals(Conf.get(1), confValue)) {
+            if (!Objects.equals(Conf.get(1), confValue)) {
                 Conf.set("1", confValue);
                 OUTKAT.executeScript("./main.ok");
             }
