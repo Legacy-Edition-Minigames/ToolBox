@@ -68,11 +68,11 @@ public class Conf {
         if (!file.exists()) {
             file.createNewFile();
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write("main");
+            writer.write("Latest");
             writer.newLine();
             writer.write("0.0");
             writer.newLine();
-            writer.write("niceEli.github.io/ToolBox/Branches"); // Change To Emmie's Site After Merge
+            writer.write("https://niceEli.github.io/ToolBox/Branches"); // Change To Emmie's Site After Merge
             writer.newLine();
             writer.close();
         }
