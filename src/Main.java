@@ -21,6 +21,7 @@ public class Main {
             Floppa.GUI();
         } else if (args[0].equals("config")) {
             Conf.set(args[1], args[2]);
+            System.out.println("Line updated");
         } else if (args[0].equals("gConfig")) {
             System.out.println(Conf.get(Integer.parseInt(args[1])));
         } else {

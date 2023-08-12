@@ -56,8 +56,6 @@ public class Conf {
                 writer.newLine();
             }
             writer.close();
-
-            System.out.println("Line updated successfully.");
         } catch (IOException e) {
             e.printStackTrace();
         }
