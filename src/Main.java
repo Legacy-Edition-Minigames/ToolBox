@@ -15,6 +15,8 @@ public class Main {
             noGUI.GUI();
         } else if (args[0].equals("--inject")) {
             OUTKAT.executeScript(args[1]);
+        } else if (args[0].equals("--injectCRC")) {
+            FileWorkerThreads.RUNCRC(args[1]);
         } else if (args[0].equals("gui")) {
             mainMenu.GUI();
         } else if (args[0].equals("floppa")) {
@@ -27,7 +29,8 @@ public class Main {
         } else {
             System.out.println("Available Args:");
             System.out.println("empty");
-            System.out.println("--inject (outkat file)");
+            System.out.println("--inject (OUTKAT file)");
+            System.out.println("--injectCRC (CRC File)");
             System.out.println("gui");
             System.out.println("config (Key) (Value)");
             System.out.println("gConfig (key)");

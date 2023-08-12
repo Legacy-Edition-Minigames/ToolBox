@@ -4,7 +4,7 @@ import java.net.URL;
 
 public class JarUpdater {
 
-    private static final String CURRENT_VERSION = "1.2.0";
+    private static final String CURRENT_VERSION = "1.2.1";
 
     public static void update() {
         String jarFilePath = getJarFilePath();
