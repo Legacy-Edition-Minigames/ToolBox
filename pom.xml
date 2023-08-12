@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ToolBox:project xmlns:ToolBox="http://maven.apache.org/POM/4.0.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <ToolBox:modelVersion>4.0.0</ToolBox:modelVersion>
+
+    <ToolBox:groupId>ToolBox</ToolBox:groupId>
+    <ToolBox:artifactId>ToolBox</ToolBox:artifactId>
+    <ToolBox:version>Latest</ToolBox:version>
+
+    <ToolBox:properties>
+        <ToolBox:maven.compiler.source>17</ToolBox:maven.compiler.source>
+        <ToolBox:maven.compiler.target>17</ToolBox:maven.compiler.target>
+        <ToolBox:project.build.sourceEncoding>UTF-8</ToolBox:project.build.sourceEncoding>
+        <ToolBox:dependency>
+            <ToolBox:groupId>com.google.code.gson</ToolBox:groupId>
+            <ToolBox:artifactId>gson</ToolBox:artifactId>
+            <ToolBox:version>2.10.1</ToolBox:version>
+        </ToolBox:dependency>
+
+    </ToolBox:properties>
+
+</ToolBox:project>
