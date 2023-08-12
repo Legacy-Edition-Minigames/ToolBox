@@ -8,7 +8,7 @@ public class noGUI {
     public static void GUI() {
         try {
             Conf.createIfNotExists();
-            FileDownloader.main(new String[]{Conf.get(2) + "/" + Conf.get(0) + "/main.ok", "./main.ok"});
+           // FileDownloader.main(new String[]{Conf.get(2) + "/" + Conf.get(0) + "/main.ok", "./main.ok"});
 
             String confValue = ReadSpecificLine.main(new String[]{"./main.ok", "1"});
             if (!Objects.equals(Conf.get(1), confValue)) {
@@ -16,7 +16,7 @@ public class noGUI {
                 OUTKAT.executeScript("./main.ok");
             }
 
-            FileDownloader.main(new String[]{Conf.get(2) + "/" + Conf.get(0) + "/CRC", "./CRC"});
+            //FileDownloader.main(new String[]{Conf.get(2) + "/" + Conf.get(0) + "/CRC", "./CRC"});
             FileWorkerThreads.RUNCRC("./CRC");
         } catch (IOException e) {
             e.printStackTrace();

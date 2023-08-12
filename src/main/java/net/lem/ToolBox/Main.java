@@ -9,6 +9,31 @@ import java.io.IOException;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) throws IOException {
+        //download branches
+       ConfigLoader.BranchConfig branches = ConfigLoader.parseBranches(FileDownloader.download("https://raw.githubusercontent.com/niceEli/ToolBox/main/Branches/Latest/DefaultBranches.json"));
+
+        branches.branches.forEach((s, s2) -> {
+            System.out.println(s + " : " + s2);
+        });
+
+
+        ConfigLoader.ToolboxConfig toolboxConfig = ConfigLoader.parseToolboxConfig(FileDownloader.download("https://raw.githubusercontent.com/niceEli/ToolBox/main/Branches/Latest/toolboxConfig.json"));
+
+        //download server jar
+        FileDownloader.download(toolboxConfig.serverJarURL, "testout/server.jar");
+
+        //download minigames repo
+        FileDownloader.downloadAndUnzip("https://github.com/Legacy-Edition-Minigames/Minigames/archive/refs/heads/experimental-server.zip", "testout");
+
+        //download mods
+        toolboxConfig.mods.forEach((s, s2) -> {
+          FileDownloader.download(s2, "testout/mods/" + s + ".jar");
+        });
+
+
+        //FileDownloader.downloadAndUnzip("https://github.com/Legacy-Edition-Minigames/Minigames/archive/refs/heads/experimental-server.zip", "testout");
+
+        /*
         JarUpdater.update();
         Conf.createIfNotExists();
         LEMLogo.GUI();
@@ -37,5 +62,7 @@ public class Main {
             System.out.println("config (Key) (Value)");
             System.out.println("gConfig (key)");
         }
+
+         */
     }
 }
