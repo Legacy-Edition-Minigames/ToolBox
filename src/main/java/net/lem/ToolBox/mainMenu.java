@@ -1,8 +1,7 @@
-package ToolBox;
+package net.lem.ToolBox;
 
-import ToolBox.GUIIcons.LEMLogo;
+import net.lem.ToolBox.GUIIcons.LEMLogo;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;

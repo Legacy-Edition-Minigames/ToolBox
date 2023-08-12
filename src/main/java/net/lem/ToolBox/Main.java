@@ -1,7 +1,7 @@
-package ToolBox;
+package net.lem.ToolBox;
 
-import ToolBox.GUIIcons.Floppa;
-import ToolBox.GUIIcons.LEMLogo;
+import net.lem.ToolBox.GUIIcons.Floppa;
+import net.lem.ToolBox.GUIIcons.LEMLogo;
 
 import java.io.IOException;
 

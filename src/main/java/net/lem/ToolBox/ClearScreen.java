@@ -1,6 +1,4 @@
-package ToolBox;
-
-import java.io.IOException;
+package net.lem.ToolBox;
 
 public class ClearScreen {
     public static void Execute() {

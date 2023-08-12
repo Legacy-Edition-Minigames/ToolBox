@@ -1,13 +1,13 @@
-# Guide-for-Emmie: How to publish a LEB-ToolBox update
-This guide will walk you through the steps required to successfully publish to all LEB users a LEB-ToolBox update.
+# Guide-for-Emmie: How to publish a LEB-net.lem.ToolBox update
+This guide will walk you through the steps required to successfully publish to all LEB users a LEB-net.lem.ToolBox update.
 
 
-## What is a LEB-ToolBox update?
-A LEB-ToolBox update consist of 4 files: The Source Code (.py), the Windows build (.exe), and the Linux and MacOS (binary)
+## What is a LEB-net.lem.ToolBox update?
+A LEB-net.lem.ToolBox update consist of 4 files: The Source Code (.py), the Windows build (.exe), and the Linux and MacOS (binary)
 
 
 ### Things to know:
-LEB-ToolBox update number scheme consists of a FLOAT type number. That is, a number with decimals.
+LEB-net.lem.ToolBox update number scheme consists of a FLOAT type number. That is, a number with decimals.
 Updates __must__ be named as follows:
 
 A.BBB
@@ -21,13 +21,13 @@ Unlike other name schemes, you cannot, for example, use the scheme A.B.C, as 1.2
 
 
 ## GitHub Structure Scheme
-LEB-ToolBox.py  -----  Required to fetch new versions
+LEB-net.lem.ToolBox.py  -----  Required to fetch new versions
 
-LEB-ToolBox-vA.B.exe  -----  Windows Builds
+LEB-net.lem.ToolBox-vA.B.exe  -----  Windows Builds
 
-LEB-ToolBox-vA.B  -----  Linux Builds
+LEB-net.lem.ToolBox-vA.B  -----  Linux Builds
 
-LEB-ToolBox-vA.B-MacOS  -----  MacOS Builds
+LEB-net.lem.ToolBox-vA.B-MacOS  -----  MacOS Builds
 
 
 ## Hypothetical Environment
@@ -46,7 +46,7 @@ Once it has been patched, build the files.
 
 The names of the files __must__ be:
 
-__LEB-ToolBox-vA.B__ _+ OS specific extension_
+__LEB-net.lem.ToolBox-vA.B__ _+ OS specific extension_
 
 _A and B are the version number_
 

@@ -1,4 +1,4 @@
-package ToolBox;
+package net.lem.ToolBox;
 
 import java.io.BufferedInputStream;
 import java.io.File;

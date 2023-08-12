@@ -50,7 +50,7 @@ cnt_program = 1.7
 
 ver_program = G+"v"+str(cnt_program)+W
 
-ver_info = "$OLEB-ToolBox v1.7 (Hotfix) changelog:\n$W-$G Make Default Branch 1.19.2 Untill Full Rewrite (2.0) releases."
+ver_info = "$OLEB-net.lem.ToolBox v1.7 (Hotfix) changelog:\n$W-$G Make Default Branch 1.19.2 Untill Full Rewrite (2.0) releases."
 ####### PROGRAM VERSION #######
 
 repo = "Legacy-Edition-Minigames"
@@ -86,8 +86,8 @@ def readConfig():
     try:      
         if os.path.isfile('LEB-ToolBox_old.exe') or os.path.isfile('LEB-ToolBox_old') or os.path.isfile('LEB-ToolBox_DELETE_ME.exe') or os.path.isfile('LEB-ToolBox_DELETE_ME'):
             isUpdating = 1
-        if os.path.isfile('LEB-ToolBox.cfg'):
-            raw = open("LEB-ToolBox.cfg", "r")
+        if os.path.isfile('LEB-net.lem.ToolBox.cfg'):
+            raw = open("LEB-net.lem.ToolBox.cfg", "r")
             f = raw.read()
             file_split = f.split("#/#")
             cfg_branch = file_split[0]
@@ -104,20 +104,20 @@ def readConfig():
                                                                       """+ver_program+W)
             print(O+"***************************************************************************"+W)
             print("")
-            print("Welcome to LEB-ToolBox!")
+            print("Welcome to LEB-net.lem.ToolBox!")
             print("")
-            print("LEB-ToolBox is a tool designed to make it easy for users to install, update and customize their own LEB instance.")
+            print("LEB-net.lem.ToolBox is a tool designed to make it easy for users to install, update and customize their own LEB instance.")
             print("To navigate through the program, wait until a blue <Input:> message appears. Then, use the numbers displayed on screen to select your choice and press ENTER.")
             print("")
             print("If you encounter any problem, try performing a clean reinstall or contact us on our Discord.")
-            print(B+"LEB"+W+"-"+G+"ToolBox "+W+"created by Pi"+R+"por"+O+"Games"+W)
+            print(B+"LEB"+W+"-"+G+"net.lem.ToolBox "+W+"created by Pi"+R+"por"+O+"Games"+W)
             print(E+"Legacy Edition"+O+" Battle"+W+" created by "+R+"DBTDerpbox "+E+"+"+B+" contributors"+W)
             print("Consider donating at"+O+" Patreon"+W+"! "+O+"patreon.com/DBTDerpbox"+W)
             print("")
             print("Have fun!")
             print("")
             action = input(B+"Press ENTER to continue . . ."+W)
-            raw = open("LEB-ToolBox.cfg", "w")
+            raw = open("LEB-net.lem.ToolBox.cfg", "w")
             raw.write("1.19.2#/#1#/#unknown#/#1#/#0")
             raw.close()
     except:
@@ -134,7 +134,7 @@ def readConfig():
             try:
                 print("")
                 print("Trying to convert old configuration...")
-                raw = open("LEB-ToolBox.cfg", "r")
+                raw = open("LEB-net.lem.ToolBox.cfg", "r")
                 f = raw.read()
                 file_split = f.split("#/#")
                 cfg_branch = file_split[0]
@@ -153,7 +153,7 @@ def readConfig():
                 if check_for_updates == -1:
                     check_for_updates = 1
                 raw.close()
-                raw = open("LEB-ToolBox.cfg", "w")
+                raw = open("LEB-net.lem.ToolBox.cfg", "w")
                 print(str(motd_sync))
                 raw.write(cfg_branch+"#/#"+str(motd_sync)+"#/#"+current_hash+"#/#"+str(check_for_updates)+"#/#0")
                 raw.close()
@@ -162,13 +162,13 @@ def readConfig():
         elif action.lower() == "n":
             print("")
         else:
-            raw = open("LEB-ToolBox.cfg", "w")
+            raw = open("LEB-net.lem.ToolBox.cfg", "w")
             raw.write("main#/#1#/#unknown#/#1#/#0")
             raw.close()
     finally:
         raw.close()
 if os.name=='nt':
-    os.system('title LEB-ToolBox v'+str(cnt_program))
+    os.system('title LEB-net.lem.ToolBox v'+str(cnt_program))
 
 ################
 ###   GUIs   ###
@@ -646,7 +646,7 @@ def installMenu_8():
         action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
         if action.lower() == "y":
             try:
-                f = open("LEB-ToolBox.cfg", "w")
+                f = open("LEB-net.lem.ToolBox.cfg", "w")
                 f.write(cfg_branch+"#/#1")
             finally:
                 f.close()
@@ -1048,10 +1048,10 @@ def installMenu_13():
     print("")
     print(G+"LEB has been installed successfully!"+W)
     print("You are now ready to run your own LEB server.")
-    print("To run your server, select the option <<0. Start LEB Server>> at the LEB-ToolBox main menu, or execute the file called <<Run ...>> and your OS of preference.")
-    print("You can change your LEB ToolBox and server settings at the Settings page.")
+    print("To run your server, select the option <<0. Start LEB Server>> at the LEB-net.lem.ToolBox main menu, or execute the file called <<Run ...>> and your OS of preference.")
+    print("You can change your LEB net.lem.ToolBox and server settings at the Settings page.")
     print("")
-    print(B+"LEB"+W+"-"+G+"ToolBox "+W+"created by Pi"+R+"por"+O+"Games"+W)
+    print(B+"LEB"+W+"-"+G+"net.lem.ToolBox "+W+"created by Pi"+R+"por"+O+"Games"+W)
     print(E+"Legacy Edition"+O+" Battle"+W+" created by "+R+"DBTDerpbox "+E+"+"+B+" contributors"+W)
     print("Consider donating at"+O+" Patreon"+W+"! "+O+"patreon.com/DBTDerpbox"+W)
     print("")
@@ -1162,7 +1162,7 @@ def reinstallMenu():
     print("=======================================================")
     print("")
     print(R+"WARNING!: Reinstalling LEB will erase ALL DATA, including server files, player data and LEB resources.")
-    print("It's recommended to backup the folder LEB-ToolBox is installed to to avoid losing player-specific-settings, custom presets, advancements,...")
+    print("It's recommended to backup the folder LEB-net.lem.ToolBox is installed to to avoid losing player-specific-settings, custom presets, advancements,...")
     print("If you are troubleshooting problems on a mirrored server, feel free to continue." +W)
     print("")
     print(P+"Are you sure you want to TRULY ERASE EVERYTHING NO JOKES and install again?"+W)
@@ -1197,7 +1197,7 @@ def changeBranch():
     print("The default (most stable and updated) branch is "+G+"MAIN"+W+".")
     print("Using branches other than "+G+"MAIN"+W+" might break the server (which could include player savedata!). "+E+R+"Test with caution!"+E)
     print("")
-    print("To select a branch, type the corresponding number or type the name of the branch in the text box (be sure it's correctly spelled or LEB-ToolBox will break!).")
+    print("To select a branch, type the corresponding number or type the name of the branch in the text box (be sure it's correctly spelled or LEB-net.lem.ToolBox will break!).")
     print("")
     print(G+"Default branches:"+W)
     print("1. 1.19.2 (Default)")
@@ -1251,17 +1251,17 @@ def settingsMenu():
     print(G+"Settings"+W)
     print("=======================================================")
     print("")
-    print("Welcome to the Settings page: Change your ToolBox/Server settings here.")
+    print("Welcome to the Settings page: Change your net.lem.ToolBox/Server settings here.")
     print(E+"Program version: "+ver_program+W)
     print("")
-    print(G+"LEB-ToolBox Settings:"+W)
+    print(G+"LEB-net.lem.ToolBox Settings:"+W)
     print("")
     print("1. Change branch (current selected branch: ", B+cfg_branch+W, ")")
     print(E+"   Allows you to change the build branch the server is running on."+W)
-    print("2. Update LEB-ToolBox (current version: "+ver_program+W+")")
-    print(E+"   Update LEB-ToolBox to the latest stable version available at GitHub."+W)
-    print("3. Check for LEB-ToolBox updates at startup ("+response_cfu+")"+W)
-    print(E+"   This will check if there are any updates available for LEB-ToolBox when you start the application."+W)
+    print("2. Update LEB-net.lem.ToolBox (current version: "+ver_program+W+")")
+    print(E+"   Update LEB-net.lem.ToolBox to the latest stable version available at GitHub."+W)
+    print("3. Check for LEB-net.lem.ToolBox updates at startup ("+response_cfu+")"+W)
+    print(E+"   This will check if there are any updates available for LEB-net.lem.ToolBox when you start the application."+W)
     print("")
     print(B+"Server Settings:"+W)
     print("")
@@ -1325,12 +1325,12 @@ def settingsMenu():
 def updateLEBTB():
     cls()
     print("=======================================================")
-    print(G+"Update LEB-ToolBox"+W)
+    print(G+"Update LEB-net.lem.ToolBox"+W)
     print("=======================================================")
     print("")
-    print("You can update your LEB-ToolBox program to the latest stable version available at GitHub.")
-    print("The current LEB-ToolBox program version is "+ver_program+W)
-    print("Newer LEB-ToolBox updates might ship with new features, bugfixes, and other improvements!")
+    print("You can update your LEB-net.lem.ToolBox program to the latest stable version available at GitHub.")
+    print("The current LEB-net.lem.ToolBox program version is "+ver_program+W)
+    print("Newer LEB-net.lem.ToolBox updates might ship with new features, bugfixes, and other improvements!")
     print("")
     print(E+"Searching for updates . . ."+W)
     print("")
@@ -1338,12 +1338,12 @@ def updateLEBTB():
     result2 = checkForChangeLog()
     cls()
     print("=======================================================")
-    print(G+"Update LEB-ToolBox"+W)
+    print(G+"Update LEB-net.lem.ToolBox"+W)
     print("=======================================================")
     print("")
-    print("You can update your LEB-ToolBox program to the latest stable version available at GitHub.")
-    print("The current LEB-ToolBox program version is "+ver_program+W)
-    print("Newer LEB-ToolBox updates might ship with new features, bugfixes, and other improvements!")
+    print("You can update your LEB-net.lem.ToolBox program to the latest stable version available at GitHub.")
+    print("The current LEB-net.lem.ToolBox program version is "+ver_program+W)
+    print("Newer LEB-net.lem.ToolBox updates might ship with new features, bugfixes, and other improvements!")
     print("")
     if result == 0:
         print(E+"There aren't any new updates. Your program is fully updated.")
@@ -1372,20 +1372,20 @@ def updateLEBTB():
         print("")
         action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
         if action.lower() == "y":
-            ### LEB-ToolBox update
-            print(E+"Preparing to update LEB-ToolBox..."+W)
-            print("Downloading LEB-ToolBox...", end="")
+            ### LEB-net.lem.ToolBox update
+            print(E+"Preparing to update LEB-net.lem.ToolBox..."+W)
+            print("Downloading LEB-net.lem.ToolBox...", end="")
             pgrmfile = ""
             try:
                 if platform.system() == "Linux":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True)
-                    open("LEB-ToolBox-new", "wb").write(prgrmfile.content)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/net.lem.ToolBox/main/LEB-net.lem.ToolBox-v'+str(online_count_program), allow_redirects=True)
+                    open("LEB-net.lem.ToolBox-new", "wb").write(prgrmfile.content)
                 elif platform.system() == "Darwin":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox-v'+str(online_count_program), allow_redirects=True)
-                    open("LEB-ToolBox-new-MacOS", "wb").write(prgrmfile.content)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/net.lem.ToolBox/main/LEB-net.lem.ToolBox-v'+str(online_count_program), allow_redirects=True)
+                    open("LEB-net.lem.ToolBox-new-MacOS", "wb").write(prgrmfile.content)
                 elif platform.system() == "Windows":
-                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox-v'+str(online_count_program)+'.exe', allow_redirects=True)
-                    open("LEB-ToolBox-new.exe", "wb").write(prgrmfile.content)
+                    prgrmfile = requests.get('https://raw.githubusercontent.com/'+repo+'/net.lem.ToolBox/main/LEB-net.lem.ToolBox-v'+str(online_count_program)+'.exe', allow_redirects=True)
+                    open("LEB-net.lem.ToolBox-new.exe", "wb").write(prgrmfile.content)
                 print(G+"DONE"+W)
             except Exception as error:
                 print(R+"FAIL ("+str(error)+")"+W)
@@ -1396,44 +1396,44 @@ def updateLEBTB():
                 if action.lower() == "y":
                     print("Keeping old version...", end="")
                     if platform.system() == "Linux":
-                        os.rename("LEB-ToolBox", "LEB-ToolBox_old")
+                        os.rename("LEB-net.lem.ToolBox", "LEB-ToolBox_old")
                     elif platform.system() == "Darwin":
-                        os.rename("LEB-ToolBox-MacOS", "LEB-ToolBox_old-MacOS")
+                        os.rename("LEB-net.lem.ToolBox-MacOS", "LEB-ToolBox_old-MacOS")
                     elif platform.system() == "Windows":
-                        os.rename("LEB-ToolBox.exe", "LEB-ToolBox_old.exe")
+                        os.rename("LEB-net.lem.ToolBox.exe", "LEB-ToolBox_old.exe")
                 else:
                     print("Marking DELETE_ME to old version...", end="")
                     if platform.system() == "Linux":
-                        os.rename("LEB-ToolBox", "LEB-ToolBox_DELETE_ME")
+                        os.rename("LEB-net.lem.ToolBox", "LEB-ToolBox_DELETE_ME")
                     elif platform.system() == "Darwin":
-                        os.rename("LEB-ToolBox-MacOS", "LEB-ToolBox_DELETE_ME-MacOS")
+                        os.rename("LEB-net.lem.ToolBox-MacOS", "LEB-ToolBox_DELETE_ME-MacOS")
                     elif platform.system() == "Windows":
-                        os.rename("LEB-ToolBox.exe", "LEB-ToolBox_DELETE_ME.exe")
+                        os.rename("LEB-net.lem.ToolBox.exe", "LEB-ToolBox_DELETE_ME.exe")
                     print(G+"DONE"+W)
             except Exception as error:
                 print(R+"FAIL ("+str(error)+")"+W)
             try:
                 print("Renaming new update file...", end="")
                 if platform.system() == "Linux":
-                    os.rename("LEB-ToolBox-new", "LEB-ToolBox")
-                    os.system("chmod +x LEB-ToolBox")
+                    os.rename("LEB-net.lem.ToolBox-new", "LEB-net.lem.ToolBox")
+                    os.system("chmod +x LEB-net.lem.ToolBox")
                 elif platform.system() == "Darwin":
-                    os.rename("LEB-ToolBox-new-MacOS", "LEB-ToolBox-MacOS")
+                    os.rename("LEB-net.lem.ToolBox-new-MacOS", "LEB-net.lem.ToolBox-MacOS")
                 elif platform.system() == "Windows":
-                    os.rename("LEB-ToolBox-new.exe", "LEB-ToolBox.exe")
+                    os.rename("LEB-net.lem.ToolBox-new.exe", "LEB-net.lem.ToolBox.exe")
             except Exception as error:
                 print(R+"FAIL ("+str(error)+")"+W)
             print("")
-            print(O+"***" +W+"LEB-ToolBox will restart in 5 . . ."+O+" ***"+W)
+            print(O+"***" +W+"LEB-net.lem.ToolBox will restart in 5 . . ."+O+" ***"+W)
             print("")
             sleep(5)
             print(E+"Restarting..."+W)
             if platform.system() == "Linux":
-                os.system("./LEB-ToolBox")
+                os.system("./LEB-net.lem.ToolBox")
             elif platform.system() == "Darwin":
-                os.system("./LEB-ToolBox-MacOS")
+                os.system("./LEB-net.lem.ToolBox-MacOS")
             elif platform.system() == "Windows":
-                os.startfile("LEB-ToolBox.exe")
+                os.startfile("LEB-net.lem.ToolBox.exe")
             exit()
         elif action.lower() == "n":
             settingsMenu()
@@ -1447,7 +1447,7 @@ def changeLog():
     print(B+"CHANGELOG"+W)
     print("=======================================================")
     print("")
-    print("You are now reading the LEB-ToolBox "+ver_program+" "+B+"changelog"+W+".")
+    print("You are now reading the LEB-net.lem.ToolBox "+ver_program+" "+B+"changelog"+W+".")
     print("")
     print(B+"CHANGELOG:"+W)
     print(colorize(ver_info))
@@ -1464,7 +1464,7 @@ def changeLog():
 ####################
 def writeConfig(var_branch,var_motd_sync,var_hash,var_cfu):
     try:
-        f = open("LEB-ToolBox.cfg", "w")
+        f = open("LEB-net.lem.ToolBox.cfg", "w")
         f.write(var_branch+"#/#"+str(var_motd_sync)+"#/#"+var_hash+"#/#"+str(var_cfu))
     finally:
         f.close()
@@ -1633,7 +1633,7 @@ def checkForUpdates():
     global lebTBStatus
     ver1 = 0
     try:
-        req = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
+        req = requests.get('https://raw.githubusercontent.com/'+repo+'/net.lem.ToolBox/main/LEB-net.lem.ToolBox.py', allow_redirects=True)
         data = (req.content).decode("utf-8")
         info = data.split("\n")
         for line in info:
@@ -1656,7 +1656,7 @@ def checkForUpdates():
             extension = '.exe'
         try:
             global online_count_program
-            req = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox-v'+str(ver1)+str(extension), allow_redirects=True)
+            req = requests.get('https://raw.githubusercontent.com/'+repo+'/net.lem.ToolBox/main/LEB-net.lem.ToolBox-v'+str(ver1)+str(extension), allow_redirects=True)
             data = req.content
             if data == b'404: Not Found':
                 lebTBStatus = -2
@@ -1679,7 +1679,7 @@ def checkForUpdates():
     
 def checkForChangeLog():
     try:
-        req = requests.get('https://raw.githubusercontent.com/'+repo+'/ToolBox/main/LEB-ToolBox.py', allow_redirects=True)
+        req = requests.get('https://raw.githubusercontent.com/'+repo+'/net.lem.ToolBox/main/LEB-net.lem.ToolBox.py', allow_redirects=True)
         data = (req.content).decode("utf-8")
         info = data.split("\n")
         for line in info:
@@ -1721,13 +1721,13 @@ def CFU():
         result2 = checkForChangeLog()
         if result == 1:
             print(O+"*******************************************************"+W)
-            print(G+"New LEB-ToolBox v"+str(online_count_program)+" update has been found!"+W)
+            print(G+"New LEB-net.lem.ToolBox v"+str(online_count_program)+" update has been found!"+W)
             print(O+"*******************************************************"+W)
             print("")
             print(B+"CHANGELOG:"+W)
             print(result2)
             print("")
-            print(P+"Do you want to go to the LEB-ToolBox update Menu?"+W)
+            print(P+"Do you want to go to the LEB-net.lem.ToolBox update Menu?"+W)
             print("")
             action = input(B+"Input " + G + "[Y/N]" + B + ": "+W)
             if action.lower() == "y":
@@ -1743,11 +1743,11 @@ if __name__ == '__main__':
     CFU()
     mainMenu()
 else:
-    print(R+'LEB-ToolBox is not designed to be loaded as external code, a library or an addon. This thread will now be terminated.')
+    print(R+'LEB-net.lem.ToolBox is not designed to be loaded as external code, a library or an addon. This thread will now be terminated.')
     exit
 
 
 
 ##############################################################################
-###  LEB-ToolBox, created by PiporGames, with love, for the LEM Community  ###
+###  LEB-net.lem.ToolBox, created by PiporGames, with love, for the LEM Community  ###
 ##############################################################################

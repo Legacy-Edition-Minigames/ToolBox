@@ -1,4 +1,4 @@
-# LEB ToolBox
+# LEB net.lem.ToolBox
 ![runs-on-windows-_-linux-_-macos](https://user-images.githubusercontent.com/61473628/185755896-5c8999d0-70a6-4d65-be25-d767d3e090a3.svg)
 ![contains-good-enough-unoptimized-code](https://user-images.githubusercontent.com/61473628/185755898-db74d120-a79d-430c-9aa5-66b173cbffd9.svg)
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
@@ -25,7 +25,7 @@ All-in-one tools to manage your own LEB server.
 - Multiple OS support: Can be ran directly from the Phython source code, or from the compiled OS-Specific binaries (Windows/Linux).
 - Launch Scripts: Adds scripts to launch your server with your custom configuration.
 - Multi-Color terminal support: Pretty!
-- Auto-updater for LEB-ToolBox: The program will automatically search for updates and changelogs.
+- Auto-updater for LEB-net.lem.ToolBox: The program will automatically search for updates and changelogs.
 - Settings page: Customize how the program and server behaves.
 
 ## Authors
