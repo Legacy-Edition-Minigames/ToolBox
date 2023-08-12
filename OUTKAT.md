@@ -29,6 +29,9 @@ This method takes a command and its arguments as input and determines the approp
 - `STP`: Stops script execution.
 - `WIT`: Waits for a specified amount of time.
 - `KAT`: A comment line that does nothing.
+- `RUN`: **(Experimental)** Executes a command in the embedded command line.
+
+> **Caution:** The `RUN` command is experimental and may not be suitable for all environments. It's advised not to use it in critical or cross-compatible scenarios.
 
 ### `extractZipFile` Method
 
@@ -53,7 +56,7 @@ An example of a script that the `OUTKAT` interpreter can execute:
 ```
 Sample Script
 1.0
-OUTKAT-Interpreter v1.0
+COMOK100
 
 OUT Hello, world!
 DWN http://example.com/sample.txt local.txt
@@ -63,9 +66,12 @@ EXT archive.zip extracted_files/
 STP
 WIT 3000
 KAT This is a comment.
+RUN echo "Hello from embedded command line!"
 ```
 
-In this example, the script starts by printing "Hello, world!" to the console, then proceeds to download a file from a URL, move a file, jump to line 5, extract files from a ZIP archive, stop execution, wait for 3 seconds, and finally, ignore a comment line.
+In this example, the script starts by printing "Hello, world!" to the console, then proceeds to download a file from a URL, move a file, jump to line 5, extract files from a ZIP archive, stop execution, wait for 3 seconds, ignore a comment line, and finally, experimentally runs a command in the embedded command line.
+
+> **Note:** Use the `RUN` command with caution and only in controlled environments due to its experimental nature.
 
 ## Conclusion
 

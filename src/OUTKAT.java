@@ -72,6 +72,10 @@ public class OUTKAT {
                 stopExecution();
                 break;
 
+            case "RUN":
+                runCommandLine(kArgs);
+                break;
+
             // Implement other commands here...
 
             case "WIT":
@@ -93,7 +97,26 @@ public class OUTKAT {
         }
     }
 
-    private static void extractZipFile(String sourceZip, String destination) {
+    private static void runCommandLine(String[] kArgs) {
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(kArgs);
+            Process process = processBuilder.start();
+
+            // Redirect process output to the current process's output (the command line window)
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            int exitCode = process.waitFor();
+            System.out.println("Command finished with exit code: " + exitCode);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+        private static void extractZipFile(String sourceZip, String destination) {
         try {
             File destDir = new File(destination);
             if (!destDir.exists()) {
