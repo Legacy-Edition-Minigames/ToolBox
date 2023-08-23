@@ -1,1 +1,1 @@
-Javac --version
+Java -Jar server.jar -nogui

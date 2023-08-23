@@ -6,21 +6,35 @@ import java.util.Objects;
 public class noGUI {
 
     public static void GUI() {
-        try {
-            Conf.createIfNotExists();
-           // FileDownloader.main(new String[]{Conf.get(2) + "/" + Conf.get(0) + "/main.ok", "./main.ok"});
+        //FileDownloader.downloadAndUnzip("https://github.com/Legacy-Edition-Minigames/Minigames/archive/refs/heads/experimental-server.zip", "serverInstance");
+        //download branches
+        ConfigLoader.BranchConfig branches = ConfigLoader.parseBranches(FileDownloader.download(Conf.get(2) + "/DefaultBranches.json"));
 
-            String confValue = ReadSpecificLine.main(new String[]{"./main.ok", "1"});
-            if (!Objects.equals(Conf.get(1), confValue)) {
-                Conf.set("1", confValue);
-                OUTKAT.executeScript("./main.ok");
-            }
+        /*
+        branches.branches.forEach((s, s2) -> {
+            System.out.println(s + " : " + s2);
+        });
+        */
 
-            //FileDownloader.main(new String[]{Conf.get(2) + "/" + Conf.get(0) + "/CRC", "./CRC"});
-            FileWorkerThreads.RUNCRC("./CRC");
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Handle the exception here, if needed
+
+        ConfigLoader.ToolboxConfig toolboxConfig = ConfigLoader.parseToolboxConfig(FileDownloader.download(Conf.get(2) + "/" + Conf.get(0) + "/toolboxConfig.json"));
+        if (!toolboxConfig.version.equals(Conf.get(1))) {
+            //download server jar
+            FileDownloader.download(toolboxConfig.serverJarURL, "serverInstance/server.jar");
+
+            //download minigames repo
+            FileDownloader.downloadAndUnzip(toolboxConfig.LEMbaseURL, "serverInstance");
+
+            //download mods
+            toolboxConfig.mods.forEach((s, s2) -> {
+                FileDownloader.download(s2, "serverInstance/mods/" + s + ".jar");
+            });
+
+            FileDownloader.download(Conf.get(2) + "/" + Conf.get(0) + "/" + toolboxConfig.DEFCRCfile);
+
+            FileWorkerThreads.RUNCRC(toolboxConfig.DEFCRCfile);
+        } else {
+            FileWorkerThreads.RUNCRC(toolboxConfig.DEFCRCfile);
         }
     }
 }

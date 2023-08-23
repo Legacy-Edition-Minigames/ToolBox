@@ -1,7 +1,9 @@
 {
+  "version": "1.0.0",
   "name": "experimental",
   "serverJarURL": "https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.14.22/0.11.2/server/jar",
-  "launchARGS": "-nogui",
+  "LEMbaseURL": "https://github.com/Legacy-Edition-Minigames/Minigames/archive/refs/heads/experimental-server.zip",
+  "DEFCRCfile": "DEF",
   "mods": {
     "Fabric API": "https://cdn.modrinth.com/data/P7dR8mSH/versions/XheZ9iGK/fabric-api-0.86.1%2B1.20.1.jar",
     "Server Utils": "https://github.com/Legacy-Edition-Minigames/Server-Utils/suites/14773513689/artifacts/840238466"

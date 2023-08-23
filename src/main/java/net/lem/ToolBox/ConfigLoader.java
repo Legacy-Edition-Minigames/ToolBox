@@ -26,11 +26,15 @@ public class ConfigLoader {
     }
 
     public static class ToolboxConfig {
+        public String version;
+
         public String name;
 
         public String serverJarURL;
 
-        public String launchARGS;
+        public String LEMbaseURL;
+
+        public String DEFCRCfile;
 
         public HashMap<String, String> mods = new HashMap<>();
 
