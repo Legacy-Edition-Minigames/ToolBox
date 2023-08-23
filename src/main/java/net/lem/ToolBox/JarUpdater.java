@@ -10,7 +10,7 @@ public class JarUpdater {
 
     public static void update() {
         String jarFilePath = getJarFilePath();
-        String downloadUrl = "https://github.com/niceEli/ToolBox/releases/latest/download/ToolBox.jar";
+        String downloadUrl = "https://github.com/niceEli/ToolBox/releases/latest/download/toolbox-latest-jar-with-dependencies.jar";
 
         try {
             String latestVersion = getLatestVersionFromGitHub();
