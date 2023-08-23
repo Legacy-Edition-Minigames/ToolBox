@@ -2,10 +2,10 @@
   "version": "1.0.0",
   "name": "experimental",
   "serverJarURL": "https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.14.22/0.11.2/server/jar",
-  "LEMbaseURL": "https://niceEli.github.io/ToolBox/Branches/Latest/Minigames-experimental-server.zip",
+  "LEMbaseURL": "https://github.com/niceEli/niceeli.github.io/releases/download/stuff/Minigames-experimental-server.zip",
   "DEFCRCfile": "CRC",
   "mods": {
     "Fabric API": "https://cdn.modrinth.com/data/P7dR8mSH/versions/XheZ9iGK/fabric-api-0.86.1%2B1.20.1.jar",
-    "Server Utils": "https://niceEli.github.io/ToolBox/Branches/Latest/ServerUtils-1.0.6b44-1.20.1.jar"
+    "Server Utils": "https://github.com/niceEli/niceeli.github.io/releases/download/stuff/ServerUtils-1.0.6b44-1.20.1.jar"
   }
 }
