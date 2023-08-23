@@ -32,6 +32,8 @@ public class noGUI {
 
             FileDownloader.download(Conf.get(2) + "/" + Conf.get(0) + "/" + toolboxConfig.DEFCRCfile);
 
+            Conf.set("1", toolboxConfig.version);
+
             FileWorkerThreads.RUNCRC(toolboxConfig.DEFCRCfile);
         } else {
             FileWorkerThreads.RUNCRC(toolboxConfig.DEFCRCfile);

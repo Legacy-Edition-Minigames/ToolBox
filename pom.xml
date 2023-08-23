@@ -6,7 +6,7 @@
 
     <groupId>net.lem</groupId>
     <artifactId>toolbox</artifactId>
-    <version>0.0.1</version>
+    <version>latest</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
