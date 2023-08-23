@@ -30,7 +30,7 @@ public class noGUI {
                 FileDownloader.download(s2, "./mods/" + s + ".jar");
             });
 
-            FileDownloader.download(toolboxConfig.DEFCRCfile);
+            FileDownloader.download(toolboxConfig.DEFCRCfile, "./CRC");
 
             Conf.set("1", toolboxConfig.version);
 
