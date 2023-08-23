@@ -20,23 +20,23 @@ public class noGUI {
         ConfigLoader.ToolboxConfig toolboxConfig = ConfigLoader.parseToolboxConfig(FileDownloader.download(Conf.get(2) + "/" + Conf.get(0) + "/toolboxConfig.json"));
         if (!toolboxConfig.version.equals(Conf.get(1))) {
             //download server jar
-            FileDownloader.download(toolboxConfig.serverJarURL, "serverInstance/server.jar");
+            FileDownloader.download(toolboxConfig.serverJarURL, "./server.jar");
 
             //download minigames repo
-            FileDownloader.downloadAndUnzip(toolboxConfig.LEMbaseURL, "serverInstance");
+            FileDownloader.downloadAndUnzip(toolboxConfig.LEMbaseURL, "./");
 
             //download mods
             toolboxConfig.mods.forEach((s, s2) -> {
-                FileDownloader.download(s2, "serverInstance/mods/" + s + ".jar");
+                FileDownloader.download(s2, "./mods/" + s + ".jar");
             });
 
-            FileDownloader.download(Conf.get(2) + "/" + Conf.get(0) + "/" + toolboxConfig.DEFCRCfile);
+            FileDownloader.download(toolboxConfig.DEFCRCfile);
 
             Conf.set("1", toolboxConfig.version);
 
-            FileWorkerThreads.RUNCRC(toolboxConfig.DEFCRCfile);
+            FileWorkerThreads.RUNCRC("CRC");
         } else {
-            FileWorkerThreads.RUNCRC(toolboxConfig.DEFCRCfile);
+            FileWorkerThreads.RUNCRC("CRC");
         }
     }
 }
