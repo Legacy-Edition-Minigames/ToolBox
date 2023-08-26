@@ -13,6 +13,7 @@ public class BranchConfig {
         public String name;
         public String url;
         public String location;
+        public boolean gitRepo = false;
         public boolean unzip = false;
     }
 }

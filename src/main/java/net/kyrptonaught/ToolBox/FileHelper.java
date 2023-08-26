@@ -6,23 +6,23 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 
 public class FileHelper {
 
-    public static void download(String fileURL, Path savePath) {
+    public static boolean download(String fileURL, Path savePath) {
         try (InputStream in = openFileOrURL(fileURL)) {
             Files.createDirectories(savePath.getParent());
             Files.copy(in, savePath, StandardCopyOption.REPLACE_EXISTING);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public static String download(String fileURL) {
@@ -41,7 +41,11 @@ public class FileHelper {
         return null;
     }
 
-    public static void unzipFile(Path zipFile, Path unzipPath) {
+    public static <T> T download(String fileURL, Class<T> clazz) {
+        return ConfigLoader.gson.fromJson(download(fileURL), clazz);
+    }
+
+    public static boolean unzipFile(Path zipFile, Path unzipPath) {
         try (java.util.zip.ZipFile zip = new java.util.zip.ZipFile(zipFile.toFile())) {
             int size = zip.size();
             int count = 0;
@@ -68,9 +72,11 @@ public class FileHelper {
                 count++;
                 //System.out.println(count + "/" + size);
             }
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public static InputStream openFileOrURL(String path) throws IOException {
@@ -92,13 +98,41 @@ public class FileHelper {
         return false;
     }
 
-    public static void moveFile(Path source, Path destination) {
+    public static boolean moveFile(Path source, Path destination) {
         try {
             Files.move(source, destination, StandardCopyOption.REPLACE_EXISTING);
+            return true;
         } catch (Exception e) {
             System.out.println("Failed to copy file: " + source + " -> " + destination);
             e.printStackTrace();
         }
+        return false;
+    }
+
+    public static boolean deleteDirectory(Path directory) {
+        try {
+            Files.walkFileTree(directory,
+                    new SimpleFileVisitor<Path>() {
+                        @Override
+                        public FileVisitResult postVisitDirectory(
+                                Path dir, IOException exc) throws IOException {
+                            Files.delete(dir);
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                        @Override
+                        public FileVisitResult visitFile(
+                                Path file, BasicFileAttributes attrs)
+                                throws IOException {
+                            Files.delete(file);
+                            return FileVisitResult.CONTINUE;
+                        }
+                    });
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static String hashFile(Path filePath) {
@@ -113,13 +147,15 @@ public class FileHelper {
         return null;
     }
 
-    public static void writeHash(Path filePath, String hash) {
+    public static boolean writeHash(Path filePath, String hash) {
         try {
             Files.writeString(filePath, hash);
+            return true;
         } catch (Exception e) {
             System.out.println("Error writing hash: " + filePath);
             e.printStackTrace();
         }
+        return false;
     }
 
     public static String readHash(Path filePath) {
