@@ -1,0 +1,6 @@
+{
+  "branches": {
+    "Main": "https://github.com/Legacy-Edition-Minigames/Minigames",
+    "Experimental": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/experimental-server"
+  }
+}
