@@ -1,6 +1,19 @@
 {
-  "branches": {
-    "Main": "https://github.com/Legacy-Edition-Minigames/Minigames",
-    "Experimental": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/experimental-server"
-  }
+  "branches": [
+    {
+      "name": "Main",
+      "url": "https://github.com/Legacy-Edition-Minigames/Minigames",
+      "desc": "Stable branch of LEM"
+    },
+    {
+      "name": "Experimental",
+      "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/experimental-server",
+      "desc": "Experimental branch of LEM"
+    },
+    {
+      "name": "Toolbox Testing",
+      "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/toolbox-testing",
+      "desc": "LEM branch for testing Toolbox"
+    }
+  ]
 }

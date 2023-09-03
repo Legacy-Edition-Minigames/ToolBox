@@ -1,7 +1,11 @@
 package net.kyrptonaught.ToolBox.configs;
 
-import java.util.HashMap;
-
 public class BranchesConfig {
-    public HashMap<String, String> branches = new HashMap<>();
+    BranchInfo[] branches;
+
+    public static class BranchInfo {
+        String name;
+        String url;
+        String desc;
+    }
 }
