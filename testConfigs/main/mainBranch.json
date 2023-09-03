@@ -1,5 +1,5 @@
 {
-  "name": "main",
+  "name": "LEM ToolBox Testing",
   "launchCMD": "java -jar server.jar nogui",
   "dependencies": [
     {

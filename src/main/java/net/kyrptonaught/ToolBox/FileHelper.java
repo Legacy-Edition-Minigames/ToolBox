@@ -9,7 +9,10 @@ import java.net.URL;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 
 public class FileHelper {
@@ -45,11 +48,10 @@ public class FileHelper {
         return ConfigLoader.gson.fromJson(download(fileURL), clazz);
     }
 
-    public static boolean unzipFile(Path zipFile, Path unzipPath) {
+    public static List<String> unzipFile(Path zipFile, Path unzipPath) {
+        List<String> installedFiles = new ArrayList<>();
         try (java.util.zip.ZipFile zip = new java.util.zip.ZipFile(zipFile.toFile())) {
             int size = zip.size();
-            int count = 0;
-
 
             boolean firstChecked = false;
             String initialDir = null;
@@ -69,14 +71,15 @@ public class FileHelper {
                     Files.createDirectories(output);
                 else
                     Files.copy(zip.getInputStream(entry), output, StandardCopyOption.REPLACE_EXISTING);
-                count++;
+                installedFiles.add(output.toString());
                 //System.out.println(count + "/" + size);
             }
-            return true;
+            installedFiles.sort(Comparator.reverseOrder());
+            return installedFiles;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return installedFiles;
     }
 
     public static InputStream openFileOrURL(String path) throws IOException {
@@ -98,15 +101,16 @@ public class FileHelper {
         return false;
     }
 
-    public static boolean moveFile(Path source, Path destination) {
+    public static List<String> moveFile(Path source, Path destination) {
+        List<String> installedFiles = new ArrayList<>();
         try {
             Files.move(source, destination, StandardCopyOption.REPLACE_EXISTING);
-            return true;
+            installedFiles.add(destination.toString());
         } catch (Exception e) {
             System.out.println("Failed to copy file: " + source + " -> " + destination);
             e.printStackTrace();
         }
-        return false;
+        return installedFiles;
     }
 
     public static boolean deleteDirectory(Path directory) {
@@ -166,5 +170,36 @@ public class FileHelper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static boolean writeLines(Path filePath, List<String> lines) {
+        try {
+            Files.write(filePath, lines);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error writing: " + filePath);
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static List<String> readLines(Path filePath) {
+        try {
+            return Files.readAllLines(filePath);
+        } catch (Exception e) {
+            System.out.println("Error reading: " + filePath);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static boolean delete(Path filePath) {
+        try {
+            Files.delete(filePath);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

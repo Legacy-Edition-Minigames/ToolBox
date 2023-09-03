@@ -1,11 +1,11 @@
 package net.kyrptonaught.ToolBox.configs;
 
 public class BranchesConfig {
-    BranchInfo[] branches;
+    public BranchInfo[] branches;
 
     public static class BranchInfo {
-        String name;
-        String url;
-        String desc;
+        public String name;
+        public String url;
+        public String desc;
     }
 }
