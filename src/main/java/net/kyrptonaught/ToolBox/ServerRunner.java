@@ -38,7 +38,7 @@ public class ServerRunner {
 
                 reader.close();
                 stagingPipe.close();
-                stagingThread.stop();//todo this doesn't actually stop the thread. Will be an issue if another server launches before toolbox closes
+                stagingThread.interrupt();
             } catch (IOException e) {
                 e.printStackTrace();
             }
