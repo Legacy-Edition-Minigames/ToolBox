@@ -3,6 +3,7 @@ package net.kyrptonaught.ToolBox;
 import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.configs.BranchesConfig;
 
+import java.nio.file.Path;
 import java.util.Scanner;
 
 public class Menu {
@@ -28,6 +29,9 @@ public class Menu {
         System.out.println("Creating toolbox instance in /installs/" + branch.name);
         Installer.installBranch(branch);
         System.out.println("Finished");
+
+        checkEula(scan);
+
         System.out.print("Start Server? (Y/N): ");
         String input = scan.next().substring(0, 1).toUpperCase();
 
@@ -47,5 +51,26 @@ public class Menu {
         System.out.println("█       █   █▄▄▄█ ██▄██ █    █   █ █       █       █       █ █▄█   █       █   ▄   █");
         System.out.println("█▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄█   █▄█    █▄▄▄█ █▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄▄█ █▄▄█");
         System.out.println();
+    }
+
+    public static void checkEula(Scanner scan) {
+        Path eulaFile = Paths.getInstallPath().resolve("eula.txt");
+        boolean agreed = EulaChecker.checkEulaAgreement(eulaFile);
+
+        if(agreed) return;
+
+        System.out.println("Do you accept the Minecraft's EULA?");
+        System.out.println("For your server to run you must accept Minecraft's EULA.");
+        System.out.println("The Minecraft's EULA contains information and rules about what you can do and can't do while using the game.");
+        System.out.println("Agreement of the Minecraft's EULA is strictly needed, otherwise your server would be illegal to operate and thus, won't open.");
+        System.out.println();
+        System.out.println("WARNING: LEB WON'T WORK IF MINECRAFT'S EULA IS NOT AGREED!");
+        System.out.println();
+        System.out.print("Do you want to accept the Minecraft's EULA? (Y/N): ");
+        String input = scan.next().substring(0, 1).toUpperCase();
+
+        if (input.equals("Y")){
+            EulaChecker.agreeToEula(eulaFile);
+        }
     }
 }
