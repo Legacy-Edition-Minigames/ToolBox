@@ -18,7 +18,7 @@ public class EulaChecker {
     }
 
     public static void agreeToEula(Path eulaFile) {
-        try (OutputStream outputStream = Files.newOutputStream(eulaFile);) {
+        try (OutputStream outputStream = Files.newOutputStream(eulaFile)) {
             Properties properties = new Properties();
             properties.setProperty("eula", "true");
             properties.store(outputStream, "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://aka.ms/MinecraftEULA).");

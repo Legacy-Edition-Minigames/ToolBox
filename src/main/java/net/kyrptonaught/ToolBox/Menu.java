@@ -10,7 +10,11 @@ public class Menu {
 
     public static void init(String[] args) {
         Scanner scan = new Scanner(System.in);
-        GUI();
+        clearConsole();
+        GUI(scan);
+
+
+        clearConsole();
         System.out.println("Checking for Branches");
         BranchesConfig branches = ConfigLoader.parseBranches(FileHelper.download("https://raw.githubusercontent.com/Legacy-Edition-Minigames/ToolBox/java/testConfigs/TestBranches.json"));
         System.out.println("Found the following Branches. Please enter the branch number you would like to use");
@@ -30,6 +34,7 @@ public class Menu {
         Installer.installBranch(branch);
         System.out.println("Finished");
 
+        clearConsole();
         checkEula(scan);
 
         System.out.print("Start Server? (Y/N): ");
@@ -42,7 +47,7 @@ public class Menu {
         }
     }
 
-    public static void GUI() {
+    public static void GUI(Scanner scan) {
         System.out.println(" ▄▄▄     ▄▄▄▄▄▄▄ ▄▄   ▄▄    ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄     ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄   ▄▄ ");
         System.out.println("█   █   █       █  █▄█  █  █       █       █       █   █   █  ▄    █       █  █▄█  █");
         System.out.println("█   █   █    ▄▄▄█       █  █▄     ▄█   ▄   █   ▄   █   █   █ █▄█   █   ▄   █       █");
@@ -51,13 +56,27 @@ public class Menu {
         System.out.println("█       █   █▄▄▄█ ██▄██ █    █   █ █       █       █       █ █▄█   █       █   ▄   █");
         System.out.println("█▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄█   █▄█    █▄▄▄█ █▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄▄█ █▄▄█");
         System.out.println();
+        System.out.println("Welcome to LEM-ToolBox!");
+        System.out.println();
+        System.out.println("LEM-ToolBox is a tool designed to make it easy for users to install, update and customize their own LEB instance.");
+        System.out.println();
+        System.out.println("If you encounter any problem, try performing a clean reinstall or contact us on our Discord.");
+        System.out.println("LEM-ToolBox created by Kyrptonaught");
+        System.out.println("Legacy Edition Minigames created by DBTDerpbox & Kyrptonaught");
+        System.out.println("Consider donating at Patreon! patreon.com/DBTDerpbox");
+        System.out.println();
+        System.out.println("Have fun!");
+        System.out.println();
+
+        System.out.println("Press ENTER to continue...");
+        scan.nextLine();
     }
 
     public static void checkEula(Scanner scan) {
         Path eulaFile = Paths.getInstallPath().resolve("eula.txt");
         boolean agreed = EulaChecker.checkEulaAgreement(eulaFile);
 
-        if(agreed) return;
+        if (agreed) return;
 
         System.out.println("Do you accept the Minecraft's EULA?");
         System.out.println("For your server to run you must accept Minecraft's EULA.");
@@ -69,8 +88,20 @@ public class Menu {
         System.out.print("Do you want to accept the Minecraft's EULA? (Y/N): ");
         String input = scan.next().substring(0, 1).toUpperCase();
 
-        if (input.equals("Y")){
+        if (input.equals("Y")) {
             EulaChecker.agreeToEula(eulaFile);
+        }
+    }
+
+    public static void clearConsole() {
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            if (System.getProperty("os.name").contains("Windows"))
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            else
+                Runtime.getRuntime().exec("clear");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
