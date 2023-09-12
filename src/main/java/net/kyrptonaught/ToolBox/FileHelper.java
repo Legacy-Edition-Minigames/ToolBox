@@ -67,6 +67,11 @@ public class FileHelper {
                 }
 
                 Path output = unzipPath.resolve(initialDir == null ? entry.getName() : entry.getName().replace(initialDir, ""));
+
+                //skip toolbox folder in repo
+                if(output.toString().contains("\\.toolbox\\"))
+                    continue;
+
                 if (entry.isDirectory())
                     Files.createDirectories(output);
                 else
