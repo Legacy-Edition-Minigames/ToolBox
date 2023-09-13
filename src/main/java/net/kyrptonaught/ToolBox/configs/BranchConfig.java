@@ -1,8 +1,6 @@
 package net.kyrptonaught.ToolBox.configs;
 
 public class BranchConfig {
-    public String version;
-
     public String name;
 
     public String launchCMD;

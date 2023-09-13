@@ -69,7 +69,7 @@ public class FileHelper {
                 Path output = unzipPath.resolve(initialDir == null ? entry.getName() : entry.getName().replace(initialDir, ""));
 
                 //skip toolbox folder in repo
-                if(output.toString().contains("\\.toolbox\\"))
+                if (output.toString().contains("\\.toolbox\\"))
                     continue;
 
                 if (entry.isDirectory())
@@ -120,23 +120,19 @@ public class FileHelper {
 
     public static boolean deleteDirectory(Path directory) {
         try {
-            Files.walkFileTree(directory,
-                    new SimpleFileVisitor<Path>() {
-                        @Override
-                        public FileVisitResult postVisitDirectory(
-                                Path dir, IOException exc) throws IOException {
-                            Files.delete(dir);
-                            return FileVisitResult.CONTINUE;
-                        }
+            Files.walkFileTree(directory, new SimpleFileVisitor<>() {
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
 
-                        @Override
-                        public FileVisitResult visitFile(
-                                Path file, BasicFileAttributes attrs)
-                                throws IOException {
-                            Files.delete(file);
-                            return FileVisitResult.CONTINUE;
-                        }
-                    });
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,22 +152,22 @@ public class FileHelper {
         return null;
     }
 
-    public static boolean writeHash(Path filePath, String hash) {
+    public static boolean writeFile(Path filePath, String text) {
         try {
-            Files.writeString(filePath, hash);
+            Files.writeString(filePath, text);
             return true;
         } catch (Exception e) {
-            System.out.println("Error writing hash: " + filePath);
+            System.out.println("Error writing file: " + filePath);
             e.printStackTrace();
         }
         return false;
     }
 
-    public static String readHash(Path filePath) {
+    public static String readFile(Path filePath) {
         try {
             return Files.readString(filePath);
         } catch (Exception e) {
-            System.out.println("Error reading hash: " + filePath);
+            System.out.println("Error reading file: " + filePath);
             e.printStackTrace();
         }
         return null;

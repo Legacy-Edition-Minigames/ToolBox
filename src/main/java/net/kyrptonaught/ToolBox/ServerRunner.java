@@ -1,13 +1,12 @@
 package net.kyrptonaught.ToolBox;
 
-import net.kyrptonaught.ToolBox.configs.BranchConfig;
 
 import java.io.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ServerRunner {
 
-    public static void runServer(BranchConfig branch) {
+    public static void runServer(InstalledServerInfo serverInfo) {
         AtomicReference<Process> process = new AtomicReference<>();
         PipedOutputStream stagingPipe = new PipedOutputStream();
 
@@ -25,15 +24,15 @@ public class ServerRunner {
 
         new Thread(() -> {
             try {
-                process.set(new ProcessBuilder(branch.launchCMD.split(" "))
-                        .directory(new File(System.getProperty("user.dir") + "/" + Paths.getInstallPath() + "/"))
+                process.set(new ProcessBuilder(serverInfo.getLaunchArgs().split(" "))
+                        .directory(new File(System.getProperty("user.dir") + "/" + serverInfo.getPath() + "/"))
                         .redirectErrorStream(true)
                         .start());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.get().getInputStream()));
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    System.out.println("Server: " + line);
+                    System.out.println(line);
                 }
 
                 reader.close();

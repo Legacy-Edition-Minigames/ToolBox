@@ -9,83 +9,83 @@ import java.util.List;
 
 public class Installer {
 
-    public static void installBranch(BranchConfig branch) {
-        Paths.setToolboxTempPath(Path.of(".toolbox"));
-        Paths.setInstallPath(Path.of("installs"), branch);
+    public static void installAndCheckForUpdates(InstalledServerInfo serverInfo) {
+        FileHelper.createDir(serverInfo.getPath());
 
-        FileHelper.createDir(Paths.getInstallToolbox());
-        FileHelper.createDir(Paths.getGlobalDownloadPath());
-
+        FileHelper.createDir(serverInfo.getMetaPath());
+        FileHelper.createDir(serverInfo.getDownloadPath());
+        FileHelper.createDir(serverInfo.getHashPath());
+        FileHelper.createDir(serverInfo.getLogPath());
 
         System.out.println("Checking dependencies...");
-        installDependencies(branch);
+        installDependencies(serverInfo);
+        FileHelper.deleteDirectory(serverInfo.getDownloadPath());
 
+        FileHelper.writeFile(serverInfo.getMetaPath().resolve("toolbox.json"), ConfigLoader.serializeToolboxInstall(serverInfo));
         System.out.println("Dependencies done");
-        FileHelper.deleteDirectory(Paths.getGlobalToolbox());
     }
 
-    public static String getNewHash(BranchConfig.Dependency dependency) {
-        if (dependency.gitRepo) {
-
-            String apiCall = GithubHelper.convertRepoToApiCall(dependency.url);
-            dependency.url = GithubHelper.convertRepoToZipball(dependency.url);//todo move this conversion to the dl
-
-            JsonObject response = FileHelper.download(apiCall, JsonObject.class);
-            return response.getAsJsonObject("commit").getAsJsonPrimitive("sha").getAsString();
-        } else {
-            Path tempFile = Paths.getGlobalDownloadPath(dependency);
-            FileHelper.download(dependency.url, tempFile);
-            String hash = FileHelper.hashFile(tempFile);
-            FileHelper.delete(tempFile);
-            return hash;
-        }
-    }
-
-    public static String hashExistingFile(BranchConfig.Dependency dependency) {
-        Path hashFile = Paths.getInstallTemp(dependency, ".hash");
-        if (Files.exists(hashFile) && Files.isReadable(hashFile))
-            return FileHelper.readHash(hashFile);
-        return null;
-    }
-
-    public static void installFile(BranchConfig.Dependency dependency, String hash) {
-        Path destination = Paths.getInstallPath().resolve(FileNameCleaner.removeFirstSlashAndClean(dependency.location));
-        FileHelper.createDir(destination);
-
-        FileHelper.download(dependency.url, Paths.getGlobalDownloadPath(dependency));
-
-        List<String> installedFiles;
-        if (dependency.unzip) {
-            installedFiles = FileHelper.unzipFile(Paths.getGlobalDownloadPath(dependency), destination);
-            FileHelper.delete(Paths.getGlobalDownloadPath(dependency));
-        } else {
-            installedFiles = FileHelper.moveFile(Paths.getGlobalDownloadPath(dependency), destination.resolve(dependency.name));
-        }
-
-        installedFiles.add(destination.toString());
-        FileHelper.writeHash(Paths.getInstallTemp(dependency, ".hash"), hash);
-        FileHelper.writeLines(Paths.getInstallTemp(dependency, ".installed"), installedFiles);
-    }
-
-
-    public static void installDependencies(BranchConfig branch) {
-        for (BranchConfig.Dependency dependency : branch.dependencies) {
+    private static void installDependencies(InstalledServerInfo serverInfo) {
+        for (BranchConfig.Dependency dependency : serverInfo.getDependencies()) {
 
             if (dependency.location.startsWith("/"))
                 dependency.location = dependency.location.substring(1);
 
             System.out.print("Checking " + dependency.name + "...");
 
-            String hash = getNewHash(dependency);
-            String existingHash = hashExistingFile(dependency);
+            String hash = getNewHash(serverInfo, dependency);
+            String existingHash = hashExistingFile(serverInfo, dependency);
 
             if (hash != null && !hash.equals(existingHash)) {
                 System.out.print("downloading...");
-                installFile(dependency, hash);
-                System.out.println("Installed");
+                installFile(serverInfo, dependency, hash);
+                System.out.println("installed");
             } else {
                 System.out.println("Already exists");
             }
         }
+    }
+
+    private static String getNewHash(InstalledServerInfo serverInfo, BranchConfig.Dependency dependency) {
+        if (dependency.gitRepo) {
+            String apiCall = GithubHelper.convertRepoToApiCall(dependency.url);
+            JsonObject response = FileHelper.download(apiCall, JsonObject.class);
+            return response.getAsJsonObject("commit").getAsJsonPrimitive("sha").getAsString();
+        } else {
+            Path downloadPath = serverInfo.getDownloadPath(dependency);
+            FileHelper.download(dependency.url, downloadPath);
+            return FileHelper.hashFile(downloadPath);
+        }
+    }
+
+    private static String hashExistingFile(InstalledServerInfo serverInfo, BranchConfig.Dependency dependency) {
+        Path hashFile = serverInfo.getHashPath(dependency);
+        if (Files.exists(hashFile) && Files.isReadable(hashFile))
+            return FileHelper.readFile(hashFile);
+        return null;
+    }
+
+    private static void installFile(InstalledServerInfo serverInfo, BranchConfig.Dependency dependency, String hash) {
+        Path downloadPath = serverInfo.getDownloadPath(dependency);
+        Path destination = serverInfo.getDependencyPath(dependency);
+        FileHelper.createDir(destination);
+
+        //checking hash already downloaded other file types
+        if (dependency.gitRepo) {
+            FileHelper.download(GithubHelper.convertRepoToZipball(dependency.url), downloadPath);
+        }
+
+        //todo properly uninstall old file(s) before installing new one
+
+        List<String> installedFiles;
+        if (dependency.unzip) {
+            installedFiles = FileHelper.unzipFile(downloadPath, destination);
+        } else {
+            installedFiles = FileHelper.moveFile(downloadPath, destination.resolve(dependency.name));
+        }
+
+        installedFiles.add(destination.toString());
+        FileHelper.writeFile(serverInfo.getHashPath(dependency), hash);
+        FileHelper.writeLines(serverInfo.getLogPath(dependency), installedFiles);
     }
 }
