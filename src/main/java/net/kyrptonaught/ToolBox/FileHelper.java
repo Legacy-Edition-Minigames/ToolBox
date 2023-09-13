@@ -189,7 +189,6 @@ public class FileHelper {
             return Files.readAllLines(filePath);
         } catch (Exception e) {
             System.out.println("Error reading: " + filePath);
-            e.printStackTrace();
         }
         return null;
     }
@@ -199,7 +198,6 @@ public class FileHelper {
             Files.delete(filePath);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return false;
     }

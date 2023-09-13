@@ -75,7 +75,12 @@ public class Installer {
             FileHelper.download(GithubHelper.convertRepoToZipball(dependency.url), downloadPath);
         }
 
-        //todo properly uninstall old file(s) before installing new one
+        List<String> previousInstalledFiles = FileHelper.readLines(serverInfo.getLogPath(dependency));
+        if (previousInstalledFiles != null) {
+            for (String string : previousInstalledFiles) {
+                FileHelper.delete(Path.of(string));
+            }
+        }
 
         List<String> installedFiles;
         if (dependency.unzip) {

@@ -71,7 +71,7 @@ public class InstalledServerInfo {
     }
 
     public Path getLogPath(BranchConfig.Dependency dependency) {
-        return getLogPath().resolve(FileNameCleaner.cleanFileName(dependency.name) + ".hash");
+        return getLogPath().resolve(FileNameCleaner.cleanFileName(dependency.name) + ".installed");
     }
 
     public Path getMetaPath() {

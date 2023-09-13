@@ -159,6 +159,7 @@ public class Menu {
             ServerRunner.runServer(serverInfo);
             System.out.println("Server Stopped...Exiting");
         } else if (input == 2) {
+            //todo remove old dependencies
             Installer.installAndCheckForUpdates(serverInfo);
             existingInstallMenu(scan, serverInfo);
         } else if (input == 3) {
