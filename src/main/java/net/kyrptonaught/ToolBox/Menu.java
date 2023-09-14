@@ -249,6 +249,9 @@ public class Menu {
     public static int readInt(BufferedReader input) {
         try {
             return Integer.parseInt(input.readLine());
+        } catch (NumberFormatException numberFormatException) {
+            System.out.print("Please enter a number: ");
+            return readInt(input);
         } catch (IOException e) {
             e.printStackTrace();
         }
