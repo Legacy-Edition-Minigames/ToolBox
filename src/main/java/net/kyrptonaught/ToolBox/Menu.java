@@ -117,6 +117,15 @@ public class Menu {
         String url = GithubHelper.convertRepoToToolboxConfig(branchInfo.url);
         BranchConfig branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
 
+        if (branch == null) {
+            System.out.println();
+            System.out.println("This branch is invalid.");
+            System.out.println("Returning to menu.");
+            pressEnterToCont(scan);
+            init(null);
+            return;
+        }
+
         InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
         serverInfo.setPath();
 
@@ -127,7 +136,6 @@ public class Menu {
         checkEula(scan, serverInfo);
         pressEnterToCont(scan);
 
-
         existingInstallMenu(scan, serverInfo);
     }
 
@@ -135,6 +143,7 @@ public class Menu {
         clearConsole();
         BranchesConfig.BranchInfo info = serverInfo.getBranchInfo();
         System.out.println("Server Selected: ");
+        System.out.println();
         System.out.println(info.name);
         System.out.println(info.desc);
         System.out.println(info.url);
@@ -152,6 +161,7 @@ public class Menu {
 
         System.out.print("Action: ");
         int input = scan.nextInt();
+        System.out.println();
 
         if (input == 1) {
             clearConsole();
@@ -161,14 +171,28 @@ public class Menu {
         } else if (input == 2) {
             //todo remove old dependencies
             Installer.installAndCheckForUpdates(serverInfo);
+            System.out.println();
+            System.out.println("Server updated.");
+            System.out.println();
+            pressEnterToCont(scan);
             existingInstallMenu(scan, serverInfo);
         } else if (input == 3) {
             FileHelper.deleteDirectory(serverInfo.getPath());
+            System.out.println("Server deleted...reinstalling...");
+            System.out.println();
             Installer.installAndCheckForUpdates(serverInfo);
+            System.out.println();
             checkEula(scan, serverInfo);
+            System.out.println();
+            System.out.println("Server reinstalled.");
+            System.out.println();
+            pressEnterToCont(scan);
             existingInstallMenu(scan, serverInfo);
         } else if (input == 4) {
             FileHelper.deleteDirectory(serverInfo.getPath());
+            System.out.println("Server deleted.");
+            System.out.println();
+            pressEnterToCont(scan);
         }
 
         //todo properly return to main menu
@@ -189,7 +213,12 @@ public class Menu {
 
     public static void pressEnterToCont(Scanner scan) {
         System.out.println("Press ENTER to continue...");
-        scan.nextLine();
+        try {
+            System.in.read();
+            scan.nextLine();
+        } catch (Exception ignored) {
+
+        }
     }
 
     public static List<InstalledServerInfo> detectInstalls() {
