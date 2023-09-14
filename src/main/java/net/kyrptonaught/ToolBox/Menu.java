@@ -3,20 +3,21 @@ package net.kyrptonaught.ToolBox;
 import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.configs.BranchesConfig;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Stream;
 
 public class Menu {
 
     public static void init(String[] args) {
-        Scanner scan = new Scanner(System.in);
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         clearConsole();
-        GUI(scan);
+        GUI(input);
 
         clearConsole();
 
@@ -27,27 +28,28 @@ public class Menu {
             System.out.println("Select the server you would like to use, or NONE to set up a new server");
             System.out.println();
 
-            System.out.println("0: NONE");
             for (int i = 0; i < installedServers.size(); i++) {
                 InstalledServerInfo serverInfo = installedServers.get(i);
-                System.out.println((i + 1) + ": " + serverInfo.getName());
+                System.out.println((i + 1) + ". " + serverInfo.getName() + " (" + serverInfo.getBranchInfo().name + ")");
             }
+            System.out.println();
+            System.out.println("0. NONE");
 
             System.out.println();
             System.out.print("Select Install: ");
-            int selection = scan.nextInt() - 1;
+            int selection = readInt(input) - 1;
             if (selection > -1) {
-                existingInstallMenu(scan, installedServers.get(selection));
+                existingInstallMenu(input, installedServers.get(selection));
             } else {
-                installBranchMenu(scan);
+                installBranchMenu(input);
             }
 
         } else {
-            installBranchMenu(scan);
+            installBranchMenu(input);
         }
     }
 
-    public static void GUI(Scanner scan) {
+    public static void GUI(BufferedReader input) {
         System.out.println(" ▄▄▄     ▄▄▄▄▄▄▄ ▄▄   ▄▄    ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄     ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄   ▄▄ ");
         System.out.println("█   █   █       █  █▄█  █  █       █       █       █   █   █  ▄    █       █  █▄█  █");
         System.out.println("█   █   █    ▄▄▄█       █  █▄     ▄█   ▄   █   ▄   █   █   █ █▄█   █   ▄   █       █");
@@ -68,10 +70,10 @@ public class Menu {
         System.out.println("Have fun!");
         System.out.println();
 
-        pressEnterToCont(scan);
+        pressEnterToCont(input);
     }
 
-    public static void checkEula(Scanner scan, InstalledServerInfo serverInfo) {
+    public static void checkEula(BufferedReader input, InstalledServerInfo serverInfo) {
         Path eulaFile = serverInfo.getPath().resolve("eula.txt");
         boolean agreed = EulaChecker.checkEulaAgreement(eulaFile);
 
@@ -86,65 +88,84 @@ public class Menu {
                 WARNING: LEM WON'T WORK IF MINECRAFT'S EULA IS NOT AGREED!
                 """);
         System.out.print("Do you want to accept the Minecraft's EULA? (Y/N): ");
-        String input = scan.next().substring(0, 1).toUpperCase();
+        String eulaAgree = readLine(input).substring(0, 1).toUpperCase();
 
-        if (input.equals("Y")) {
+        if (eulaAgree.equals("Y")) {
             EulaChecker.agreeToEula(eulaFile);
             System.out.println("EULA accepted.");
         }
+        System.out.println();
     }
 
-    public static void installBranchMenu(Scanner scan) {
+    public static void installBranchMenu(BufferedReader input) {
         clearConsole();
         System.out.println("Checking for Branches");
         System.out.println();
         BranchesConfig branches = ConfigLoader.parseBranches(FileHelper.download("https://raw.githubusercontent.com/Legacy-Edition-Minigames/ToolBox/java/testConfigs/TestBranches.json"));
-        System.out.println("Found the following Branches. Please enter the branch number you would like to use");
+        System.out.println("Found the following Branches. Please enter the branch number you would like to use, or NONE to go back.");
         System.out.println();
 
         for (int i = 0; i < branches.branches.length; i++) {
             BranchesConfig.BranchInfo branch = branches.branches[i];
-            System.out.println((i + 1) + ": " + branch.name + " : " + branch.desc);
+            System.out.println((i + 1) + ". " + branch.name + " : " + branch.desc);
         }
+        System.out.println();
+        System.out.println("0. NONE");
 
         System.out.println();
         System.out.print("Select Branch: ");
-        int selection = scan.nextInt() - 1;
-
-        BranchesConfig.BranchInfo branchInfo = branches.branches[selection];
-        System.out.println("Loading branch: " + branchInfo.name + " (" + branchInfo.url + ")");
-
-        String url = GithubHelper.convertRepoToToolboxConfig(branchInfo.url);
-        BranchConfig branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
-
-        if (branch == null) {
-            System.out.println();
-            System.out.println("This branch is invalid.");
-            System.out.println("Returning to menu.");
-            pressEnterToCont(scan);
-            init(null);
-            return;
-        }
-
-        InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
-        serverInfo.setPath();
-
-        System.out.println("Creating toolbox instance in " + serverInfo.getPath());
-        Installer.installAndCheckForUpdates(serverInfo);
-        System.out.println("Finished");
+        int selection = readInt(input) - 1;
         System.out.println();
-        checkEula(scan, serverInfo);
-        pressEnterToCont(scan);
 
-        existingInstallMenu(scan, serverInfo);
+        if (selection > -1) {
+            BranchesConfig.BranchInfo branchInfo = branches.branches[selection];
+            System.out.println("Loading branch: " + branchInfo.name + " (" + branchInfo.url + ")");
+
+            String url = GithubHelper.convertRepoToToolboxConfig(branchInfo.url);
+            BranchConfig branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
+
+            if (branch == null) {
+                System.out.println();
+                System.out.println("This branch is invalid.");
+                System.out.println("Returning to menu.");
+                pressEnterToCont(input);
+                init(null);
+                return;
+            }
+
+            System.out.println();
+
+            System.out.println("Please enter a name for this server, or leave blank for default (" + branch.name + "): ");
+            System.out.println();
+            System.out.print("Server Name: ");
+            String enteredServerName = readLine(input);
+            System.out.println();
+
+            //todo input sanitization
+            //todo check if server with name already installed
+            InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
+            if (enteredServerName != null) serverInfo.setName(enteredServerName);
+            serverInfo.setPath();
+
+            System.out.println("Creating toolbox instance in " + serverInfo.getPath());
+            Installer.installAndCheckForUpdates(serverInfo);
+            System.out.println("Finished");
+            System.out.println();
+            checkEula(input, serverInfo);
+            pressEnterToCont(input);
+
+            existingInstallMenu(input, serverInfo);
+        } else {
+            init(null);
+        }
     }
 
-    public static void existingInstallMenu(Scanner scan, InstalledServerInfo serverInfo) {
+    public static void existingInstallMenu(BufferedReader input, InstalledServerInfo serverInfo) {
         clearConsole();
         BranchesConfig.BranchInfo info = serverInfo.getBranchInfo();
         System.out.println("Server Selected: ");
         System.out.println();
-        System.out.println(info.name);
+        System.out.println(serverInfo.getName() + " (" + info.name + ")");
         System.out.println(info.desc);
         System.out.println(info.url);
         System.out.println();
@@ -156,43 +177,43 @@ public class Menu {
                 3. Reinstall
                 4. Delete
                                 
-                5. Back
+                0. Back
                  """);
 
         System.out.print("Action: ");
-        int input = scan.nextInt();
+        int selectedAction = readInt(input);
         System.out.println();
 
-        if (input == 1) {
+        if (selectedAction == 1) {
             clearConsole();
             System.out.println("Starting server: " + serverInfo.getLaunchArgs());
             ServerRunner.runServer(serverInfo);
             System.out.println("Server Stopped...Exiting");
-        } else if (input == 2) {
+        } else if (selectedAction == 2) {
             //todo remove old dependencies
             Installer.installAndCheckForUpdates(serverInfo);
             System.out.println();
             System.out.println("Server updated.");
             System.out.println();
-            pressEnterToCont(scan);
-            existingInstallMenu(scan, serverInfo);
-        } else if (input == 3) {
+            pressEnterToCont(input);
+            existingInstallMenu(input, serverInfo);
+        } else if (selectedAction == 3) {
             FileHelper.deleteDirectory(serverInfo.getPath());
             System.out.println("Server deleted...reinstalling...");
             System.out.println();
             Installer.installAndCheckForUpdates(serverInfo);
             System.out.println();
-            checkEula(scan, serverInfo);
+            checkEula(input, serverInfo);
             System.out.println();
             System.out.println("Server reinstalled.");
             System.out.println();
-            pressEnterToCont(scan);
-            existingInstallMenu(scan, serverInfo);
-        } else if (input == 4) {
+            pressEnterToCont(input);
+            existingInstallMenu(input, serverInfo);
+        } else if (selectedAction == 4) {
             FileHelper.deleteDirectory(serverInfo.getPath());
             System.out.println("Server deleted.");
             System.out.println();
-            pressEnterToCont(scan);
+            pressEnterToCont(input);
         }
 
         //todo properly return to main menu
@@ -211,14 +232,27 @@ public class Menu {
         }
     }
 
-    public static void pressEnterToCont(Scanner scan) {
+    public static void pressEnterToCont(BufferedReader input) {
         System.out.println("Press ENTER to continue...");
-        try {
-            System.in.read();
-            scan.nextLine();
-        } catch (Exception ignored) {
+        readLine(input);
+    }
 
+    public static String readLine(BufferedReader input) {
+        try {
+            return input.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return "";
+    }
+
+    public static int readInt(BufferedReader input) {
+        try {
+            return Integer.parseInt(input.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public static List<InstalledServerInfo> detectInstalls() {

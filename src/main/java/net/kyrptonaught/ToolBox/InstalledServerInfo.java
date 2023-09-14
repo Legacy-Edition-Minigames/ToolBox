@@ -13,13 +13,22 @@ public class InstalledServerInfo {
 
     private Path installPath;
 
+    private String installName;
+
     public InstalledServerInfo(BranchConfig branchConfig, BranchesConfig.BranchInfo branchInfo) {
         this.branchConfig = branchConfig;
         this.branchInfo = branchInfo;
+        this.installName = branchConfig.name;
     }
 
     public String getName() {
+        if (installName != null)
+            return installName;
         return branchConfig.name;
+    }
+
+    public void setName(String name) {
+        installName = name;
     }
 
     public String getLaunchArgs() {
