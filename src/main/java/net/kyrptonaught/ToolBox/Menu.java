@@ -141,11 +141,19 @@ public class Menu {
             String enteredServerName = readLine(input);
             System.out.println();
 
+            System.out.println("How much RAM do you want to allocate to the server?");
+            System.out.println("It's recommended to use at least 3GB of RAM to ensure LEM will work as intended.");
+            System.out.println();
+            System.out.print("RAM Allocation (GB): ");
+            int allocatedRam = readInt(input);
+            System.out.println();
+
             //todo input sanitization
             //todo check if server with name already installed
             InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
             if (enteredServerName != null) serverInfo.setName(enteredServerName);
             serverInfo.setPath();
+            serverInfo.setCustomLaunchArgs("-Xmx" + allocatedRam + "G -Xms" + allocatedRam + "G");
 
             System.out.println("Creating toolbox instance in " + serverInfo.getPath());
             Installer.installAndCheckForUpdates(serverInfo);
@@ -188,7 +196,10 @@ public class Menu {
             clearConsole();
             System.out.println("Starting server: " + serverInfo.getLaunchArgs());
             ServerRunner.runServer(serverInfo);
-            System.out.println("Server Stopped...Exiting");
+            System.out.println();
+            System.out.println("Server Stopped...");
+            System.out.println();
+            pressEnterToCont(input);
         } else if (selectedAction == 2) {
             //todo remove old dependencies
             Installer.installAndCheckForUpdates(serverInfo);
@@ -233,7 +244,7 @@ public class Menu {
     }
 
     public static void pressEnterToCont(BufferedReader input) {
-        System.out.println("Press ENTER to continue...");
+        System.out.print("Press ENTER to continue...");
         readLine(input);
     }
 

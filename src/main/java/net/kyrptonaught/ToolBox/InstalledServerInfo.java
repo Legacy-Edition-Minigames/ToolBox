@@ -15,6 +15,8 @@ public class InstalledServerInfo {
 
     private String installName;
 
+    private String customLaunchArgs;
+
     public InstalledServerInfo(BranchConfig branchConfig, BranchesConfig.BranchInfo branchInfo) {
         this.branchConfig = branchConfig;
         this.branchInfo = branchInfo;
@@ -31,7 +33,15 @@ public class InstalledServerInfo {
         installName = name;
     }
 
+    public void setCustomLaunchArgs(String args) {
+        customLaunchArgs = args;
+    }
+
     public String getLaunchArgs() {
+        if (customLaunchArgs != null) {
+            int space = branchConfig.launchCMD.indexOf(" ");
+            return branchConfig.launchCMD.substring(0, space) + " " + customLaunchArgs + branchConfig.launchCMD.substring(space);
+        }
         return branchConfig.launchCMD;
     }
 
