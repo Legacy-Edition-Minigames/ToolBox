@@ -201,4 +201,8 @@ public class FileHelper {
         }
         return false;
     }
+
+    public static boolean exists(Path filePath) {
+        return Files.exists(filePath);
+    }
 }

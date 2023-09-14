@@ -75,10 +75,12 @@ public class Installer {
             FileHelper.download(GithubHelper.convertRepoToZipball(dependency.url), downloadPath);
         }
 
-        List<String> previousInstalledFiles = FileHelper.readLines(serverInfo.getLogPath(dependency));
-        if (previousInstalledFiles != null) {
-            for (String string : previousInstalledFiles) {
-                FileHelper.delete(Path.of(string));
+        if (Files.exists(serverInfo.getLogPath(dependency))) {
+            List<String> previousInstalledFiles = FileHelper.readLines(serverInfo.getLogPath(dependency));
+            if (previousInstalledFiles != null) {
+                for (String string : previousInstalledFiles) {
+                    FileHelper.delete(Path.of(string));
+                }
             }
         }
 
