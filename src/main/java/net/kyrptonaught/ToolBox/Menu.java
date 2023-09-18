@@ -65,7 +65,7 @@ public class Menu {
         System.out.println("If you encounter any problem, try performing a clean reinstall or contact us on our Discord.");
         System.out.println("LEM-ToolBox created by Kyrptonaught");
         System.out.println("Legacy Edition Minigames created by DBTDerpbox & Kyrptonaught");
-        System.out.println("Consider donating at Patreon! patreon.com/DBTDerpbox");
+        System.out.println("Consider donating at Patreon! www.legacyminigames.xyz/patreon");
         System.out.println();
         System.out.println("Have fun!");
         System.out.println();
@@ -85,6 +85,7 @@ public class Menu {
                 For your server to run you must accept Minecraft's EULA.
                 The Minecraft's EULA contains information and rules about what you can do and can't do while using the game.
                 Agreement of the Minecraft's EULA is strictly needed, otherwise your server would be illegal to operate and thus, won't open.
+                You can read the EULA here: https://aka.ms/MinecraftEULA
                 WARNING: LEM WON'T WORK IF MINECRAFT'S EULA IS NOT AGREED!
                 """);
         System.out.print("Do you want to accept the Minecraft's EULA? (Y/N): ");
