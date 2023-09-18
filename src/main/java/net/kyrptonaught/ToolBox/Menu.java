@@ -274,7 +274,8 @@ public class Menu {
         List<InstalledServerInfo> configs = new ArrayList<>();
         try (Stream<Path> files = Files.walk(installPath)) {
             files.forEach(path -> {
-                if (path.toString().endsWith("\\.toolbox\\meta\\toolbox.json")) {
+                if (path.endsWith(Path.of(".toolbox").resolve("meta").resolve("toolbox.json"))) {
+                    //if (path.toString().endsWith("\\.toolbox\\meta\\toolbox.json")) {
                     configs.add(ConfigLoader.parseToolboxInstall(FileHelper.readFile(path)));
                 }
             });
