@@ -215,7 +215,6 @@ public class Menu {
             Installer.installAndCheckForUpdates(serverInfo);
             System.out.println();
             checkEula(input, serverInfo);
-            System.out.println();
             System.out.println("Server reinstalled.");
             System.out.println();
             pressEnterToCont(input);
@@ -233,11 +232,10 @@ public class Menu {
 
     public static void clearConsole() {
         try {
-            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             if (System.getProperty("os.name").contains("Windows"))
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             else
-                Runtime.getRuntime().exec("clear");
+                System.out.print("\033\143");
         } catch (Exception e) {
             e.printStackTrace();
         }
