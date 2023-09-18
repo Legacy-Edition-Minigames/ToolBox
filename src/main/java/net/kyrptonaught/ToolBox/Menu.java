@@ -14,42 +14,26 @@ import java.util.stream.Stream;
 
 public class Menu {
 
-    public static void init(String[] args) {
+    public static State state;
+
+    public static void startStateMachine(String[] args) {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        clearConsole();
-        GUI(input);
 
-        clearConsole();
+        setState(State.STATES.MENU);
 
-        List<InstalledServerInfo> installedServers = detectInstalls();
-
-        if (!installedServers.isEmpty()) {
-            System.out.println("The following installs were detected");
-            System.out.println("Select the server you would like to use, or NONE to set up a new server");
-            System.out.println();
-
-            for (int i = 0; i < installedServers.size(); i++) {
-                InstalledServerInfo serverInfo = installedServers.get(i);
-                System.out.println((i + 1) + ". " + serverInfo.getName() + " (" + serverInfo.getBranchInfo().name + ")");
+        while (true) {
+            clearConsole();
+            switch (state.getState()) {
+                case MENU -> menuState(input);
+                case EXISTING_INSTALLS_LIST -> existingInstallsMenu(input);
+                case EXISTING_INSTALL -> existingMenu(input);
+                case INSTALLER -> installMenu(input);
+                case EXIT -> System.exit(0);
             }
-            System.out.println();
-            System.out.println("0. NONE");
-
-            System.out.println();
-            System.out.print("Select Install: ");
-            int selection = readInt(input) - 1;
-            if (selection > -1) {
-                existingInstallMenu(input, installedServers.get(selection));
-            } else {
-                installBranchMenu(input);
-            }
-
-        } else {
-            installBranchMenu(input);
         }
     }
 
-    public static void GUI(BufferedReader input) {
+    public static void menuState(BufferedReader input) {
         System.out.println(" ▄▄▄     ▄▄▄▄▄▄▄ ▄▄   ▄▄    ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄     ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄   ▄▄ ");
         System.out.println("█   █   █       █  █▄█  █  █       █       █       █   █   █  ▄    █       █  █▄█  █");
         System.out.println("█   █   █    ▄▄▄█       █  █▄     ▄█   ▄   █   ▄   █   █   █ █▄█   █   ▄   █       █");
@@ -71,35 +55,101 @@ public class Menu {
         System.out.println();
 
         pressEnterToCont(input);
+
+        setState(State.STATES.EXISTING_INSTALLS_LIST);
     }
 
-    public static void checkEula(BufferedReader input, InstalledServerInfo serverInfo) {
-        Path eulaFile = serverInfo.getPath().resolve("eula.txt");
-        boolean agreed = EulaChecker.checkEulaAgreement(eulaFile);
+    public static void existingInstallsMenu(BufferedReader input) {
+        List<InstalledServerInfo> installedServers = detectInstalls();
 
-        if (agreed) return;
+        if (!installedServers.isEmpty()) {
+            System.out.println("The following installs were detected");
+            System.out.println("Select the server you would like to use, or NONE to set up a new server");
+            System.out.println();
 
-        System.out.println("""
-                Do you accept the Minecraft's EULA?
-                                
-                For your server to run you must accept Minecraft's EULA.
-                The Minecraft's EULA contains information and rules about what you can do and can't do while using the game.
-                Agreement of the Minecraft's EULA is strictly needed, otherwise your server would be illegal to operate and thus, won't open.
-                You can read the EULA here: https://aka.ms/MinecraftEULA
-                WARNING: LEM WON'T WORK IF MINECRAFT'S EULA IS NOT AGREED!
-                """);
-        System.out.print("Do you want to accept the Minecraft's EULA? (Y/N): ");
-        String eulaAgree = readLine(input).substring(0, 1).toUpperCase();
+            for (int i = 0; i < installedServers.size(); i++) {
+                InstalledServerInfo serverInfo = installedServers.get(i);
+                System.out.println((i + 1) + ". " + serverInfo.getName() + " (" + serverInfo.getBranchInfo().name + ")");
+            }
+            System.out.println();
+            System.out.println("0. NONE");
 
-        if (eulaAgree.equals("Y")) {
-            EulaChecker.agreeToEula(eulaFile);
-            System.out.println("EULA accepted.");
+            System.out.println();
+            System.out.print("Select Install: ");
+            int selection = readInt(input) - 1;
+            if (selection > -1) {
+                setServerState(State.STATES.EXISTING_INSTALL, installedServers.get(selection));
+                return;
+            }
         }
-        System.out.println();
+
+        setState(State.STATES.INSTALLER);
     }
 
-    public static void installBranchMenu(BufferedReader input) {
-        clearConsole();
+    public static void existingMenu(BufferedReader input) {
+        InstalledServerInfo serverInfo = ((State.ServerInfoState) state).getServerInfo();
+
+        BranchesConfig.BranchInfo info = serverInfo.getBranchInfo();
+        System.out.println("Server Selected: ");
+        System.out.println();
+        System.out.println(serverInfo.getName() + " (" + info.name + ")");
+        System.out.println(info.desc);
+        System.out.println(info.url);
+        System.out.println();
+        System.out.println("""
+                Chose an action below:
+                                
+                1. Start Server
+                2. Check for Updates
+                3. Reinstall
+                4. Delete
+                                
+                0. Back
+                 """);
+
+        System.out.print("Action: ");
+        int selectedAction = readInt(input);
+        System.out.println();
+
+
+        if (selectedAction == 0) {
+            setState(State.STATES.MENU);
+        } else if (selectedAction == 1) {
+            clearConsole();
+            System.out.println("Starting server: " + serverInfo.getLaunchArgs());
+            ServerRunner.runServer(serverInfo);
+            System.out.println();
+            System.out.println("Server Stopped...");
+            System.out.println();
+            pressEnterToCont(input);
+        } else if (selectedAction == 2) {
+            //todo remove old dependencies
+            Installer.installAndCheckForUpdates(serverInfo);
+            System.out.println();
+            System.out.println("Server updated.");
+            System.out.println();
+            pressEnterToCont(input);
+        } else if (selectedAction == 3) {
+            FileHelper.deleteDirectory(serverInfo.getPath());
+            System.out.println("Server deleted...reinstalling...");
+            System.out.println();
+            Installer.installAndCheckForUpdates(serverInfo);
+            System.out.println();
+            checkEula(input, serverInfo);
+            System.out.println("Server reinstalled.");
+            System.out.println();
+            pressEnterToCont(input);
+        } else if (selectedAction == 4) {
+            FileHelper.deleteDirectory(serverInfo.getPath());
+            System.out.println("Server deleted.");
+            System.out.println();
+            pressEnterToCont(input);
+            setState(State.STATES.MENU);
+        }
+        //will loop back into this menu
+    }
+
+    public static void installMenu(BufferedReader input) {
         System.out.println("Checking for Branches");
         System.out.println();
         BranchesConfig branches = ConfigLoader.parseBranches(FileHelper.download("https://raw.githubusercontent.com/Legacy-Edition-Minigames/ToolBox/java/testConfigs/TestBranches.json"));
@@ -118,7 +168,10 @@ public class Menu {
         int selection = readInt(input) - 1;
         System.out.println();
 
-        if (selection > -1) {
+        if (selection == -1) {
+            setState(State.STATES.MENU);
+
+        } else if (selection > -1 && selection < branches.branches.length) {
             BranchesConfig.BranchInfo branchInfo = branches.branches[selection];
             System.out.println("Loading branch: " + branchInfo.name + " (" + branchInfo.url + ")");
 
@@ -130,7 +183,8 @@ public class Menu {
                 System.out.println("This branch is invalid.");
                 System.out.println("Returning to menu.");
                 pressEnterToCont(input);
-                init(null);
+
+                setState(State.STATES.MENU);
                 return;
             }
 
@@ -163,72 +217,50 @@ public class Menu {
             checkEula(input, serverInfo);
             pressEnterToCont(input);
 
-            existingInstallMenu(input, serverInfo);
-        } else {
-            init(null);
+            setServerState(State.STATES.EXISTING_INSTALL, serverInfo);
         }
+        //will loop back into this menu
     }
 
-    public static void existingInstallMenu(BufferedReader input, InstalledServerInfo serverInfo) {
-        clearConsole();
-        BranchesConfig.BranchInfo info = serverInfo.getBranchInfo();
-        System.out.println("Server Selected: ");
-        System.out.println();
-        System.out.println(serverInfo.getName() + " (" + info.name + ")");
-        System.out.println(info.desc);
-        System.out.println(info.url);
-        System.out.println();
+    public static void checkEula(BufferedReader input, InstalledServerInfo serverInfo) {
+        Path eulaFile = serverInfo.getPath().resolve("eula.txt");
+        boolean agreed = EulaChecker.checkEulaAgreement(eulaFile);
+
+        if (agreed) return;
+
         System.out.println("""
-                Chose an action below:
+                Do you accept the Minecraft's EULA?
                                 
-                1. Start Server
-                2. Check for Updates
-                3. Reinstall
-                4. Delete
-                                
-                0. Back
-                 """);
+                For your server to run you must accept Minecraft's EULA.
+                The Minecraft's EULA contains information and rules about what you can do and can't do while using the game.
+                Agreement of the Minecraft's EULA is strictly needed, otherwise your server would be illegal to operate and thus, won't open.
+                You can read the EULA here: https://aka.ms/MinecraftEULA
+                WARNING: LEM WON'T WORK IF MINECRAFT'S EULA IS NOT AGREED!
+                """);
+        System.out.print("Do you want to accept the Minecraft's EULA? (Y/N): ");
+        String eulaAgree = readLine(input).substring(0, 1).toUpperCase();
 
-        System.out.print("Action: ");
-        int selectedAction = readInt(input);
-        System.out.println();
-
-        if (selectedAction == 1) {
-            clearConsole();
-            System.out.println("Starting server: " + serverInfo.getLaunchArgs());
-            ServerRunner.runServer(serverInfo);
-            System.out.println();
-            System.out.println("Server Stopped...");
-            System.out.println();
-            pressEnterToCont(input);
-        } else if (selectedAction == 2) {
-            //todo remove old dependencies
-            Installer.installAndCheckForUpdates(serverInfo);
-            System.out.println();
-            System.out.println("Server updated.");
-            System.out.println();
-            pressEnterToCont(input);
-            existingInstallMenu(input, serverInfo);
-        } else if (selectedAction == 3) {
-            FileHelper.deleteDirectory(serverInfo.getPath());
-            System.out.println("Server deleted...reinstalling...");
-            System.out.println();
-            Installer.installAndCheckForUpdates(serverInfo);
-            System.out.println();
-            checkEula(input, serverInfo);
-            System.out.println("Server reinstalled.");
-            System.out.println();
-            pressEnterToCont(input);
-            existingInstallMenu(input, serverInfo);
-        } else if (selectedAction == 4) {
-            FileHelper.deleteDirectory(serverInfo.getPath());
-            System.out.println("Server deleted.");
-            System.out.println();
-            pressEnterToCont(input);
+        if (eulaAgree.equals("Y")) {
+            EulaChecker.agreeToEula(eulaFile);
+            System.out.println("EULA accepted.");
         }
+        System.out.println();
+    }
 
-        //todo properly return to main menu
-        init(null);
+    public static void setServerState(State.STATES state, InstalledServerInfo serverInfo) {
+        setServerState(state, serverInfo, null);
+    }
+
+    public static void setServerState(State.STATES state, InstalledServerInfo serverInfo, String args) {
+        Menu.state = new State.ServerInfoState(state, serverInfo, args);
+    }
+
+    public static void setState(State.STATES state) {
+        setState(state, null);
+    }
+
+    public static void setState(State.STATES state, String args) {
+        Menu.state = new State(state, args);
     }
 
     public static void clearConsole() {
