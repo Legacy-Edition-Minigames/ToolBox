@@ -208,6 +208,7 @@ public class Menu {
             InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
             if (!enteredServerName.isBlank()) serverInfo.setName(enteredServerName);
             serverInfo.setPath();
+            if (allocatedRam < 1) allocatedRam = 3;
             serverInfo.setCustomLaunchArgs("-Xmx" + allocatedRam + "G -Xms" + allocatedRam + "G");
 
             System.out.println("Creating toolbox instance in " + serverInfo.getPath());
