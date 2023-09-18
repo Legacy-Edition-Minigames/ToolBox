@@ -152,7 +152,7 @@ public class Menu {
             //todo input sanitization
             //todo check if server with name already installed
             InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
-            if (enteredServerName != null) serverInfo.setName(enteredServerName);
+            if (!enteredServerName.isBlank()) serverInfo.setName(enteredServerName);
             serverInfo.setPath();
             serverInfo.setCustomLaunchArgs("-Xmx" + allocatedRam + "G -Xms" + allocatedRam + "G");
 
@@ -249,7 +249,7 @@ public class Menu {
 
     public static String readLine(BufferedReader input) {
         try {
-            return input.readLine();
+            return input.readLine().trim();
         } catch (IOException e) {
             e.printStackTrace();
         }
