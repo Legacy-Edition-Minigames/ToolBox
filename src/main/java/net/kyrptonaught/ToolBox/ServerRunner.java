@@ -15,8 +15,7 @@ public class ServerRunner {
                 while (true) {
                     stagingPipe.write(System.in.read());
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception ignored) {
             }
         }, "Server Input Pipe");
         stagingThread.setDaemon(true);
@@ -38,8 +37,7 @@ public class ServerRunner {
                 reader.close();
                 stagingPipe.close();
                 stagingThread.interrupt();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception ignored) {
             }
         }, "Server Instance").start();
 
@@ -54,8 +52,7 @@ public class ServerRunner {
                 writer.write(line);
                 writer.flush();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
     }
 }
