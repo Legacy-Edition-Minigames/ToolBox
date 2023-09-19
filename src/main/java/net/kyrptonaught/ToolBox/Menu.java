@@ -334,9 +334,9 @@ public class Menu {
                 WARNING: LEM WON'T WORK IF MINECRAFT'S EULA IS NOT AGREED!
                 """);
         System.out.print("Do you want to accept the Minecraft's EULA? (Y/N): ");
-        String eulaAgree = readLine(input).substring(0, 1).toUpperCase();
+        String eulaAgree = readLine(input);
 
-        if (eulaAgree.equals("Y")) {
+        if (!eulaAgree.isEmpty() && eulaAgree.substring(0, 1).equalsIgnoreCase("Y")) {
             EulaChecker.agreeToEula(eulaFile);
             System.out.println("EULA accepted.");
         }
@@ -349,8 +349,7 @@ public class Menu {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             else
                 System.out.print("\033\143");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
     }
 
