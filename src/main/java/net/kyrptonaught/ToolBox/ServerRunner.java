@@ -1,58 +1,41 @@
 package net.kyrptonaught.ToolBox;
 
-
-import java.io.*;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServerRunner {
 
-    public static void runServer(InstalledServerInfo serverInfo) {
-        AtomicReference<Process> process = new AtomicReference<>();
-        PipedOutputStream stagingPipe = new PipedOutputStream();
+    private static final List<RunningServer> runningServers = new ArrayList<>();
 
-        Thread stagingThread = new Thread(() -> {
-            try {
-                while (true) {
-                    stagingPipe.write(System.in.read());
-                }
-            } catch (Exception ignored) {
-            }
-        }, "Server Input Pipe");
-        stagingThread.setDaemon(true);
-        stagingThread.start();
-
-        new Thread(() -> {
-            try {
-                process.set(new ProcessBuilder(serverInfo.getLaunchArgs().split(" "))
-                        .directory(new File(System.getProperty("user.dir") + "/" + serverInfo.getPath() + "/"))
-                        .redirectErrorStream(true)
-                        .start());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.get().getInputStream()));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                }
-
-                reader.close();
-                stagingPipe.close();
-                stagingThread.interrupt();
-            } catch (Exception ignored) {
-            }
-        }, "Server Instance").start();
-
-        while (process.get() == null) {
-            //we have to wait for the process to start
+    public static void exit() {
+        for (RunningServer server : runningServers) {
+            server.stop();
         }
+    }
 
-        try (PipedInputStream pipe = new PipedInputStream(stagingPipe);
-             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.get().getOutputStream()))) {
-            int line;
-            while ((line = pipe.read()) != -1) {
-                writer.write(line);
-                writer.flush();
-            }
-        } catch (Exception ignored) {
-        }
+    public static RunningServer runServer(InstalledServerInfo serverInfo) {
+        RunningServer server = new RunningServer();
+        runningServers.add(server);
+        server.startServer(serverInfo);
+        server.setActive();
+        return server;
+    }
+
+    public static void resumeServer(RunningServer server) {
+        server.setActive();
+    }
+
+    public static void killServer(RunningServer server) {
+        server.kill();
+        runningServers.remove(server);
+    }
+
+    public static void stopServer(RunningServer server) {
+        server.stop();
+        runningServers.remove(server);
+    }
+
+    public static List<RunningServer> getRunningServers() {
+        return runningServers;
     }
 }

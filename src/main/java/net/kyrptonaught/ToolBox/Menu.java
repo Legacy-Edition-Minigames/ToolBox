@@ -9,31 +9,42 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class Menu {
 
     public static State state;
+    public static Object stateData;
 
     public static void startStateMachine(String[] args) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println();
+            System.out.println();
+            System.out.println("SHUTTING DOWN");
+            System.out.println("Attempting to stop running servers");
+            ServerRunner.exit();
+
+        }));
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-        setState(State.STATES.MENU);
+        setState(State.SPLASH);
 
         while (true) {
             clearConsole();
-            switch (state.getState()) {
+            switch (state) {
+                case SPLASH -> splashState(input);
                 case MENU -> menuState(input);
-                case EXISTING_INSTALLS_LIST -> existingInstallsMenu(input);
                 case EXISTING_INSTALL -> existingMenu(input);
+                case RUNNING_INSTALL -> runningMenu(input);
                 case INSTALLER -> installMenu(input);
                 case EXIT -> System.exit(0);
             }
         }
     }
 
-    public static void menuState(BufferedReader input) {
+    public static void splashState(BufferedReader input) {
         System.out.println(" ▄▄▄     ▄▄▄▄▄▄▄ ▄▄   ▄▄    ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄     ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄   ▄▄ ");
         System.out.println("█   █   █       █  █▄█  █  █       █       █       █   █   █  ▄    █       █  █▄█  █");
         System.out.println("█   █   █    ▄▄▄█       █  █▄     ▄█   ▄   █   ▄   █   █   █ █▄█   █   ▄   █       █");
@@ -47,7 +58,7 @@ public class Menu {
         System.out.println("LEM-ToolBox is a tool designed to make it easy for users to install, update and customize their own LEB instance.");
         System.out.println();
         System.out.println("If you encounter any problem, try performing a clean reinstall or contact us on our Discord.");
-        System.out.println("LEM-ToolBox created by Kyrptonaught");
+        System.out.println("LEM-ToolBox 2.0 created by Kyrptonaught");
         System.out.println("Legacy Edition Minigames created by DBTDerpbox & Kyrptonaught");
         System.out.println("Consider donating at Patreon! www.legacyminigames.xyz/patreon");
         System.out.println();
@@ -56,38 +67,67 @@ public class Menu {
 
         pressEnterToCont(input);
 
-        setState(State.STATES.EXISTING_INSTALLS_LIST);
+        setState(State.MENU);
     }
 
-    public static void existingInstallsMenu(BufferedReader input) {
+    public static void menuState(BufferedReader input) {
+        System.out.println("Loading Servers...");
+        System.out.println();
+
         List<InstalledServerInfo> installedServers = detectInstalls();
+        List<RunningServer> runningServers = ServerRunner.getRunningServers();
+        BranchesConfig branches = ConfigLoader.parseBranches(FileHelper.download("https://raw.githubusercontent.com/Legacy-Edition-Minigames/ToolBox/java/testConfigs/TestBranches.json"));
 
-        if (!installedServers.isEmpty()) {
-            System.out.println("The following installs were detected");
-            System.out.println("Select the server you would like to use, or NONE to set up a new server");
-            System.out.println();
+        HashMap<Integer, Runnable> options = new HashMap<>();
 
-            for (int i = 0; i < installedServers.size(); i++) {
-                InstalledServerInfo serverInfo = installedServers.get(i);
-                System.out.println((i + 1) + ". " + serverInfo.getName() + " (" + serverInfo.getBranchInfo().name + ")");
-            }
-            System.out.println();
-            System.out.println("0. NONE");
+        clearConsole();
 
-            System.out.println();
-            System.out.print("Select Install: ");
-            int selection = readInt(input) - 1;
-            if (selection > -1) {
-                setServerState(State.STATES.EXISTING_INSTALL, installedServers.get(selection));
-                return;
-            }
+        System.out.println("Select the server you would like to use");
+        int serverOptions = 0;
+
+        System.out.println();
+        System.out.println("Installed servers");
+        for (InstalledServerInfo serverInfo : installedServers) {
+            serverOptions++;
+            System.out.println(serverOptions + ". " + serverInfo.getName() + " (" + serverInfo.getBranchInfo().name + ")");
+            options.put(serverOptions, () -> setState(State.EXISTING_INSTALL, serverInfo));
         }
 
-        setState(State.STATES.INSTALLER);
+        System.out.println();
+        System.out.println("Running servers");
+        for (RunningServer runningServer : runningServers) {
+            serverOptions++;
+            System.out.println(serverOptions + ". " + runningServer.serverInfo.getName() + " (" + runningServer.serverInfo.getBranchInfo().name + ")");
+            options.put(serverOptions, () -> setState(State.RUNNING_INSTALL, runningServer));
+        }
+
+        System.out.println();
+        System.out.println("New servers");
+        for (BranchesConfig.BranchInfo branch : branches.branches) {
+            serverOptions++;
+            System.out.println(serverOptions + ". " + branch.name + " : " + branch.desc);
+            options.put(serverOptions, () -> setState(State.INSTALLER, branch));
+        }
+        System.out.println();
+        System.out.println("Other Options");
+        System.out.println("0. Exit");
+
+        options.put(0, () -> setState(State.EXIT));
+
+        System.out.println();
+
+        System.out.print("Select Server: ");
+        int selection = readInt(input);
+
+
+        if (options.containsKey(selection)) {
+            options.get(selection).run();
+        }
+        //will loop back into this menu
     }
 
     public static void existingMenu(BufferedReader input) {
-        InstalledServerInfo serverInfo = ((State.ServerInfoState) state).getServerInfo();
+        InstalledServerInfo serverInfo = (InstalledServerInfo) stateData;
 
         BranchesConfig.BranchInfo info = serverInfo.getBranchInfo();
         System.out.println("Server Selected: ");
@@ -113,14 +153,22 @@ public class Menu {
 
 
         if (selectedAction == 0) {
-            setState(State.STATES.MENU);
+            setState(State.MENU);
         } else if (selectedAction == 1) {
             clearConsole();
             System.out.println("Starting server: " + serverInfo.getLaunchArgs());
-            ServerRunner.runServer(serverInfo);
+            RunningServer runningServer = ServerRunner.runServer(serverInfo);
+
             System.out.println();
-            System.out.println("Server Stopped...");
+            if (runningServer.isRunning()) {
+                System.out.println("Server backgrounded...");
+
+            } else {
+                System.out.println("Server stopped...");
+            }
             System.out.println();
+
+            setState(State.MENU);
             pressEnterToCont(input);
         } else if (selectedAction == 2) {
             //todo remove old dependencies
@@ -144,82 +192,115 @@ public class Menu {
             System.out.println("Server deleted.");
             System.out.println();
             pressEnterToCont(input);
-            setState(State.STATES.MENU);
+            setState(State.MENU);
         }
         //will loop back into this menu
     }
 
-    public static void installMenu(BufferedReader input) {
-        System.out.println("Checking for Branches");
+    public static void runningMenu(BufferedReader input) {
+        RunningServer runningServer = (RunningServer) stateData;
+
+        BranchesConfig.BranchInfo info = runningServer.serverInfo.getBranchInfo();
+        System.out.println("Server Selected: ");
         System.out.println();
-        BranchesConfig branches = ConfigLoader.parseBranches(FileHelper.download("https://raw.githubusercontent.com/Legacy-Edition-Minigames/ToolBox/java/testConfigs/TestBranches.json"));
-        System.out.println("Found the following Branches. Please enter the branch number you would like to use, or NONE to go back.");
+        System.out.println(runningServer.serverInfo.getName() + " (" + info.name + ")");
+        System.out.println(info.desc);
+        System.out.println(info.url);
+        System.out.println();
+        System.out.println("""
+                Chose an action below:
+                                
+                1. Open Console
+                2. Stop Server
+                                
+                0. Back
+                 """);
+
+        System.out.print("Action: ");
+        int selectedAction = readInt(input);
         System.out.println();
 
-        for (int i = 0; i < branches.branches.length; i++) {
-            BranchesConfig.BranchInfo branch = branches.branches[i];
-            System.out.println((i + 1) + ". " + branch.name + " : " + branch.desc);
-        }
-        System.out.println();
-        System.out.println("0. NONE");
+        if (selectedAction == 0) {
+            setState(State.MENU);
+        } else if (selectedAction == 1) {
+            clearConsole();
+            System.out.println("Resuming server");
+            ServerRunner.resumeServer(runningServer);
 
-        System.out.println();
-        System.out.print("Select Branch: ");
-        int selection = readInt(input) - 1;
-        System.out.println();
+            System.out.println();
+            if (runningServer.isRunning()) {
+                System.out.println("Server backgrounded...");
 
-        if (selection == -1) {
-            setState(State.STATES.MENU);
-
-        } else if (selection > -1 && selection < branches.branches.length) {
-            BranchesConfig.BranchInfo branchInfo = branches.branches[selection];
-            System.out.println("Loading branch: " + branchInfo.name + " (" + branchInfo.url + ")");
-
-            String url = GithubHelper.convertRepoToToolboxConfig(branchInfo.url);
-            BranchConfig branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
-
-            if (branch == null) {
-                System.out.println();
-                System.out.println("This branch is invalid.");
-                System.out.println("Returning to menu.");
-                pressEnterToCont(input);
-
-                setState(State.STATES.MENU);
-                return;
+            } else {
+                System.out.println("Server stopped...");
             }
-
             System.out.println();
 
-            System.out.println("Please enter a name for this server, or leave blank for default (" + branch.name + "): ");
+            setState(State.MENU);
+            pressEnterToCont(input);
+        } else if (selectedAction == 2) {
             System.out.println();
-            System.out.print("Server Name: ");
-            String enteredServerName = readLine(input);
-            System.out.println();
+            System.out.println("Stopping Server...");
 
-            System.out.println("How much RAM do you want to allocate to the server?");
-            System.out.println("It's recommended to use at least 3GB of RAM to ensure LEM will work as intended.");
+            ServerRunner.stopServer(runningServer);
             System.out.println();
-            System.out.print("RAM Allocation (GB): ");
-            int allocatedRam = readInt(input);
+            System.out.println("Server Stopped...");
             System.out.println();
+            setState(State.MENU);
+            pressEnterToCont(input);
+        }
+    }
 
-            //todo input sanitization
-            //todo check if server with name already installed
-            InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
-            if (!enteredServerName.isBlank()) serverInfo.setName(enteredServerName);
-            serverInfo.setPath();
-            if (allocatedRam < 1) allocatedRam = 3;
-            serverInfo.setCustomLaunchArgs("-Xmx" + allocatedRam + "G -Xms" + allocatedRam + "G");
+    public static void installMenu(BufferedReader input) {
+        BranchesConfig.BranchInfo branchInfo = (BranchesConfig.BranchInfo) stateData;
 
-            System.out.println("Creating toolbox instance in " + serverInfo.getPath());
-            Installer.installAndCheckForUpdates(serverInfo);
-            System.out.println("Finished");
+        System.out.println("Loading branch: " + branchInfo.name + " (" + branchInfo.url + ")");
+
+        String url = GithubHelper.convertRepoToToolboxConfig(branchInfo.url);
+        BranchConfig branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
+
+        if (branch == null) {
             System.out.println();
-            checkEula(input, serverInfo);
+            System.out.println("This branch is invalid.");
+            System.out.println("Returning to menu.");
             pressEnterToCont(input);
 
-            setServerState(State.STATES.EXISTING_INSTALL, serverInfo);
+            setState(State.MENU);
+            return;
         }
+
+        System.out.println();
+
+        System.out.println("Please enter a name for this server, or leave blank for default (" + branch.name + "): ");
+        System.out.println();
+        System.out.print("Server Name: ");
+        String enteredServerName = readLine(input);
+        System.out.println();
+
+        System.out.println("How much RAM do you want to allocate to the server?");
+        System.out.println("It's recommended to use at least 3GB of RAM to ensure LEM will work as intended.");
+        System.out.println();
+        System.out.print("RAM Allocation (GB): ");
+        int allocatedRam = readInt(input);
+        System.out.println();
+
+        //todo input sanitization
+        //todo check if server with name already installed
+        InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
+        if (!enteredServerName.isBlank()) serverInfo.setName(enteredServerName);
+        serverInfo.setPath();
+        if (allocatedRam < 1) allocatedRam = 3;
+        serverInfo.setCustomLaunchArgs("-Xmx" + allocatedRam + "G -Xms" + allocatedRam + "G");
+
+        System.out.println("Creating toolbox instance in " + serverInfo.getPath());
+        Installer.installAndCheckForUpdates(serverInfo);
+        System.out.println("Finished");
+        System.out.println();
+        checkEula(input, serverInfo);
+        pressEnterToCont(input);
+
+        setState(State.EXISTING_INSTALL, serverInfo);
+
         //will loop back into this menu
     }
 
@@ -246,22 +327,6 @@ public class Menu {
             System.out.println("EULA accepted.");
         }
         System.out.println();
-    }
-
-    public static void setServerState(State.STATES state, InstalledServerInfo serverInfo) {
-        setServerState(state, serverInfo, null);
-    }
-
-    public static void setServerState(State.STATES state, InstalledServerInfo serverInfo, String args) {
-        Menu.state = new State.ServerInfoState(state, serverInfo, args);
-    }
-
-    public static void setState(State.STATES state) {
-        setState(state, null);
-    }
-
-    public static void setState(State.STATES state, String args) {
-        Menu.state = new State(state, args);
     }
 
     public static void clearConsole() {
@@ -305,16 +370,33 @@ public class Menu {
         Path installPath = Path.of("installs");
 
         List<InstalledServerInfo> configs = new ArrayList<>();
-        try (Stream<Path> files = Files.walk(installPath)) {
+        try (Stream<Path> files = Files.walk(installPath, 1)) {
             files.forEach(path -> {
-                if (path.endsWith(Path.of(".toolbox").resolve("meta").resolve("toolbox.json"))) {
-                    //if (path.toString().endsWith("\\.toolbox\\meta\\toolbox.json")) {
-                    configs.add(ConfigLoader.parseToolboxInstall(FileHelper.readFile(path)));
+                if (Files.isDirectory(path) && Files.exists(path.resolve(".toolbox").resolve("meta").resolve("toolbox.json"))) {
+                    configs.add(ConfigLoader.parseToolboxInstall(FileHelper.readFile(path.resolve(".toolbox").resolve("meta").resolve("toolbox.json"))));
                 }
             });
         } catch (IOException ignored) {
         }
 
         return configs;
+    }
+
+    public static void setState(State state) {
+        setState(state, null);
+    }
+
+    public static void setState(State state, Object stateData) {
+        Menu.state = state;
+        Menu.stateData = stateData;
+    }
+
+    public enum State {
+        SPLASH,
+        MENU,
+        EXISTING_INSTALL,
+        RUNNING_INSTALL,
+        INSTALLER,
+        EXIT
     }
 }
