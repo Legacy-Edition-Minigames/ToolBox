@@ -267,6 +267,7 @@ public class Menu {
         BranchesConfig.BranchInfo branchInfo = (BranchesConfig.BranchInfo) stateData;
 
         System.out.println("Loading branch: " + branchInfo.name + " (" + branchInfo.url + ")");
+        System.out.println();
 
         String url = GithubHelper.convertRepoToToolboxConfig(branchInfo.url);
         BranchConfig branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
@@ -281,6 +282,7 @@ public class Menu {
             return;
         }
 
+        System.out.println("Configuring server");
         System.out.println();
 
         System.out.println("Please enter a name for this server, or leave blank for default (" + branch.name + "): ");
@@ -360,8 +362,7 @@ public class Menu {
     public static String readLine(BufferedReader input) {
         try {
             return input.readLine().trim();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         return "";
     }
@@ -372,8 +373,7 @@ public class Menu {
         } catch (NumberFormatException numberFormatException) {
             System.out.print("Please enter a number: ");
             return readInt(input);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         return -1;
     }
