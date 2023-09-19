@@ -87,26 +87,38 @@ public class Menu {
 
         System.out.println();
         System.out.println("Installed servers");
-        for (InstalledServerInfo serverInfo : installedServers) {
-            serverOptions++;
-            System.out.println(serverOptions + ". " + serverInfo.getName() + " (" + serverInfo.getBranchInfo().name + ")");
-            options.put(serverOptions, () -> setState(State.EXISTING_INSTALL, serverInfo));
+        if (!installedServers.isEmpty()) {
+            for (InstalledServerInfo serverInfo : installedServers) {
+                serverOptions++;
+                System.out.println(serverOptions + ". " + serverInfo.getName() + " (" + serverInfo.getBranchInfo().name + ")");
+                options.put(serverOptions, () -> setState(State.EXISTING_INSTALL, serverInfo));
+            }
+        } else {
+            System.out.println("--NONE--");
         }
 
         System.out.println();
         System.out.println("Running servers");
-        for (RunningServer runningServer : runningServers) {
-            serverOptions++;
-            System.out.println(serverOptions + ". " + runningServer.serverInfo.getName() + " (" + runningServer.serverInfo.getBranchInfo().name + ")");
-            options.put(serverOptions, () -> setState(State.RUNNING_INSTALL, runningServer));
+        if (!runningServers.isEmpty()) {
+            for (RunningServer runningServer : runningServers) {
+                serverOptions++;
+                System.out.println(serverOptions + ". " + runningServer.serverInfo.getName() + " (" + runningServer.serverInfo.getBranchInfo().name + ")");
+                options.put(serverOptions, () -> setState(State.RUNNING_INSTALL, runningServer));
+            }
+        } else {
+            System.out.println("--NONE--");
         }
 
         System.out.println();
         System.out.println("New servers");
-        for (BranchesConfig.BranchInfo branch : branches.branches) {
-            serverOptions++;
-            System.out.println(serverOptions + ". " + branch.name + " : " + branch.desc);
-            options.put(serverOptions, () -> setState(State.INSTALLER, branch));
+        if (!branches.branches.isEmpty()) {
+            for (BranchesConfig.BranchInfo branch : branches.branches) {
+                serverOptions++;
+                System.out.println(serverOptions + ". " + branch.name + " : " + branch.desc);
+                options.put(serverOptions, () -> setState(State.INSTALLER, branch));
+            }
+        } else {
+            System.out.println("--NONE--");
         }
         System.out.println();
         System.out.println("Other Options");
