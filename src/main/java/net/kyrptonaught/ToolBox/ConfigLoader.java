@@ -40,7 +40,7 @@ public class ConfigLoader {
 
         @Override
         public JsonElement serialize(Path path, Type type, JsonSerializationContext jsonSerializationContext) {
-            return new JsonPrimitive(path.toString());
+            return new JsonPrimitive(path.toString().replaceAll("\\\\", "/"));
         }
     }
 }
