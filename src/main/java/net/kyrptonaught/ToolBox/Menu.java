@@ -1,7 +1,13 @@
 package net.kyrptonaught.ToolBox;
 
+import net.kyrptonaught.ToolBox.IO.ConfigLoader;
+import net.kyrptonaught.ToolBox.IO.EulaChecker;
+import net.kyrptonaught.ToolBox.IO.FileHelper;
+import net.kyrptonaught.ToolBox.IO.GithubHelper;
 import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.configs.BranchesConfig;
+import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
+import net.kyrptonaught.ToolBox.holders.RunningServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -183,7 +189,6 @@ public class Menu {
             setState(State.MENU);
             pressEnterToCont(input);
         } else if (selectedAction == 2) {
-            //todo remove old dependencies
             Installer.installAndCheckForUpdates(serverInfo);
             System.out.println();
             System.out.println("Server updated.");
@@ -298,8 +303,6 @@ public class Menu {
         int allocatedRam = readInt(input);
         System.out.println();
 
-        //todo input sanitization
-        //todo check if server with name already installed
         InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
         if (!enteredServerName.isBlank()) serverInfo.setName(enteredServerName);
         serverInfo.setPath();

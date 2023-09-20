@@ -1,8 +1,9 @@
-package net.kyrptonaught.ToolBox;
+package net.kyrptonaught.ToolBox.IO;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
 import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.configs.BranchesConfig;
+import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
 
 public class ConfigLoader {
     public static Gson gson = new Gson().newBuilder()

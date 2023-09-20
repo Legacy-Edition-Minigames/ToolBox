@@ -1,5 +1,6 @@
-package net.kyrptonaught.ToolBox;
+package net.kyrptonaught.ToolBox.holders;
 
+import net.kyrptonaught.ToolBox.IO.FileNameCleaner;
 import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.configs.BranchesConfig;
 

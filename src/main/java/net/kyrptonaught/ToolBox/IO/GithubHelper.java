@@ -1,4 +1,4 @@
-package net.kyrptonaught.ToolBox;
+package net.kyrptonaught.ToolBox.IO;
 
 public class GithubHelper {
     public static String convertRepoToZipball(String repo) {

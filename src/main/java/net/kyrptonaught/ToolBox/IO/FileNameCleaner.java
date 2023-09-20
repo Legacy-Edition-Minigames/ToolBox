@@ -1,4 +1,4 @@
-package net.kyrptonaught.ToolBox;
+package net.kyrptonaught.ToolBox.IO;
 
 import java.util.Arrays;
 

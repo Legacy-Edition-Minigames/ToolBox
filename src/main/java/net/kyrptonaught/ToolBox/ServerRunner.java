@@ -1,5 +1,8 @@
 package net.kyrptonaught.ToolBox;
 
+import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
+import net.kyrptonaught.ToolBox.holders.RunningServer;
+
 import java.util.ArrayList;
 import java.util.List;
 
