@@ -11,7 +11,7 @@ public class InstalledServerInfo {
 
     private final BranchesConfig.BranchInfo branchInfo;
 
-    private Path installPath;
+    private transient Path installPath;
 
     private String installName;
 

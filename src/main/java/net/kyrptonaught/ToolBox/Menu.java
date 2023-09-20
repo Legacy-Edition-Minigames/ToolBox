@@ -384,7 +384,9 @@ public class Menu {
         try (Stream<Path> files = Files.walk(installPath, 1)) {
             files.forEach(path -> {
                 if (Files.isDirectory(path) && Files.exists(path.resolve(".toolbox").resolve("meta").resolve("toolbox.json"))) {
-                    configs.add(ConfigLoader.parseToolboxInstall(FileHelper.readFile(path.resolve(".toolbox").resolve("meta").resolve("toolbox.json"))));
+                    InstalledServerInfo serverInfo = ConfigLoader.parseToolboxInstall(FileHelper.readFile(path.resolve(".toolbox").resolve("meta").resolve("toolbox.json")));
+                    serverInfo.setPath(path);
+                    configs.add(serverInfo);
                 }
             });
         } catch (IOException ignored) {
