@@ -10,14 +10,10 @@ import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
 import net.kyrptonaught.ToolBox.holders.RunningServer;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class Menu {
 
@@ -25,6 +21,8 @@ public class Menu {
     public static Object stateData;
 
     public static void startStateMachine(String[] args) {
+        CMDArgsParser.setArgs(args);
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println();
             System.out.println();
@@ -35,7 +33,9 @@ public class Menu {
         }));
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-        setState(State.SPLASH);
+        setState(CMDArgsParser.skipSplash() ? State.MENU : State.SPLASH);
+
+        Automation.run();
 
         while (true) {
             clearConsole();
@@ -80,7 +80,7 @@ public class Menu {
         System.out.println("Loading Servers...");
         System.out.println();
 
-        List<InstalledServerInfo> installedServers = detectInstalls();
+        List<InstalledServerInfo> installedServers = Installer.detectInstalls();
         List<RunningServer> runningServers = ServerRunner.getRunningServers();
         BranchesConfig branches = ConfigLoader.parseBranches(FileHelper.download("https://raw.githubusercontent.com/Legacy-Edition-Minigames/ToolBox/java/testConfigs/TestBranches.json"));
 
@@ -169,27 +169,15 @@ public class Menu {
         int selectedAction = readInt(input);
         System.out.println();
 
-
         if (selectedAction == 0) {
             setState(State.MENU);
         } else if (selectedAction == 1) {
             clearConsole();
-            System.out.println("Starting server: " + serverInfo.getLaunchArgs());
-            RunningServer runningServer = ServerRunner.runServer(serverInfo);
-
-            System.out.println();
-            if (runningServer.isRunning()) {
-                System.out.println("Server backgrounded...");
-
-            } else {
-                System.out.println("Server stopped...");
-            }
-            System.out.println();
-
+            Executer.startServer(serverInfo);
             setState(State.MENU);
             pressEnterToCont(input);
         } else if (selectedAction == 2) {
-            Installer.installAndCheckForUpdates(serverInfo);
+            Executer.updateServer(serverInfo);
             System.out.println();
             System.out.println("Server updated.");
             System.out.println();
@@ -380,22 +368,14 @@ public class Menu {
         return -1;
     }
 
-    public static List<InstalledServerInfo> detectInstalls() {
-        Path installPath = Path.of("installs");
+    public static InstalledServerInfo getServerFromName(String name) {
+        List<InstalledServerInfo> serverInfos = Installer.detectInstalls();
 
-        List<InstalledServerInfo> configs = new ArrayList<>();
-        try (Stream<Path> files = Files.walk(installPath, 1)) {
-            files.forEach(path -> {
-                if (Files.isDirectory(path) && Files.exists(path.resolve(".toolbox").resolve("meta").resolve("toolbox.json"))) {
-                    InstalledServerInfo serverInfo = ConfigLoader.parseToolboxInstall(FileHelper.readFile(path.resolve(".toolbox").resolve("meta").resolve("toolbox.json")));
-                    serverInfo.setPath(path);
-                    configs.add(serverInfo);
-                }
-            });
-        } catch (IOException ignored) {
+        for (InstalledServerInfo serverInfo : serverInfos) {
+            if (serverInfo.getName().equals(name)) return serverInfo;
         }
 
-        return configs;
+        return null;
     }
 
     public static void setState(State state) {

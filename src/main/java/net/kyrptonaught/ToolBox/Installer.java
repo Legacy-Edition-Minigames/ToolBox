@@ -7,11 +7,32 @@ import net.kyrptonaught.ToolBox.IO.GithubHelper;
 import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Installer {
+
+    public static List<InstalledServerInfo> detectInstalls() {
+        Path installPath = Path.of("installs");
+
+        List<InstalledServerInfo> configs = new ArrayList<>();
+        try (Stream<Path> files = Files.walk(installPath, 1)) {
+            files.forEach(path -> {
+                if (Files.isDirectory(path) && Files.exists(path.resolve(".toolbox").resolve("meta").resolve("toolbox.json"))) {
+                    InstalledServerInfo serverInfo = ConfigLoader.parseToolboxInstall(FileHelper.readFile(path.resolve(".toolbox").resolve("meta").resolve("toolbox.json")));
+                    serverInfo.setPath(path);
+                    configs.add(serverInfo);
+                }
+            });
+        } catch (IOException ignored) {
+        }
+
+        return configs;
+    }
 
     public static void installAndCheckForUpdates(InstalledServerInfo serverInfo) {
         FileHelper.createDir(serverInfo.getPath());
