@@ -61,7 +61,7 @@ public class Menu {
         System.out.println();
         System.out.println("Welcome to LEM-ToolBox!");
         System.out.println();
-        System.out.println("LEM-ToolBox is a tool designed to make it easy for users to install, update and customize their own LEB instance.");
+        System.out.println("LEM-ToolBox is a tool designed to make it easy for users to install, update and customize their own LEM instance.");
         System.out.println();
         System.out.println("If you encounter any problem, try performing a clean reinstall or contact us on our Discord.");
         System.out.println("LEM-ToolBox 2.0 created by Kyrptonaught");
