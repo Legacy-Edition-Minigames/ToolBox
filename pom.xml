@@ -62,9 +62,13 @@
                             <outfile>target/dist/Toolbox 2.0.exe</outfile>
                             <jar>target/dist/Toolbox 2.0.jar</jar>
                             <icon>BattleModeIcon.ico</icon>
-                            <jre>
-                                <path>%JAVA_HOME%;%PATH%</path>
-                            </jre>
+                            <jre><path>%JAVA_HOME%;%PATH%</path></jre>
+                            <versionInfo>
+                                <fileDescription>All-in-one tools to manage your own LEM server</fileDescription>
+                                <copyright>Legacy Edition Minigames Team</copyright>
+                                <productName>Toolbox 2.0</productName>
+                                <internalName>Toolbox 2.0</internalName>
+                            </versionInfo>
                         </configuration>
                     </execution>
                 </executions>
