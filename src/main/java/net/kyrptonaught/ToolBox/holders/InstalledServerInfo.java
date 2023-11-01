@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public class InstalledServerInfo {
 
-    private final BranchConfig branchConfig;
+    private BranchConfig branchConfig;
 
     private final BranchesConfig.BranchInfo branchInfo;
 
@@ -22,6 +22,10 @@ public class InstalledServerInfo {
         this.branchConfig = branchConfig;
         this.branchInfo = branchInfo;
         this.installName = branchConfig.name;
+    }
+
+    public void updateBranchConfig(BranchConfig config){
+        this.branchConfig = config;
     }
 
     public String getName() {

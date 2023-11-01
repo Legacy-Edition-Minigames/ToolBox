@@ -1,5 +1,9 @@
 package net.kyrptonaught.ToolBox;
 
+import net.kyrptonaught.ToolBox.IO.ConfigLoader;
+import net.kyrptonaught.ToolBox.IO.FileHelper;
+import net.kyrptonaught.ToolBox.IO.GithubHelper;
+import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
 import net.kyrptonaught.ToolBox.holders.RunningServer;
 
@@ -16,11 +20,11 @@ public class Executer {
         } else {
             System.out.println("Server stopped...");
 
-            if(CMDArgsParser.autoRestart()){
+            if (CMDArgsParser.autoRestart()) {
                 startServer(serverInfo);
             }
 
-            if(CMDArgsParser.autoExit()){
+            if (CMDArgsParser.autoExit()) {
                 Menu.setState(Menu.State.EXIT);
                 return;
             }
@@ -29,6 +33,9 @@ public class Executer {
     }
 
     public static void updateServer(InstalledServerInfo serverInfo) {
+        String url = GithubHelper.convertRepoToToolboxConfig(serverInfo.getBranchInfo().url);
+        BranchConfig branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
+        serverInfo.updateBranchConfig(branch);
         Installer.installAndCheckForUpdates(serverInfo);
     }
 }
