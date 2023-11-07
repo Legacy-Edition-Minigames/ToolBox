@@ -1,9 +1,6 @@
 package net.kyrptonaught.ToolBox;
 
-import net.kyrptonaught.ToolBox.IO.ConfigLoader;
-import net.kyrptonaught.ToolBox.IO.EulaChecker;
-import net.kyrptonaught.ToolBox.IO.FileHelper;
-import net.kyrptonaught.ToolBox.IO.GithubHelper;
+import net.kyrptonaught.ToolBox.IO.*;
 import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.configs.BranchesConfig;
 import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
@@ -278,10 +275,7 @@ public class Menu {
         System.out.println("Configuring server");
         System.out.println();
 
-        System.out.println("Please enter a name for this server, or leave blank for default (" + branch.name + "): ");
-        System.out.println();
-        System.out.print("Server Name: ");
-        String enteredServerName = readLine(input);
+        String enteredServerName = askServerName(input, branch.name);
         System.out.println();
 
         System.out.println("How much RAM do you want to allocate to the server?");
@@ -292,7 +286,7 @@ public class Menu {
         System.out.println();
 
         InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
-        if (!enteredServerName.isBlank()) serverInfo.setName(enteredServerName);
+        serverInfo.setName(enteredServerName);
         serverInfo.setPath();
         if (allocatedRam < 1) allocatedRam = 3;
         serverInfo.setCustomLaunchArgs("-Xmx" + allocatedRam + "G -Xms" + allocatedRam + "G");
@@ -307,6 +301,22 @@ public class Menu {
         setState(State.EXISTING_INSTALL, serverInfo);
 
         //will loop back into this menu
+    }
+
+    public static String askServerName(BufferedReader input, String defaultName) {
+        System.out.println("Please enter a name for this server, or leave blank for default (" + defaultName + "): ");
+        System.out.println();
+        System.out.print("Server Name: ");
+        String enteredServerName = readLine(input);
+        if (enteredServerName.isBlank()) enteredServerName = defaultName;
+        enteredServerName = FileNameCleaner.cleanFileName(enteredServerName);
+
+        if (getServerFromName(enteredServerName) != null) {
+            System.out.println("A server with that name already exists.");
+            System.out.println();
+            return askServerName(input, defaultName);
+        }
+        return enteredServerName;
     }
 
     public static void checkEula(BufferedReader input, InstalledServerInfo serverInfo) {
