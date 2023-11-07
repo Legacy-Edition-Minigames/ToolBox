@@ -180,21 +180,35 @@ public class Menu {
             System.out.println();
             pressEnterToCont(input);
         } else if (selectedAction == 3) {
-            FileHelper.deleteDirectory(serverInfo.getPath());
-            System.out.println("Server deleted...reinstalling...");
-            System.out.println();
-            Installer.installAndCheckForUpdates(serverInfo);
-            System.out.println();
-            checkEula(input, serverInfo);
-            System.out.println("Server reinstalled.");
-            System.out.println();
-            pressEnterToCont(input);
+            System.out.println("This server and all data associated with it will be permanently deleted before being reinstalled.");
+            System.out.println("This is irreversible.");
+            System.out.print("Are you sure you want to reinstall this server? (Y/N): ");
+            String deleteAgree = readLine(input);
+
+            if (!deleteAgree.isEmpty() && deleteAgree.substring(0, 1).equalsIgnoreCase("Y")) {
+                FileHelper.deleteDirectory(serverInfo.getPath());
+                System.out.println("Server deleted...reinstalling...");
+                System.out.println();
+                Installer.installAndCheckForUpdates(serverInfo);
+                System.out.println();
+                checkEula(input, serverInfo);
+                System.out.println("Server reinstalled.");
+                System.out.println();
+                pressEnterToCont(input);
+            }
         } else if (selectedAction == 4) {
-            FileHelper.deleteDirectory(serverInfo.getPath());
-            System.out.println("Server deleted.");
-            System.out.println();
-            pressEnterToCont(input);
-            setState(State.MENU);
+            System.out.println("This server and all data associated with it will be permanently deleted.");
+            System.out.println("This is irreversible.");
+            System.out.print("Are you sure you want to delete this server? (Y/N): ");
+            String deleteAgree = readLine(input);
+
+            if (!deleteAgree.isEmpty() && deleteAgree.substring(0, 1).equalsIgnoreCase("Y")) {
+                FileHelper.deleteDirectory(serverInfo.getPath());
+                System.out.println("Server deleted.");
+                System.out.println();
+                pressEnterToCont(input);
+                setState(State.MENU);
+            }
         }
         //will loop back into this menu
     }
