@@ -157,7 +157,7 @@ public class Menu {
                 1. Start Server
                 2. Check for Updates
                 3. Verify Integrity
-                4. Share Install (Un-Implemented)
+                4. Share Install (WIP)
                 5. Reinstall
                 6. Delete
                                 
@@ -191,7 +191,10 @@ public class Menu {
             System.out.println();
             pressEnterToCont(input);
         } else if (selectedAction == 4) {
-
+            System.out.println("Packaging install...");
+            System.out.println();
+            FileHelper.createDir(Path.of("packaged"));
+            Installer.packageInstall(serverInfo);
         } else if (selectedAction == 5) {
             System.out.println("This server and all data associated with it will be permanently deleted before being reinstalled.");
             System.out.println("This is irreversible.");

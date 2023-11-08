@@ -63,6 +63,10 @@ public class Installer {
         }
     }
 
+    public static void packageInstall(InstalledServerInfo serverInfo) {
+        FileHelper.zipDirectory(serverInfo.getPath(), Path.of("packaged/" + serverInfo.getName() + ".toolbox"));
+    }
+
     private static void installDependencies(InstalledServerInfo serverInfo) {
         for (BranchConfig.Dependency dependency : serverInfo.getDependencies()) {
 

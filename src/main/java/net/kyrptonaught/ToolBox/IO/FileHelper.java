@@ -14,6 +14,8 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 public class FileHelper {
 
@@ -50,7 +52,7 @@ public class FileHelper {
 
     public static List<String> unzipFile(Path zipFile, Path unzipPath) {
         List<String> installedFiles = new ArrayList<>();
-        try (java.util.zip.ZipFile zip = new java.util.zip.ZipFile(zipFile.toFile())) {
+        try (ZipFile zip = new ZipFile(zipFile.toFile())) {
             int size = zip.size();
 
             boolean firstChecked = false;
@@ -85,6 +87,25 @@ public class FileHelper {
             e.printStackTrace();
         }
         return installedFiles;
+    }
+
+    public static void zipDirectory(Path directory, Path zip) {
+        try (ZipOutputStream zs = new ZipOutputStream(Files.newOutputStream(zip))) {
+            Files.walk(directory)
+                    .filter(path -> !Files.isDirectory(path))
+                    .forEach(path -> {
+                        ZipEntry zipEntry = new ZipEntry(directory.relativize(path).toString());
+                        try {
+                            zs.putNextEntry(zipEntry);
+                            Files.copy(path, zs);
+                            zs.closeEntry();
+                        } catch (IOException e) {
+                            System.err.println(e);
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static InputStream openFileOrURL(String path) throws IOException {
