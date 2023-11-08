@@ -156,8 +156,10 @@ public class Menu {
                                 
                 1. Start Server
                 2. Check for Updates
-                3. Reinstall
-                4. Delete
+                3. Verify Integrity
+                4. Share Install (Un-Implemented)
+                5. Reinstall
+                6. Delete
                                 
                 0. Back
                  """);
@@ -180,10 +182,23 @@ public class Menu {
             System.out.println();
             pressEnterToCont(input);
         } else if (selectedAction == 3) {
+            System.out.println("Verifying install...");
+            System.out.println();
+            Installer.verifyInstall(serverInfo);
+            System.out.println();
+
+            System.out.println("All checks passed, server install is intact");
+            System.out.println();
+            pressEnterToCont(input);
+        } else if (selectedAction == 4) {
+
+        } else if (selectedAction == 5) {
             System.out.println("This server and all data associated with it will be permanently deleted before being reinstalled.");
             System.out.println("This is irreversible.");
+            System.out.println();
             System.out.print("Are you sure you want to reinstall this server? (Y/N): ");
             String deleteAgree = readLine(input);
+            System.out.println();
 
             if (!deleteAgree.isEmpty() && deleteAgree.substring(0, 1).equalsIgnoreCase("Y")) {
                 FileHelper.deleteDirectory(serverInfo.getPath());
@@ -196,11 +211,13 @@ public class Menu {
                 System.out.println();
                 pressEnterToCont(input);
             }
-        } else if (selectedAction == 4) {
+        } else if (selectedAction == 6) {
             System.out.println("This server and all data associated with it will be permanently deleted.");
             System.out.println("This is irreversible.");
+            System.out.println();
             System.out.print("Are you sure you want to delete this server? (Y/N): ");
             String deleteAgree = readLine(input);
+            System.out.println();
 
             if (!deleteAgree.isEmpty() && deleteAgree.substring(0, 1).equalsIgnoreCase("Y")) {
                 FileHelper.deleteDirectory(serverInfo.getPath());

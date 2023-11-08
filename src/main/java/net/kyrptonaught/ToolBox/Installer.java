@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -44,10 +45,22 @@ public class Installer {
 
         System.out.println("Checking dependencies...");
         installDependencies(serverInfo);
-        FileHelper.deleteDirectory(serverInfo.getDownloadPath());
 
         FileHelper.writeFile(serverInfo.getMetaPath().resolve("toolbox.json"), ConfigLoader.serializeToolboxInstall(serverInfo));
         System.out.println("Dependencies done");
+    }
+
+    public static void verifyInstall(InstalledServerInfo serverInfo) {
+        for (BranchConfig.Dependency dependency : serverInfo.getDependencies()) {
+            System.out.println("Checking files from dependency: " + dependency.getDisplayName());
+            List<String> installedFiles = FileHelper.readLines(serverInfo.getLogPath(dependency));
+            if (installedFiles != null)
+                for (String file : installedFiles)
+                    if (!FileHelper.exists(Path.of(file))) {
+                        replaceMissingFiles(serverInfo, dependency);
+                        break;
+                    }
+        }
     }
 
     private static void installDependencies(InstalledServerInfo serverInfo) {
@@ -56,7 +69,7 @@ public class Installer {
             if (dependency.location.startsWith("/"))
                 dependency.location = dependency.location.substring(1);
 
-            System.out.print("Checking " + dependency.name + "...");
+            System.out.print("Checking " + dependency.getDisplayName() + "...");
 
             String hash = getNewHash(serverInfo, dependency);
             String existingHash = hashExistingFile(serverInfo, dependency);
@@ -113,11 +126,42 @@ public class Installer {
         if (dependency.unzip) {
             installedFiles = FileHelper.unzipFile(downloadPath, destination);
         } else {
-            installedFiles = FileHelper.moveFile(downloadPath, destination.resolve(dependency.name));
+            installedFiles = FileHelper.copyFile(downloadPath, destination.resolve(dependency.name));
         }
 
         installedFiles.add(destination.toString());
         FileHelper.writeFile(serverInfo.getHashPath(dependency), hash);
         FileHelper.writeLines(serverInfo.getLogPath(dependency), installedFiles);
+    }
+
+    private static void replaceMissingFiles(InstalledServerInfo serverInfo, BranchConfig.Dependency dependency) {
+        Path downloadPath = serverInfo.getDownloadPath(dependency);
+        Path destination = serverInfo.getDependencyPath(dependency);
+        FileHelper.createDir(destination);
+
+        if (dependency.unzip) {
+            List<String> installedFiles = FileHelper.readLines(serverInfo.getLogPath(dependency));
+            if (installedFiles != null) {
+                Path unzipPath = serverInfo.getTempLocation(dependency);
+                FileHelper.unzipFile(downloadPath, unzipPath);
+                installedFiles.sort(Comparator.naturalOrder());
+                for (String file : installedFiles) {
+                    if (!FileHelper.exists(Path.of(file))) {
+                        System.out.println("Replacing file: " + file);
+
+                        Path path = Path.of(file);
+                        if (Files.isDirectory(path)) {
+                            FileHelper.createDir(path);
+                        } else {
+                            FileHelper.copyFile(Path.of(file.replace(serverInfo.getPath().toString(), unzipPath.toString())), path);
+                        }
+                    }
+                }
+                FileHelper.deleteDirectory(serverInfo.getTempLocation());
+            }
+        } else {
+            System.out.println("Replacing file: " + destination.resolve(dependency.name));
+            FileHelper.copyFile(downloadPath, destination.resolve(dependency.name));
+        }
     }
 }

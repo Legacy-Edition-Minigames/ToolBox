@@ -105,4 +105,11 @@ public class InstalledServerInfo {
     public Path getDependencyPath(BranchConfig.Dependency dependency) {
         return getPath().resolve(FileNameCleaner.removeFirstSlashAndClean(dependency.location));
     }
+
+    public Path getTempLocation() {
+        return getToolBox().resolve("temp");
+    }
+    public Path getTempLocation(BranchConfig.Dependency dependency) {
+        return getTempLocation().resolve(FileNameCleaner.cleanFileName(dependency.name));
+    }
 }

@@ -69,7 +69,7 @@ public class FileHelper {
                 Path output = unzipPath.resolve(initialDir == null ? entry.getName() : entry.getName().replace(initialDir, ""));
 
                 //skip toolbox folder in repo
-                if (output.toString().contains(".toolbox"))
+                if (entry.getName().contains(".toolbox"))
                     continue;
 
                 if (entry.isDirectory())
@@ -110,6 +110,18 @@ public class FileHelper {
         List<String> installedFiles = new ArrayList<>();
         try {
             Files.move(source, destination, StandardCopyOption.REPLACE_EXISTING);
+            installedFiles.add(destination.toString());
+        } catch (Exception e) {
+            System.out.println("Failed to copy file: " + source + " -> " + destination);
+            e.printStackTrace();
+        }
+        return installedFiles;
+    }
+
+    public static List<String> copyFile(Path source, Path destination) {
+        List<String> installedFiles = new ArrayList<>();
+        try {
+            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
             installedFiles.add(destination.toString());
         } catch (Exception e) {
             System.out.println("Failed to copy file: " + source + " -> " + destination);
