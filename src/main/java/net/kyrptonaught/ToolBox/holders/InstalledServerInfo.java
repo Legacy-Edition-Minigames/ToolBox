@@ -24,7 +24,7 @@ public class InstalledServerInfo {
         this.installName = branchConfig.name;
     }
 
-    public void updateBranchConfig(BranchConfig config){
+    public void updateBranchConfig(BranchConfig config) {
         this.branchConfig = config;
     }
 
@@ -109,6 +109,7 @@ public class InstalledServerInfo {
     public Path getTempLocation() {
         return getToolBox().resolve("temp");
     }
+
     public Path getTempLocation(BranchConfig.Dependency dependency) {
         return getTempLocation().resolve(FileNameCleaner.cleanFileName(dependency.name));
     }
