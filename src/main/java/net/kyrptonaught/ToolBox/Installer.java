@@ -86,6 +86,7 @@ public class Installer {
                 System.out.println("Already exists");
             }
         }
+        detectRemovedDependencies(serverInfo);
     }
 
     private static String getNewHash(InstalledServerInfo serverInfo, BranchConfig.Dependency dependency) {
@@ -117,14 +118,7 @@ public class Installer {
             FileHelper.download(GithubHelper.convertRepoToZipball(dependency.url), downloadPath);
         }
 
-        if (Files.exists(serverInfo.getLogPath(dependency))) {
-            List<String> previousInstalledFiles = FileHelper.readLines(serverInfo.getLogPath(dependency));
-            if (previousInstalledFiles != null) {
-                for (String string : previousInstalledFiles) {
-                    FileHelper.delete(Path.of(string));
-                }
-            }
-        }
+        clearOldFiles(serverInfo.getLogPath(dependency));
 
         List<String> installedFiles;
         if (dependency.unzip) {
@@ -166,6 +160,41 @@ public class Installer {
         } else {
             System.out.println("Replacing file: " + destination.resolve(dependency.name));
             FileHelper.copyFile(downloadPath, destination.resolve(dependency.name));
+        }
+    }
+
+    private static void detectRemovedDependencies(InstalledServerInfo serverInfo) {
+        try (Stream<Path> logFiles = Files.list(serverInfo.getLogPath())) {
+            for (Path logPath : logFiles.toList()) {
+                String depName = logPath.getFileName().toString().replace(".installed", "");
+                boolean found = false;
+                for (BranchConfig.Dependency dependency : serverInfo.getDependencies()) {
+                    if (dependency.name.equals(depName)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    System.out.println("Removing deleted dependency: " + depName);
+                    clearOldFiles(logPath);
+                    FileHelper.delete(serverInfo.getDownloadPath().resolve(Path.of(depName)));
+                    FileHelper.delete(serverInfo.getHashPath().resolve(Path.of(depName + ".hash")));
+                    FileHelper.delete(logPath);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void clearOldFiles(Path logPath) {
+        if (Files.exists(logPath)) {
+            List<String> previousInstalledFiles = FileHelper.readLines(logPath);
+            if (previousInstalledFiles != null) {
+                for (String string : previousInstalledFiles) {
+                    FileHelper.delete(Path.of(string));
+                }
+            }
         }
     }
 }
