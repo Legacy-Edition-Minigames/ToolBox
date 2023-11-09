@@ -71,7 +71,7 @@ public class FileHelper {
                 Path output = unzipPath.resolve(initialDir == null ? entry.getName() : entry.getName().replace(initialDir, ""));
 
                 //skip toolbox folder in repo
-                if (entry.getName().contains(".toolbox"))
+                if (entry.getName().contains(".toolbox") || entry.getName().contains(".github"))
                     continue;
 
                 if (entry.isDirectory())
