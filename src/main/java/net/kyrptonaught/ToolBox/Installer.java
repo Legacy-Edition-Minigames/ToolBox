@@ -5,6 +5,7 @@ import net.kyrptonaught.ToolBox.IO.ConfigLoader;
 import net.kyrptonaught.ToolBox.IO.FileHelper;
 import net.kyrptonaught.ToolBox.IO.GithubHelper;
 import net.kyrptonaught.ToolBox.configs.BranchConfig;
+import net.kyrptonaught.ToolBox.holders.InstalledDependencyInfo;
 import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
 
 import java.io.IOException;
@@ -40,8 +41,7 @@ public class Installer {
 
         FileHelper.createDir(serverInfo.getMetaPath());
         FileHelper.createDir(serverInfo.getDownloadPath());
-        FileHelper.createDir(serverInfo.getHashPath());
-        FileHelper.createDir(serverInfo.getLogPath());
+        FileHelper.createDir(serverInfo.getInstalledDependencyPath());
 
         System.out.println("Checking dependencies...");
         installDependencies(serverInfo);
@@ -53,11 +53,11 @@ public class Installer {
     public static void verifyInstall(InstalledServerInfo serverInfo) {
         for (BranchConfig.Dependency dependency : serverInfo.getDependencies()) {
             System.out.println("Checking files from dependency: " + dependency.getDisplayName());
-            List<String> installedFiles = FileHelper.readLines(serverInfo.getLogPath(dependency));
-            if (installedFiles != null)
-                for (String file : installedFiles)
+            InstalledDependencyInfo installedDependency = getInstalledDependency(serverInfo, dependency);
+            if (installedDependency.installedFiles != null)
+                for (String file : installedDependency.installedFiles)
                     if (!FileHelper.exists(Path.of(file))) {
-                        replaceMissingFiles(serverInfo, dependency);
+                        replaceMissingFiles(serverInfo, installedDependency);
                         break;
                     }
         }
@@ -75,12 +75,14 @@ public class Installer {
 
             System.out.print("Checking " + dependency.getDisplayName() + "...");
 
+            InstalledDependencyInfo installedDependency = getInstalledDependency(serverInfo, dependency);
+
             String hash = getNewHash(serverInfo, dependency);
-            String existingHash = hashExistingFile(serverInfo, dependency);
+            String existingHash = installedDependency.hash;
 
             if (hash != null && !hash.equals(existingHash)) {
                 System.out.print("downloading...");
-                installFile(serverInfo, dependency, hash);
+                installFile(serverInfo, installedDependency, hash);
                 System.out.println("installed");
             } else {
                 System.out.println("Already exists");
@@ -101,16 +103,9 @@ public class Installer {
         }
     }
 
-    private static String hashExistingFile(InstalledServerInfo serverInfo, BranchConfig.Dependency dependency) {
-        Path hashFile = serverInfo.getHashPath(dependency);
-        if (Files.exists(hashFile) && Files.isReadable(hashFile))
-            return FileHelper.readFile(hashFile);
-        return null;
-    }
-
-    private static void installFile(InstalledServerInfo serverInfo, BranchConfig.Dependency dependency, String hash) {
+    private static void installFile(InstalledServerInfo serverInfo, InstalledDependencyInfo dependency, String hash) {
         Path downloadPath = serverInfo.getDownloadPath(dependency);
-        Path destination = serverInfo.getDependencyPath(dependency);
+        Path destination = serverInfo.getDependencyInstallPath(dependency);
         FileHelper.createDir(destination);
 
         //checking hash already downloaded other file types
@@ -118,7 +113,7 @@ public class Installer {
             FileHelper.download(GithubHelper.convertRepoToZipball(dependency.url), downloadPath);
         }
 
-        clearOldFiles(serverInfo.getLogPath(dependency));
+        clearOldFiles(dependency.installedFiles);
 
         List<String> installedFiles;
         if (dependency.unzip) {
@@ -128,19 +123,20 @@ public class Installer {
         }
 
         installedFiles.add(destination.toString());
-        FileHelper.writeFile(serverInfo.getHashPath(dependency), hash);
-        FileHelper.writeLines(serverInfo.getLogPath(dependency), installedFiles);
+        dependency.installedFiles = installedFiles;
+        dependency.hash = hash;
+        FileHelper.writeFile(serverInfo.getInstalledDependencyPath(dependency), ConfigLoader.serializeToolboxInstall(dependency));
     }
 
-    private static void replaceMissingFiles(InstalledServerInfo serverInfo, BranchConfig.Dependency dependency) {
+    private static void replaceMissingFiles(InstalledServerInfo serverInfo, InstalledDependencyInfo dependency) {
         Path downloadPath = serverInfo.getDownloadPath(dependency);
-        Path destination = serverInfo.getDependencyPath(dependency);
+        Path destination = serverInfo.getDependencyInstallPath(dependency);
         FileHelper.createDir(destination);
 
         if (dependency.unzip) {
-            List<String> installedFiles = FileHelper.readLines(serverInfo.getLogPath(dependency));
+            List<String> installedFiles = new ArrayList<>(List.copyOf(dependency.installedFiles));
             if (installedFiles != null) {
-                Path unzipPath = serverInfo.getTempLocation(dependency);
+                Path unzipPath = serverInfo.getTempPath(dependency);
                 FileHelper.unzipFile(downloadPath, unzipPath);
                 installedFiles.sort(Comparator.naturalOrder());
                 for (String file : installedFiles) {
@@ -155,7 +151,7 @@ public class Installer {
                         }
                     }
                 }
-                FileHelper.deleteDirectory(serverInfo.getTempLocation());
+                FileHelper.deleteDirectory(serverInfo.getTempPath());
             }
         } else {
             System.out.println("Replacing file: " + destination.resolve(dependency.name));
@@ -164,22 +160,20 @@ public class Installer {
     }
 
     private static void detectRemovedDependencies(InstalledServerInfo serverInfo) {
-        try (Stream<Path> logFiles = Files.list(serverInfo.getLogPath())) {
-            for (Path logPath : logFiles.toList()) {
-                String depName = logPath.getFileName().toString().replace(".installed", "");
+        try (Stream<Path> dependencyFiles = Files.list(serverInfo.getInstalledDependencyPath())) {
+            for (Path dependencyPath : dependencyFiles.toList()) {
+                InstalledDependencyInfo installedDependency = ConfigLoader.parseInstalledDependency(FileHelper.readFile(dependencyPath));
                 boolean found = false;
                 for (BranchConfig.Dependency dependency : serverInfo.getDependencies()) {
-                    if (dependency.name.equals(depName)) {
+                    if (dependency.name.equals(installedDependency.name)) {
                         found = true;
                         break;
                     }
                 }
                 if (!found) {
-                    System.out.println("Removing deleted dependency: " + depName);
-                    clearOldFiles(logPath);
-                    FileHelper.delete(serverInfo.getDownloadPath().resolve(Path.of(depName)));
-                    FileHelper.delete(serverInfo.getHashPath().resolve(Path.of(depName + ".hash")));
-                    FileHelper.delete(logPath);
+                    System.out.println("Removing deleted dependency: " + installedDependency.getDisplayName());
+                    clearOldFiles(installedDependency.installedFiles);
+                    FileHelper.delete(dependencyPath);
                 }
             }
         } catch (Exception e) {
@@ -187,14 +181,18 @@ public class Installer {
         }
     }
 
-    private static void clearOldFiles(Path logPath) {
-        if (Files.exists(logPath)) {
-            List<String> previousInstalledFiles = FileHelper.readLines(logPath);
-            if (previousInstalledFiles != null) {
-                for (String string : previousInstalledFiles) {
-                    FileHelper.delete(Path.of(string));
-                }
+    private static void clearOldFiles(List<String> previousInstalledFiles) {
+        if (previousInstalledFiles != null) {
+            for (String string : previousInstalledFiles) {
+                FileHelper.delete(Path.of(string));
             }
         }
+    }
+
+    private static InstalledDependencyInfo getInstalledDependency(InstalledServerInfo serverInfo, BranchConfig.Dependency dependency) {
+        if (FileHelper.exists(serverInfo.getInstalledDependencyPath(dependency))) {
+            return ConfigLoader.parseInstalledDependency(FileHelper.readFile(serverInfo.getInstalledDependencyPath(dependency)));
+        }
+        return new InstalledDependencyInfo(dependency);
     }
 }

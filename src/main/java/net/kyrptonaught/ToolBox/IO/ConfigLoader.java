@@ -3,6 +3,7 @@ package net.kyrptonaught.ToolBox.IO;
 import com.google.gson.Gson;
 import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.configs.BranchesConfig;
+import net.kyrptonaught.ToolBox.holders.InstalledDependencyInfo;
 import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
 
 public class ConfigLoader {
@@ -18,6 +19,10 @@ public class ConfigLoader {
 
     public static BranchConfig parseToolboxConfig(String json) {
         return gson.fromJson(json, BranchConfig.class);
+    }
+
+    public static InstalledDependencyInfo parseInstalledDependency(String json){
+        return gson.fromJson(json, InstalledDependencyInfo.class);
     }
 
     public static InstalledServerInfo parseToolboxInstall(String json) {

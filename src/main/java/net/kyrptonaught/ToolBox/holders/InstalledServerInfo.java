@@ -70,47 +70,39 @@ public class InstalledServerInfo {
         return installPath;
     }
 
-    public Path getToolBox() {
+    public Path getDependencyInstallPath(BranchConfig.Dependency dependency) {
+        return getPath().resolve(FileNameCleaner.removeFirstSlashAndClean(dependency.location));
+    }
+
+    public Path getToolBoxPath() {
         return getPath().resolve(".toolbox");
     }
 
     public Path getDownloadPath() {
-        return getToolBox().resolve("downloads");
+        return getToolBoxPath().resolve("downloads");
     }
 
     public Path getDownloadPath(BranchConfig.Dependency dependency) {
         return getDownloadPath().resolve(FileNameCleaner.cleanFileName(dependency.name));
     }
 
-    public Path getHashPath() {
-        return getToolBox().resolve("hash");
+    public Path getInstalledDependencyPath() {
+        return getToolBoxPath().resolve("dependencies");
     }
 
-    public Path getHashPath(BranchConfig.Dependency dependency) {
-        return getHashPath().resolve(FileNameCleaner.cleanFileName(dependency.name) + ".hash");
-    }
-
-    public Path getLogPath() {
-        return getToolBox().resolve("log");
-    }
-
-    public Path getLogPath(BranchConfig.Dependency dependency) {
-        return getLogPath().resolve(FileNameCleaner.cleanFileName(dependency.name) + ".installed");
+    public Path getInstalledDependencyPath(BranchConfig.Dependency dependency) {
+        return getInstalledDependencyPath().resolve(FileNameCleaner.cleanFileName(dependency.name) + ".json");
     }
 
     public Path getMetaPath() {
-        return getToolBox().resolve("meta");
+        return getToolBoxPath().resolve("meta");
     }
 
-    public Path getDependencyPath(BranchConfig.Dependency dependency) {
-        return getPath().resolve(FileNameCleaner.removeFirstSlashAndClean(dependency.location));
+    public Path getTempPath() {
+        return getToolBoxPath().resolve("temp");
     }
 
-    public Path getTempLocation() {
-        return getToolBox().resolve("temp");
-    }
-
-    public Path getTempLocation(BranchConfig.Dependency dependency) {
-        return getTempLocation().resolve(FileNameCleaner.cleanFileName(dependency.name));
+    public Path getTempPath(BranchConfig.Dependency dependency) {
+        return getTempPath().resolve(FileNameCleaner.cleanFileName(dependency.name));
     }
 }
