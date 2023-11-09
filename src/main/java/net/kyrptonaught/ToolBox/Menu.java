@@ -158,8 +158,9 @@ public class Menu {
                 2. Check for Updates
                 3. Verify Integrity
                 4. Share Install (WIP)
-                5. Reinstall
-                6. Delete
+                5. Accept EULA
+                6. Reinstall
+                7. Delete
                                 
                 0. Back
                  """);
@@ -196,6 +197,10 @@ public class Menu {
             FileHelper.createDir(Path.of("packaged"));
             Installer.packageInstall(serverInfo);
         } else if (selectedAction == 5) {
+            System.out.println("Checking EULA...");
+            System.out.println();
+            checkEula(input, serverInfo);
+        } else if (selectedAction == 6) {
             System.out.println("This server and all data associated with it will be permanently deleted before being reinstalled.");
             System.out.println("This is irreversible.");
             System.out.println();
@@ -214,7 +219,7 @@ public class Menu {
                 System.out.println();
                 pressEnterToCont(input);
             }
-        } else if (selectedAction == 6) {
+        } else if (selectedAction == 7) {
             System.out.println("This server and all data associated with it will be permanently deleted.");
             System.out.println("This is irreversible.");
             System.out.println();
