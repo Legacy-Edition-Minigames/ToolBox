@@ -21,7 +21,7 @@ public class ConfigLoader {
         return gson.fromJson(json, BranchConfig.class);
     }
 
-    public static InstalledDependencyInfo parseInstalledDependency(String json){
+    public static InstalledDependencyInfo parseInstalledDependency(String json) {
         return gson.fromJson(json, InstalledDependencyInfo.class);
     }
 
