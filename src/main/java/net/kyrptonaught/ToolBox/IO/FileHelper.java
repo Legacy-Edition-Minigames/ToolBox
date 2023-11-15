@@ -50,7 +50,7 @@ public class FileHelper {
         return ConfigLoader.gson.fromJson(download(fileURL), clazz);
     }
 
-    public static List<String> unzipFile(Path zipFile, Path unzipPath) {
+    public static List<String> unzipFile(Path zipFile, Path unzipPath, boolean skipTB) {
         List<String> installedFiles = new ArrayList<>();
         try (ZipFile zip = new ZipFile(zipFile.toFile())) {
             int size = zip.size();
@@ -71,13 +71,15 @@ public class FileHelper {
                 Path output = unzipPath.resolve(initialDir == null ? entry.getName() : entry.getName().replace(initialDir, ""));
 
                 //skip toolbox folder in repo
-                if (entry.getName().contains(".toolbox") || entry.getName().contains(".github"))
+                if (skipTB && (entry.getName().contains(".toolbox") || entry.getName().contains(".github")))
                     continue;
 
                 if (entry.isDirectory())
                     Files.createDirectories(output);
-                else
+                else {
+                    Files.createDirectories(output.getParent());
                     Files.copy(zip.getInputStream(entry), output, StandardCopyOption.REPLACE_EXISTING);
+                }
                 installedFiles.add(output.toString());
                 //System.out.println(count + "/" + size);
             }
@@ -87,6 +89,18 @@ public class FileHelper {
             e.printStackTrace();
         }
         return installedFiles;
+    }
+
+    public static String readFileFromZip(Path zipFile, String fileName) {
+        try (ZipFile zip = new ZipFile(zipFile.toFile())) {
+            ZipEntry entry = zip.getEntry(fileName);
+
+            return new String(zip.getInputStream(entry).readAllBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public static void zipDirectory(Path directory, Path zip) {

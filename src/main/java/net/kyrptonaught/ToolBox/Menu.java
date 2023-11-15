@@ -7,10 +7,13 @@ import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
 import net.kyrptonaught.ToolBox.holders.RunningServer;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Menu {
 
@@ -42,6 +45,7 @@ public class Menu {
                 case EXISTING_INSTALL -> existingMenu(input);
                 case RUNNING_INSTALL -> runningMenu(input);
                 case INSTALLER -> installMenu(input);
+                case IMPORT -> importMenu(input);
                 case EXIT -> System.exit(0);
             }
         }
@@ -89,7 +93,7 @@ public class Menu {
         int serverOptions = 0;
 
         System.out.println();
-        System.out.println("Installed servers");
+        System.out.println("Installed Servers");
         if (!installedServers.isEmpty()) {
             for (InstalledServerInfo serverInfo : installedServers) {
                 serverOptions++;
@@ -101,7 +105,7 @@ public class Menu {
         }
 
         System.out.println();
-        System.out.println("Running servers");
+        System.out.println("Running Servers");
         if (!runningServers.isEmpty()) {
             for (RunningServer runningServer : runningServers) {
                 serverOptions++;
@@ -113,7 +117,7 @@ public class Menu {
         }
 
         System.out.println();
-        System.out.println("New servers");
+        System.out.println("New Servers");
         if (!branches.branches.isEmpty()) {
             for (BranchesConfig.BranchInfo branch : branches.branches) {
                 serverOptions++;
@@ -123,6 +127,12 @@ public class Menu {
         } else {
             System.out.println("--NONE--");
         }
+
+        System.out.println();
+        System.out.println("Import Servers");
+        System.out.println(++serverOptions + ". Import a packaged .toolbox server");
+        options.put(serverOptions, () -> setState(State.IMPORT));
+
         System.out.println();
         System.out.println("Other Options");
         System.out.println("0. Exit");
@@ -152,12 +162,12 @@ public class Menu {
         System.out.println(info.url);
         System.out.println();
         System.out.println("""
-                Chose an action below:
+                Choose an action below:
                                 
                 1. Start Server
                 2. Check for Updates
                 3. Verify Integrity
-                4. Share Install (WIP)
+                4. Share Install
                 5. Accept EULA
                 6. Reinstall
                 7. Delete
@@ -249,7 +259,7 @@ public class Menu {
         System.out.println(info.url);
         System.out.println();
         System.out.println("""
-                Chose an action below:
+                Choose an action below:
                                 
                 1. Open Console
                 2. Stop Server
@@ -340,6 +350,86 @@ public class Menu {
         setState(State.EXISTING_INSTALL, serverInfo);
 
         //will loop back into this menu
+    }
+
+    public static void importMenu(BufferedReader input) {
+        System.out.println("Import a packaged .toolbox server");
+        System.out.println();
+
+        System.out.println("""
+                Choose how to import:
+                                
+                1. Discover in /install folder
+                2. Select from local file system
+                3. Download from URL
+                                
+                0. Back
+                 """);
+
+        System.out.print("Option: ");
+        int selectedAction = readInt(input);
+        System.out.println();
+
+        if (selectedAction == 0) {
+            setState(State.MENU);
+        } else if (selectedAction == 1) {
+            System.out.println("Detecting .toolbox packages in /installs...");
+            System.out.println();
+
+            Path installPath = Path.of("installs");
+            try (Stream<Path> files = Files.walk(installPath, 1)) {
+                files.forEach(path -> {
+                    if (!Files.isDirectory(path) && path.toString().endsWith(".toolbox")) {
+                        System.out.println("Installing: " + path.getFileName().toString());
+                        String importedName = Installer.installPackage(path);
+                        FileHelper.delete(path);
+                        System.out.println("Installed as: " + importedName);
+                        System.out.println();
+                    }
+                });
+            } catch (IOException ignored) {
+            }
+            System.out.println();
+            System.out.println("Finished importing");
+            pressEnterToCont(input);
+            setState(State.MENU);
+        } else if (selectedAction == 2) {
+            System.out.println("Please enter the path of the .toolbox file (You can also drag and drop the file here)");
+            System.out.print("Path: ");
+            String path = readLine(input).trim();
+            path = path.replaceAll("^\"|\"$", "");
+
+            System.out.println();
+            System.out.println("Installing");
+
+            Path tempDownload = Path.of("tempDownload").resolve("temp.toolbox");
+            FileHelper.download("file:" + path, tempDownload);
+            String importedName = Installer.installPackage(tempDownload);
+            FileHelper.deleteDirectory(Path.of("tempDownload"));
+
+            System.out.println();
+            System.out.println("Imported server as: " + importedName);
+            pressEnterToCont(input);
+            setState(State.MENU);
+        } else if (selectedAction == 3) {
+            System.out.println("Please enter the URL of the .toolbox file");
+            System.out.print("URL: ");
+            String path = readLine(input).trim();
+            path = path.replaceAll("^\"|\"$", "");
+
+            System.out.println();
+            System.out.println("Installing");
+
+            Path tempDownload = Path.of("tempDownload").resolve("temp.toolbox");
+            FileHelper.download(path, tempDownload);
+            String importedName = Installer.installPackage(tempDownload);
+            FileHelper.deleteDirectory(Path.of("tempDownload"));
+
+            System.out.println();
+            System.out.println("Imported server as: " + importedName);
+            pressEnterToCont(input);
+            setState(State.MENU);
+        }
     }
 
     public static String askServerName(BufferedReader input, String defaultName) {
@@ -442,6 +532,7 @@ public class Menu {
         EXISTING_INSTALL,
         RUNNING_INSTALL,
         INSTALLER,
+        IMPORT,
         EXIT
     }
 }

@@ -67,6 +67,24 @@ public class Installer {
         FileHelper.zipDirectory(serverInfo.getPath(), Path.of("packaged/" + serverInfo.getName() + ".toolbox"));
     }
 
+    public static String installPackage(Path path) {
+        InstalledServerInfo serverInfo = ConfigLoader.parseToolboxInstall(FileHelper.readFileFromZip(path, ".toolbox\\meta\\toolbox.json"));
+        String name = serverInfo.getName() + " (Imported)";
+
+        //todo improve this conflict logic
+        while(Menu.getServerFromName(name) !=null){
+            name += " (duplicate)";
+        }
+        serverInfo.setName(name);
+        serverInfo.setPath();
+
+        FileHelper.createDir(serverInfo.getPath());
+        FileHelper.unzipFile(path, serverInfo.getPath(), false);
+        FileHelper.writeFile(serverInfo.getMetaPath().resolve("toolbox.json"), ConfigLoader.serializeToolboxInstall(serverInfo));
+
+        return name;
+    }
+
     private static void installDependencies(InstalledServerInfo serverInfo) {
         for (BranchConfig.Dependency dependency : serverInfo.getDependencies()) {
 
@@ -117,7 +135,7 @@ public class Installer {
 
         List<String> installedFiles;
         if (dependency.unzip) {
-            installedFiles = FileHelper.unzipFile(downloadPath, destination);
+            installedFiles = FileHelper.unzipFile(downloadPath, destination, true);
         } else {
             installedFiles = FileHelper.copyFile(downloadPath, destination.resolve(dependency.name));
         }
@@ -137,7 +155,7 @@ public class Installer {
             List<String> installedFiles = new ArrayList<>(List.copyOf(dependency.installedFiles));
             if (installedFiles != null) {
                 Path unzipPath = serverInfo.getTempPath(dependency);
-                FileHelper.unzipFile(downloadPath, unzipPath);
+                FileHelper.unzipFile(downloadPath, unzipPath, true);
                 installedFiles.sort(Comparator.naturalOrder());
                 for (String file : installedFiles) {
                     if (!FileHelper.exists(Path.of(file))) {
