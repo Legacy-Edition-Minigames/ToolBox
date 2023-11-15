@@ -1,5 +1,6 @@
 package net.kyrptonaught.ToolBox.IO;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 
 public class FileNameCleaner {
@@ -21,5 +22,26 @@ public class FileNameCleaner {
         if (badFileName.startsWith("/"))
             badFileName = badFileName.substring(1);
         return cleanFileName(badFileName);
+    }
+
+    public static String fixPathSeparator(String name) {
+        return name.replaceAll("\\\\", "/");
+    }
+
+    public static String fixPathSeparator(Path path) {
+        return fixPathSeparator(path.toString());
+    }
+
+    public static String pathToString(Path path) {
+        String name = fixPathSeparator(path.toString());
+
+
+        if (name.startsWith("installs/")) {
+            int nextSlash = name.indexOf("/", 9);
+            if (nextSlash == -1) return "";
+
+            return name.substring(nextSlash + 1);
+        }
+        return name;
     }
 }

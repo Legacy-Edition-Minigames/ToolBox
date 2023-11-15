@@ -56,7 +56,7 @@ public class Installer {
             InstalledDependencyInfo installedDependency = getInstalledDependency(serverInfo, dependency);
             if (installedDependency.installedFiles != null)
                 for (String file : installedDependency.installedFiles)
-                    if (!FileHelper.exists(Path.of(file))) {
+                    if (!FileHelper.exists(serverInfo.getPath().resolve(file))) {
                         replaceMissingFiles(serverInfo, installedDependency);
                         break;
                     }
@@ -72,7 +72,7 @@ public class Installer {
         String name = serverInfo.getName() + " (Imported)";
 
         //todo improve this conflict logic
-        while(Menu.getServerFromName(name) !=null){
+        while (Menu.getServerFromName(name) != null) {
             name += " (duplicate)";
         }
         serverInfo.setName(name);
@@ -131,7 +131,7 @@ public class Installer {
             FileHelper.download(GithubHelper.convertRepoToZipball(dependency.url), downloadPath);
         }
 
-        clearOldFiles(dependency.installedFiles);
+        clearOldFiles(serverInfo, dependency.installedFiles);
 
         List<String> installedFiles;
         if (dependency.unzip) {
@@ -140,7 +140,6 @@ public class Installer {
             installedFiles = FileHelper.copyFile(downloadPath, destination.resolve(dependency.name));
         }
 
-        installedFiles.add(destination.toString());
         dependency.installedFiles = installedFiles;
         dependency.hash = hash;
         FileHelper.writeFile(serverInfo.getInstalledDependencyPath(dependency), ConfigLoader.serializeToolboxInstall(dependency));
@@ -158,14 +157,14 @@ public class Installer {
                 FileHelper.unzipFile(downloadPath, unzipPath, true);
                 installedFiles.sort(Comparator.naturalOrder());
                 for (String file : installedFiles) {
-                    if (!FileHelper.exists(Path.of(file))) {
+                    Path path = serverInfo.getPath().resolve(file);
+                    if (!FileHelper.exists(path)) {
                         System.out.println("Replacing file: " + file);
 
-                        Path path = Path.of(file);
                         if (Files.isDirectory(path)) {
                             FileHelper.createDir(path);
                         } else {
-                            FileHelper.copyFile(Path.of(file.replace(serverInfo.getPath().toString(), unzipPath.toString())), path);
+                            FileHelper.copyFile(unzipPath.resolve(file), path);
                         }
                     }
                 }
@@ -190,7 +189,7 @@ public class Installer {
                 }
                 if (!found) {
                     System.out.println("Removing deleted dependency: " + installedDependency.getDisplayName());
-                    clearOldFiles(installedDependency.installedFiles);
+                    clearOldFiles(serverInfo, installedDependency.installedFiles);
                     FileHelper.delete(dependencyPath);
                 }
             }
@@ -199,10 +198,10 @@ public class Installer {
         }
     }
 
-    private static void clearOldFiles(List<String> previousInstalledFiles) {
+    private static void clearOldFiles(InstalledServerInfo serverInfo, List<String> previousInstalledFiles) {
         if (previousInstalledFiles != null) {
             for (String string : previousInstalledFiles) {
-                FileHelper.delete(Path.of(string));
+                FileHelper.delete(serverInfo.getPath().resolve(string));
             }
         }
     }

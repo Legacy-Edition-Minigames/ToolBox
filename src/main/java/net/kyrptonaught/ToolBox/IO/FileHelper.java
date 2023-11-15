@@ -1,9 +1,6 @@
 package net.kyrptonaught.ToolBox.IO;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.URL;
 import java.nio.file.*;
@@ -61,14 +58,15 @@ public class FileHelper {
             Enumeration<? extends ZipEntry> entries = zip.entries();
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
+                String entryName = FileNameCleaner.fixPathSeparator(entry.getName());
 
                 if (!firstChecked) {
                     firstChecked = true;
                     if (entry.isDirectory())
-                        initialDir = entry.getName();
+                        initialDir = entryName;
                 }
 
-                Path output = unzipPath.resolve(initialDir == null ? entry.getName() : entry.getName().replace(initialDir, ""));
+                Path output = unzipPath.resolve(initialDir == null ? entryName : entryName.replace(initialDir, ""));
 
                 //skip toolbox folder in repo
                 if (skipTB && (entry.getName().contains(".toolbox") || entry.getName().contains(".github")))
@@ -80,7 +78,9 @@ public class FileHelper {
                     Files.createDirectories(output.getParent());
                     Files.copy(zip.getInputStream(entry), output, StandardCopyOption.REPLACE_EXISTING);
                 }
-                installedFiles.add(output.toString());
+                String installedFile = FileNameCleaner.pathToString(output);
+                if (!installedFile.isEmpty() && !installedFile.equals("/"))
+                    installedFiles.add(installedFile);
                 //System.out.println(count + "/" + size);
             }
             installedFiles.sort(Comparator.reverseOrder());
@@ -145,7 +145,7 @@ public class FileHelper {
         List<String> installedFiles = new ArrayList<>();
         try {
             Files.move(source, destination, StandardCopyOption.REPLACE_EXISTING);
-            installedFiles.add(destination.toString());
+            installedFiles.add(FileNameCleaner.pathToString(destination));
         } catch (Exception e) {
             System.out.println("Failed to copy file: " + source + " -> " + destination);
             e.printStackTrace();
@@ -157,7 +157,7 @@ public class FileHelper {
         List<String> installedFiles = new ArrayList<>();
         try {
             Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
-            installedFiles.add(destination.toString());
+            installedFiles.add(FileNameCleaner.pathToString(destination));
         } catch (Exception e) {
             System.out.println("Failed to copy file: " + source + " -> " + destination);
             e.printStackTrace();
@@ -251,5 +251,11 @@ public class FileHelper {
 
     public static boolean exists(Path filePath) {
         return Files.exists(filePath);
+    }
+
+    public static boolean renameDirectory(Path original, Path destination) {
+        File file = original.toFile();
+        file.renameTo(destination.toFile());
+        return true;
     }
 }

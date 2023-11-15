@@ -169,8 +169,9 @@ public class Menu {
                 3. Verify Integrity
                 4. Share Install
                 5. Accept EULA
-                6. Reinstall
-                7. Delete
+                6. Rename Server
+                7. Reinstall
+                8. Delete
                                 
                 0. Back
                  """);
@@ -206,11 +207,25 @@ public class Menu {
             System.out.println();
             FileHelper.createDir(Path.of("packaged"));
             Installer.packageInstall(serverInfo);
+            System.out.println("Placed packaged server in: " + Path.of("packaged/" + serverInfo.getName() + ".toolbox"));
+            System.out.println();
+            pressEnterToCont(input);
         } else if (selectedAction == 5) {
             System.out.println("Checking EULA...");
             System.out.println();
             checkEula(input, serverInfo);
         } else if (selectedAction == 6) {
+            String newName = askServerName(input, serverInfo.getName());
+
+            System.out.println();
+            System.out.println("Renaming to " + newName);
+            FileHelper.renameDirectory(serverInfo.getPath(), Path.of("installs/"+newName));
+            serverInfo.setName(newName);
+            serverInfo.setPath();
+            FileHelper.writeFile(serverInfo.getMetaPath().resolve("toolbox.json"), ConfigLoader.serializeToolboxInstall(serverInfo));
+            System.out.println("Complete");
+            System.out.println();
+        } else if (selectedAction == 7) {
             System.out.println("This server and all data associated with it will be permanently deleted before being reinstalled.");
             System.out.println("This is irreversible.");
             System.out.println();
@@ -229,7 +244,7 @@ public class Menu {
                 System.out.println();
                 pressEnterToCont(input);
             }
-        } else if (selectedAction == 7) {
+        } else if (selectedAction == 8) {
             System.out.println("This server and all data associated with it will be permanently deleted.");
             System.out.println("This is irreversible.");
             System.out.println();
@@ -397,7 +412,7 @@ public class Menu {
             System.out.println("Please enter the path of the .toolbox file (You can also drag and drop the file here)");
             System.out.print("Path: ");
             String path = readLine(input).trim();
-            path = path.replaceAll("^\"|\"$", "");
+            path = path.replaceAll("^[\"|']|[\"|']$", "");
 
             System.out.println();
             System.out.println("Installing");
@@ -415,7 +430,7 @@ public class Menu {
             System.out.println("Please enter the URL of the .toolbox file");
             System.out.print("URL: ");
             String path = readLine(input).trim();
-            path = path.replaceAll("^\"|\"$", "");
+            path = path.replaceAll("^[\"|']|[\"|']$", "");
 
             System.out.println();
             System.out.println("Installing");
