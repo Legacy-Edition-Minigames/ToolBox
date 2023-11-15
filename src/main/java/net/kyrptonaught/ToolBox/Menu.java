@@ -219,7 +219,7 @@ public class Menu {
 
             System.out.println();
             System.out.println("Renaming to " + newName);
-            FileHelper.renameDirectory(serverInfo.getPath(), Path.of("installs/"+newName));
+            FileHelper.renameDirectory(serverInfo.getPath(), Path.of("installs/" + newName));
             serverInfo.setName(newName);
             serverInfo.setPath();
             FileHelper.writeFile(serverInfo.getMetaPath().resolve("toolbox.json"), ConfigLoader.serializeToolboxInstall(serverInfo));
