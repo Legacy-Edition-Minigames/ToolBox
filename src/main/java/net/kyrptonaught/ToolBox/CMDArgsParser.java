@@ -1,5 +1,9 @@
 package net.kyrptonaught.ToolBox;
 
+import net.kyrptonaught.ToolBox.IO.ConfigLoader;
+import net.kyrptonaught.ToolBox.IO.FileHelper;
+import net.kyrptonaught.ToolBox.configs.BranchConfig;
+import net.kyrptonaught.ToolBox.configs.BranchesConfig;
 
 public class CMDArgsParser {
 
@@ -58,5 +62,52 @@ public class CMDArgsParser {
 
     public static boolean updateAll() {
         return containsArgs("--updateAll");
+    }
+
+    public static boolean installServer() {
+        return containsArgs("--installServer");
+    }
+
+    public static int getNewServerRam() {
+        for (int i = 0; i < args.length - 1; i++) {
+            if (args[i].equalsIgnoreCase("--newServerRam") && !args[i + 1].startsWith("--")) {
+                return Integer.parseInt(args[i + 1]);
+            }
+        }
+        return 3;
+    }
+
+    public static BranchesConfig.BranchInfo getNewServerBranch() {
+        BranchesConfig availableBranches = ConfigLoader.parseBranches(FileHelper.download("https://raw.githubusercontent.com/Legacy-Edition-Minigames/ToolBox/java/testConfigs/TestBranches.json"));
+
+        for (int i = 0; i < args.length - 1; i++) {
+            if (args[i].equalsIgnoreCase("--newServerBranch") && !args[i + 1].startsWith("--")) {
+                String branchURL = args[i + 1];
+                
+                for (BranchesConfig.BranchInfo branch : availableBranches.branches) {
+                    if (branchURL == branch.url) {
+                        return branch;
+                    }
+                }
+            }
+        }
+        System.out.println("Using default branch");
+
+        BranchesConfig.BranchInfo defaultBranch = availableBranches.branches.get(0);
+
+        return defaultBranch;
+    }
+
+    public static boolean doesNewServerAgreeToEULA() {
+        for (int i = 0; i < args.length - 1; i++) {
+            if (args[i].equalsIgnoreCase("--newServerEULA") && !args[i + 1].startsWith("--")) {
+                return Boolean.parseBoolean(args[i+1]);
+            }
+        }
+        return false;
+    }
+
+    public static boolean unattendedInstall() {
+        return containsArgs("--unattendedInstall");
     }
 }
