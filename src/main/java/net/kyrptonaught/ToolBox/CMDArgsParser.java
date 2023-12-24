@@ -85,7 +85,7 @@ public class CMDArgsParser {
                 String branchURL = args[i + 1];
                 
                 for (BranchesConfig.BranchInfo branch : availableBranches.branches) {
-                    if (branchURL == branch.url) {
+                    if (branchURL.equals(branch.url)) {
                         return branch;
                     }
                 }
