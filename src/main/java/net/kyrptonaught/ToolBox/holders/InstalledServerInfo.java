@@ -5,6 +5,8 @@ import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.configs.BranchesConfig;
 
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class InstalledServerInfo {
 
@@ -16,7 +18,7 @@ public class InstalledServerInfo {
 
     private String installName;
 
-    private String customLaunchArgs;
+    private final HashMap<String, String> launchARGS = new HashMap<>();
 
     public InstalledServerInfo(BranchConfig branchConfig, BranchesConfig.BranchInfo branchInfo) {
         this.branchConfig = branchConfig;
@@ -38,16 +40,19 @@ public class InstalledServerInfo {
         installName = name;
     }
 
-    public void setCustomLaunchArgs(String args) {
-        customLaunchArgs = args;
+    public void setRAMArgs(int ram) {
+        setCustomLaunchArgs("<ram>", "-Xmx" + ram + "G -Xms" + ram + "G");
     }
 
-    public String getLaunchArgs() {
-        if (customLaunchArgs != null) {
-            int space = branchConfig.launchCMD.indexOf(" ");
-            return branchConfig.launchCMD.substring(0, space) + " " + customLaunchArgs + branchConfig.launchCMD.substring(space);
-        }
-        return branchConfig.launchCMD;
+    public void setCustomLaunchArgs(String key, String args) {
+        launchARGS.put(key, args);
+    }
+
+    public String getLaunchCMD() {
+        return Pattern.compile("<[a-zA-Z0-9]+>")
+                .matcher(branchConfig.launchCMD)
+                .replaceAll(matchResult -> launchARGS.getOrDefault(matchResult.group(), ""))
+                .replaceAll("\\s{2}", " "); //remove double spaces from blank substitutions
     }
 
     public BranchConfig.Dependency[] getDependencies() {

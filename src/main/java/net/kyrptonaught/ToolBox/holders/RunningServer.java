@@ -22,7 +22,7 @@ public class RunningServer {
         this.serverInfo = serverInfo;
         new Thread(() -> {
             try {
-                process.set(new ProcessBuilder(serverInfo.getLaunchArgs().split(" "))
+                process.set(new ProcessBuilder(serverInfo.getLaunchCMD().split(" "))
                         .directory(new File(System.getProperty("user.dir") + "/" + serverInfo.getPath() + "/"))
                         .redirectErrorStream(true)
                         .start());

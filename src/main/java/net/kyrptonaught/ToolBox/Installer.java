@@ -18,6 +18,10 @@ import java.util.stream.Stream;
 
 public class Installer {
 
+    public static void saveInstalledServerInfo(InstalledServerInfo serverInfo) {
+        FileHelper.writeFile(serverInfo.getMetaPath().resolve("toolbox.json"), ConfigLoader.serializeToolboxInstall(serverInfo));
+    }
+
     public static List<InstalledServerInfo> detectInstalls() {
         Path installPath = Path.of("installs");
 
@@ -46,7 +50,7 @@ public class Installer {
         System.out.println("Checking dependencies...");
         installDependencies(serverInfo);
 
-        FileHelper.writeFile(serverInfo.getMetaPath().resolve("toolbox.json"), ConfigLoader.serializeToolboxInstall(serverInfo));
+        saveInstalledServerInfo(serverInfo);
         System.out.println("Dependencies done");
     }
 
@@ -80,7 +84,7 @@ public class Installer {
 
         FileHelper.createDir(serverInfo.getPath());
         FileHelper.unzipFile(path, serverInfo.getPath(), false);
-        FileHelper.writeFile(serverInfo.getMetaPath().resolve("toolbox.json"), ConfigLoader.serializeToolboxInstall(serverInfo));
+        saveInstalledServerInfo(serverInfo);
 
         return name;
     }

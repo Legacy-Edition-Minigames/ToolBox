@@ -10,7 +10,7 @@ import net.kyrptonaught.ToolBox.holders.RunningServer;
 public class Executer {
 
     public static void startServer(InstalledServerInfo serverInfo) {
-        System.out.println("Starting server: " + serverInfo.getLaunchArgs());
+        System.out.println("Starting server: " + serverInfo.getLaunchCMD());
         RunningServer runningServer = ServerRunner.runServer(serverInfo);
 
         System.out.println();

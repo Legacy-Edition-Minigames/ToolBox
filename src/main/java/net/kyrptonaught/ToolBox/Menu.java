@@ -225,7 +225,7 @@ public class Menu {
             FileHelper.renameDirectory(serverInfo.getPath(), Path.of("installs/" + newName));
             serverInfo.setName(newName);
             serverInfo.setPath();
-            FileHelper.writeFile(serverInfo.getMetaPath().resolve("toolbox.json"), ConfigLoader.serializeToolboxInstall(serverInfo));
+            Installer.saveInstalledServerInfo(serverInfo);
             System.out.println("Complete");
             System.out.println();
         } else if (selectedAction == 7) {
@@ -356,7 +356,7 @@ public class Menu {
         serverInfo.setName(enteredServerName);
         serverInfo.setPath();
         if (allocatedRam < 1) allocatedRam = 3;
-        serverInfo.setCustomLaunchArgs("-Xmx" + allocatedRam + "G -Xms" + allocatedRam + "G");
+        serverInfo.setRAMArgs(allocatedRam);
 
         System.out.println("Creating toolbox instance in " + serverInfo.getPath());
         Installer.installAndCheckForUpdates(serverInfo);
