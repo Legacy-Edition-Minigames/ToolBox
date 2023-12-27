@@ -17,10 +17,21 @@ public class Automation {
     static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
     public static void run() {
-        String serverName = CMDArgsParser.getTargetServer();
-        if (serverName == null) return;
+        if (CMDArgsParser.installServer()) {
+            installServer();
+            return;
+        }
 
-        InstalledServerInfo server = Menu.getServerFromName(serverName);
+        InstalledServerInfo server = Menu.getServerFromName(CMDArgsParser.getTargetServer());
+
+        if (server == null) {
+            System.out.println();
+            System.out.println("This server is invalid.");
+            System.out.println("Returning to menu.");
+            Menu.pressEnterToCont(input);
+            return;
+        }
+
         Menu.setState(Menu.State.EXISTING_INSTALL, server);
 
         if (CMDArgsParser.updateServer())
@@ -28,48 +39,48 @@ public class Automation {
 
         if (CMDArgsParser.launchServer())
             Executer.startServer(server);
-        
-        if (CMDArgsParser.installServer()) {
-            BranchesConfig.BranchInfo branchInfo = CMDArgsParser.getNewServerBranch();
 
-            String url = GithubHelper.convertRepoToToolboxConfig(branchInfo.url);
-            BranchConfig branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
+    }
 
-            if (branch == null) {
-                System.out.println();
-                System.out.println("This branch is invalid.");
-                System.out.println("Returning to menu.");
-                Menu.pressEnterToCont(input);
+    public static void installServer() {
+        BranchesConfig.BranchInfo branchInfo = CMDArgsParser.getNewServerBranch();
 
-                return;
-            }
+        String url = GithubHelper.convertRepoToToolboxConfig(branchInfo.url);
+        BranchConfig branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
 
-            String name = CMDArgsParser.getTargetServer();
+        if (branch == null) {
+            System.out.println();
+            System.out.println("This branch is invalid.");
+            System.out.println("Returning to menu.");
+            Menu.pressEnterToCont(input);
+            return;
+        }
 
-            int allocatedRam = CMDArgsParser.getNewServerRam();
+        InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
 
-            InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
-            serverInfo.setName(name);
-            serverInfo.setPath();
-            if (allocatedRam < 1) allocatedRam = 3;
-            serverInfo.setCustomLaunchArgs("-Xmx" + allocatedRam + "G -Xms" + allocatedRam + "G");
+        String name = CMDArgsParser.getTargetServer();
+        if (name != null) serverInfo.setName(name);
+        serverInfo.setPath();
 
-            Installer.installAndCheckForUpdates(serverInfo);
-            if (CMDArgsParser.doesNewServerAgreeToEULA()) {
-                Path eulaFile = serverInfo.getPath().resolve("eula.txt");
+        int allocatedRam = CMDArgsParser.getNewServerRam();
+        if (allocatedRam < 1) allocatedRam = 3;
+        serverInfo.setRAMArgs(allocatedRam);
 
-                EulaChecker.agreeToEula(eulaFile);
-            } else if (!CMDArgsParser.unattendedInstall()) {
-                Menu.checkEula(input, serverInfo);
-            } else System.out.println("Did not agree to Mojang's EULA");
+        Installer.installAndCheckForUpdates(serverInfo);
+        if (CMDArgsParser.doesNewServerAgreeToEULA()) {
+            Path eulaFile = serverInfo.getPath().resolve("eula.txt");
 
-            if (CMDArgsParser.unattendedInstall()) {
-                Menu.setState(State.EXIT);
-            } else {
-                Menu.pressEnterToCont(input);
+            EulaChecker.agreeToEula(eulaFile);
+        } else if (!CMDArgsParser.unattendedInstall()) {
+            Menu.checkEula(input, serverInfo);
+        } else System.out.println("Did not agree to Mojang's EULA");
 
-                Menu.setState(State.EXISTING_INSTALL, serverInfo);
-            }
+        if (CMDArgsParser.unattendedInstall()) {
+            Menu.setState(State.EXIT);
+        } else {
+            Menu.pressEnterToCont(input);
+
+            Menu.setState(State.EXISTING_INSTALL, serverInfo);
         }
     }
 }
