@@ -9,6 +9,7 @@ import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
 public class ConfigLoader {
     public static Gson gson = new Gson().newBuilder()
             .setLenient()
+            .disableHtmlEscaping()
             .setPrettyPrinting()
             .create();
 
