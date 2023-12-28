@@ -1,17 +1,17 @@
 package net.kyrptonaught.ToolBox;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.file.Path;
-
-import net.kyrptonaught.ToolBox.Menu.State;
 import net.kyrptonaught.ToolBox.IO.ConfigLoader;
 import net.kyrptonaught.ToolBox.IO.EulaChecker;
 import net.kyrptonaught.ToolBox.IO.FileHelper;
 import net.kyrptonaught.ToolBox.IO.GithubHelper;
+import net.kyrptonaught.ToolBox.Menu.State;
 import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.configs.BranchesConfig;
 import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.file.Path;
 
 public class Automation {
     static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));

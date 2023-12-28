@@ -2,7 +2,6 @@ package net.kyrptonaught.ToolBox;
 
 import net.kyrptonaught.ToolBox.IO.ConfigLoader;
 import net.kyrptonaught.ToolBox.IO.FileHelper;
-import net.kyrptonaught.ToolBox.configs.BranchConfig;
 import net.kyrptonaught.ToolBox.configs.BranchesConfig;
 
 public class CMDArgsParser {
@@ -83,7 +82,7 @@ public class CMDArgsParser {
         for (int i = 0; i < args.length - 1; i++) {
             if (args[i].equalsIgnoreCase("--newServerBranch") && !args[i + 1].startsWith("--")) {
                 String branchURL = args[i + 1];
-                
+
                 for (BranchesConfig.BranchInfo branch : availableBranches.branches) {
                     if (branchURL.equals(branch.url)) {
                         return branch;
@@ -101,7 +100,7 @@ public class CMDArgsParser {
     public static boolean doesNewServerAgreeToEULA() {
         for (int i = 0; i < args.length - 1; i++) {
             if (args[i].equalsIgnoreCase("--newServerEULA") && !args[i + 1].startsWith("--")) {
-                return Boolean.parseBoolean(args[i+1]);
+                return Boolean.parseBoolean(args[i + 1]);
             }
         }
         return false;

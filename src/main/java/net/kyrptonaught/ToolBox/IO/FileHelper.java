@@ -219,26 +219,6 @@ public class FileHelper {
         return null;
     }
 
-    public static boolean writeLines(Path filePath, List<String> lines) {
-        try {
-            Files.write(filePath, lines);
-            return true;
-        } catch (Exception e) {
-            System.out.println("Error writing: " + filePath);
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public static List<String> readLines(Path filePath) {
-        try {
-            return Files.readAllLines(filePath);
-        } catch (Exception e) {
-            System.out.println("Error reading: " + filePath);
-        }
-        return null;
-    }
-
     public static boolean delete(Path filePath) {
         try {
             Files.delete(filePath);

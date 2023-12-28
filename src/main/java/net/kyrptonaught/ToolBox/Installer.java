@@ -130,7 +130,7 @@ public class Installer {
 
         if (dependency.gitRepo) {
             FileHelper.download(GithubHelper.convertRepoToZipball(dependency.url), downloadPath);
-        }else {
+        } else {
             FileHelper.download(dependency.url, downloadPath);
         }
 

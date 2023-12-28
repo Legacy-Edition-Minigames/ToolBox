@@ -96,14 +96,15 @@ public class Menu {
         System.out.println("Installed Servers");
         if (!installedServers.isEmpty()) {
             for (InstalledServerInfo serverInfo : installedServers) {
-                if (runningServers.stream().anyMatch(runningServer -> runningServer.serverInfo.getName().equals(serverInfo.getName()))) continue;
+                if (runningServers.stream().anyMatch(runningServer -> runningServer.serverInfo.getName().equals(serverInfo.getName())))
+                    continue;
                 serverOptions++;
                 System.out.println(serverOptions + ". " + serverInfo.getName() + " (" + serverInfo.getBranchInfo().name + ")");
                 options.put(serverOptions, () -> setState(State.EXISTING_INSTALL, serverInfo));
             }
         }
 
-        if(serverOptions == 0) {
+        if (serverOptions == 0) {
             System.out.println("--NONE--");
         }
 
