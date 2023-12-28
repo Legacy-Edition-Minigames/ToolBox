@@ -187,13 +187,12 @@ public class FileHelper {
         return false;
     }
 
-    public static String hashFile(Path filePath) {
+    public static String hashFile(byte[] data) {
         try {
-            byte[] data = Files.readAllBytes(filePath);
             byte[] hash = MessageDigest.getInstance("SHA-256").digest(data);
             return new BigInteger(1, hash).toString(16);
         } catch (Exception e) {
-            System.out.println("Failed to hash file: " + filePath);
+            System.out.println("Failed to hash file");
             e.printStackTrace();
         }
         return null;

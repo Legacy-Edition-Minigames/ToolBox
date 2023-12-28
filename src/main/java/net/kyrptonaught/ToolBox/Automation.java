@@ -22,24 +22,25 @@ public class Automation {
             return;
         }
 
-        InstalledServerInfo server = Menu.getServerFromName(CMDArgsParser.getTargetServer());
+        if (CMDArgsParser.updateServer() || CMDArgsParser.launchServer()) {
+            InstalledServerInfo server = Menu.getServerFromName(CMDArgsParser.getTargetServer());
 
-        if (server == null) {
-            System.out.println();
-            System.out.println("This server is invalid.");
-            System.out.println("Returning to menu.");
-            Menu.pressEnterToCont(input);
-            return;
+            if (server == null) {
+                System.out.println();
+                System.out.println("This server is invalid.");
+                System.out.println("Returning to menu.");
+                Menu.pressEnterToCont(input);
+                return;
+            }
+
+            Menu.setState(Menu.State.EXISTING_INSTALL, server);
+
+            if (CMDArgsParser.updateServer())
+                Executer.updateServer(server);
+
+            if (CMDArgsParser.launchServer())
+                Executer.startServer(server);
         }
-
-        Menu.setState(Menu.State.EXISTING_INSTALL, server);
-
-        if (CMDArgsParser.updateServer())
-            Executer.updateServer(server);
-
-        if (CMDArgsParser.launchServer())
-            Executer.startServer(server);
-
     }
 
     public static void installServer() {
