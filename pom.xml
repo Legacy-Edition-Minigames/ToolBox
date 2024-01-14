@@ -6,7 +6,7 @@
 
     <groupId>net.kyrptonaught</groupId>
     <artifactId>ToolBox2.0</artifactId>
-    <version>0.0.1</version>
+    <version>2.0.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -40,7 +40,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                    <finalName>Toolbox 2.0</finalName>
+                    <finalName>Toolbox2.0</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
@@ -59,8 +59,8 @@
                         <goals><goal>launch4j</goal></goals>
                         <configuration>
                             <headerType>console</headerType>
-                            <outfile>target/dist/Toolbox 2.0.exe</outfile>
-                            <jar>target/dist/Toolbox 2.0.jar</jar>
+                            <outfile>target/dist/Toolbox2.0.exe</outfile>
+                            <jar>target/dist/Toolbox2.0.jar</jar>
                             <icon>BattleModeIcon.ico</icon>
                             <jre><path>%JAVA_HOME%;%PATH%</path></jre>
                             <versionInfo>

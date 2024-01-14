@@ -1,6 +1,5 @@
 package net.kyrptonaught.ToolBox;
 
-import com.google.gson.JsonObject;
 import net.kyrptonaught.ToolBox.IO.ConfigLoader;
 import net.kyrptonaught.ToolBox.IO.FileHelper;
 import net.kyrptonaught.ToolBox.IO.GithubHelper;

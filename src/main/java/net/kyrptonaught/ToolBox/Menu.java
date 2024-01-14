@@ -6,16 +6,21 @@ import net.kyrptonaught.ToolBox.configs.BranchesConfig;
 import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
 import net.kyrptonaught.ToolBox.holders.RunningServer;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class Menu {
+    public static boolean SKIP_SHUTDOWN_TASKS = false;
+
 
     public static State state;
     public static Object stateData;
@@ -24,18 +29,22 @@ public class Menu {
         CMDArgsParser.setArgs(args);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println();
-            System.out.println();
-            System.out.println("SHUTTING DOWN");
-            System.out.println("Attempting to stop running servers");
-            ServerRunner.exit();
-
+            if(!SKIP_SHUTDOWN_TASKS) {
+                System.out.println();
+                System.out.println();
+                System.out.println("SHUTTING DOWN");
+                System.out.println("Attempting to stop running servers");
+                ServerRunner.exit();
+            }
         }));
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
         setState(CMDArgsParser.skipSplash() ? State.MENU : State.SPLASH);
 
         Automation.run();
+
+        clearConsole();
+        //checkForUpdate(input);
 
         while (true) {
             clearConsole();
@@ -490,6 +499,45 @@ public class Menu {
             System.out.println("EULA accepted.");
         }
         System.out.println();
+    }
+
+    public static void checkForUpdate(BufferedReader input) {
+        System.out.println("Checking for Toolbox Updates...");
+        System.out.println();
+        System.out.println("Current version: Toolbox 2.0 v" + UpdateChecker.version);
+
+        String update = UpdateChecker.isUpdateAvailable();
+        if (update != null) {
+            System.out.println("An update for Toolbox is available: v" + update);
+            System.out.println();
+            System.out.println("1. View Release");
+            System.out.println("2. Download Update");
+
+            System.out.println("0. Ignore");
+
+            System.out.println();
+            System.out.print("Select Option: ");
+
+            int selection = readInt(input);
+            if (selection == 1) {
+                if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                    try {
+                        Desktop.getDesktop().browse(new URI(UpdateChecker.URL));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                clearConsole();
+                checkForUpdate(input);
+            } else if (selection == 2) {
+                System.out.println("Installing update");
+                UpdateChecker.prepUpdate();
+                System.out.println();
+                System.out.println("Update installed. Closing Toolbox. Please ");
+                pressEnterToCont(input);
+                setState(State.EXIT);
+            }
+        }
     }
 
     public static void clearConsole() {
