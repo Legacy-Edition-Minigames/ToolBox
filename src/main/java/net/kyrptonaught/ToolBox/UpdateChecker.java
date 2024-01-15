@@ -45,10 +45,10 @@ public class UpdateChecker {
                 FileHelper.download(obj.get("browser_download_url").getAsString(), Paths.get(".toolbox").resolve("update").resolve(obj.get("name").getAsString()));
             }
 
-            FileHelper.copyFile(Paths.get(".").resolve("ToolBox2.0.jar"), Paths.get(".toolbox").resolve("Updater.jar"));
+            FileHelper.copyFile(Paths.get(".").resolve("Toolbox2.0.jar"), Paths.get(".toolbox").resolve("Updater.jar"));
             FileHelper.writeFile(Paths.get(".toolbox").resolve("UPDATE_IN_PROGRESS"), "rua");
 
-            launchJar(".toolbox/Updater.jar", "--updater");
+            launchJar(".toolbox/Updater.jar", "--updater", true);
         }
     }
 
@@ -81,17 +81,23 @@ public class UpdateChecker {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         Menu.pressEnterToCont(input);
 
-        launchJar("Toolbox2.0.jar", "");
+        launchJar("Toolbox2.0.jar", "", true);
     }
 
-    private static void launchJar(String jar, String args) {
+    private static void launchJar(String jar, String args, Boolean waitfor) {
         try {
-            new ProcessBuilder("java", "-jar", jar, args)
+            ProcessBuilder launcher = new ProcessBuilder("java", "-jar", jar, args)
                     .directory(new File(System.getProperty("user.dir")))
-                    .inheritIO()
-                    .start();
+                    .inheritIO();
+
+            Process launchedjar = launcher.start();
 
             Menu.SKIP_SHUTDOWN_TASKS = true;
+
+            if (waitfor) {
+                launchedjar.waitFor();
+            }
+
             System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
