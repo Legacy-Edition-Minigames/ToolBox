@@ -4,7 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.kyrptonaught.ToolBox.IO.FileHelper;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,22 +48,15 @@ public class UpdateChecker {
             FileHelper.copyFile(Paths.get(".").resolve("ToolBox2.0.jar"), Paths.get(".toolbox").resolve("Updater.jar"));
             FileHelper.writeFile(Paths.get(".toolbox").resolve("UPDATE_IN_PROGRESS"), "rua");
 
-            try {
-                new ProcessBuilder("java", "-jar", ".toolbox/Updater.jar", "--updater")
-                        .directory(new File(System.getProperty("user.dir")))
-                        .start();
-
-                Menu.SKIP_SHUTDOWN_TASKS = true;
-                System.exit(0);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            launchJar(".toolbox/Updater.jar", "--updater");
         }
     }
 
     public static void installUpdate() {
+        Menu.clearConsole();
+        System.out.println("Installing Toolbox update...");
         try (Stream<Path> files = Files.walk(Paths.get(".toolbox").resolve("update"), 1)) {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
 
             files.forEach(path -> {
                 if (!Files.isDirectory(path)) {
@@ -69,12 +64,38 @@ public class UpdateChecker {
                 }
             });
         } catch (Exception e) {
+            System.out.println("Update failed");
             e.printStackTrace();
             return;
         }
 
+        System.out.println("Update successful");
+        System.out.println("Cleaning up...");
         FileHelper.deleteDirectory(Paths.get(".toolbox").resolve("update"));
         FileHelper.delete(Paths.get(".toolbox").resolve("UPDATE_IN_PROGRESS"));
+
+
+        System.out.println("Done. Relaunching toolbox...");
+        System.out.println();
+
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        Menu.pressEnterToCont(input);
+
+        launchJar("Toolbox2.0.jar", "");
+    }
+
+    private static void launchJar(String jar, String args) {
+        try {
+            new ProcessBuilder("java", "-jar", jar, args)
+                    .directory(new File(System.getProperty("user.dir")))
+                    .inheritIO()
+                    .start();
+
+            Menu.SKIP_SHUTDOWN_TASKS = true;
+            System.exit(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static int compareVersions(String version1, String version2) {
