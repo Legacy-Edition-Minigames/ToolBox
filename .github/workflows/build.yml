@@ -28,7 +28,7 @@ jobs:
         run: tar -xzf l4j.tgz
 
       - name: l4j run
-        run: ./launch4j/launch4j ./launch4jConfig.xml
+        run: java -jar launch4j/launch4j.jar launch4jConfig.xml
 
       - name: capture build artifacts
         uses: actions/upload-artifact@v3
