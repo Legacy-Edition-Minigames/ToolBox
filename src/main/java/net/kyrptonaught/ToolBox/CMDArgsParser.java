@@ -6,7 +6,7 @@ import net.kyrptonaught.ToolBox.configs.BranchesConfig;
 
 public class CMDArgsParser {
 
-    private static String[] args;
+    public static String[] args;
 
     public static void setArgs(String[] args) {
         CMDArgsParser.args = args;

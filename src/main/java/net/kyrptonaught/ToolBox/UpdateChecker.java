@@ -3,20 +3,16 @@ package net.kyrptonaught.ToolBox;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.kyrptonaught.ToolBox.IO.FileHelper;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UpdateChecker {
-
-    //todo change on every new release
-    public static String version = "1.0";
-
+    public static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     public static String URL = "https://github.com/Legacy-Edition-Minigames/ToolBox/releases";
 
     public static String isUpdateAvailable() {
@@ -24,7 +20,7 @@ public class UpdateChecker {
 
         if (!response.isEmpty()) {
             String latestRelease = response.get(0).getAsJsonObject().get("tag_name").getAsString();
-            if (compareVersions(version, latestRelease) == -1)
+            if (compareVersions(getVersion(), latestRelease) == -1)
                 return latestRelease;
             return null;
         }
@@ -33,36 +29,35 @@ public class UpdateChecker {
         return null;
     }
 
-    public static void prepUpdate() {
-        FileHelper.createDir(Paths.get(".toolbox").resolve("update"));
-
-        JsonArray response = FileHelper.download(URL.replace("//github.com/", "//api.github.com/repos/"), JsonArray.class);
-
-        if (!response.isEmpty()) {
-            JsonArray assets = response.get(0).getAsJsonObject().get("assets").getAsJsonArray();
-            for (int i = 0; i < assets.size(); i++) {
-                JsonObject obj = assets.get(i).getAsJsonObject();
-                FileHelper.download(obj.get("browser_download_url").getAsString(), Paths.get(".toolbox").resolve("update").resolve(obj.get("name").getAsString()));
-            }
-
-            FileHelper.copyFile(Paths.get(".").resolve("Toolbox2.0.jar"), Paths.get(".toolbox").resolve("Updater.jar"));
-            FileHelper.writeFile(Paths.get(".toolbox").resolve("UPDATE_IN_PROGRESS"), "rua");
-
-            launchJar(".toolbox/Updater.jar", "--updater", true);
+    public static void runAndUpdate() {
+        String latestRelease = isUpdateAvailable();
+        if (latestRelease != null) {
+            installUpdate();
         }
+
+        launchJar(".toolbox/launch.jar", getToolboxRunArgs(), true);
     }
 
     public static void installUpdate() {
         Menu.clearConsole();
         System.out.println("Installing Toolbox update...");
-        try (Stream<Path> files = Files.walk(Paths.get(".toolbox").resolve("update"), 1)) {
-            Thread.sleep(1000);
+        try {
+            JsonArray response = FileHelper.download(URL.replace("//github.com/", "//api.github.com/repos/"), JsonArray.class);
 
-            files.forEach(path -> {
-                if (!Files.isDirectory(path)) {
-                    FileHelper.copyFile(path, path.getFileName());
+            if (!response.isEmpty()) {
+                JsonArray assets = response.get(0).getAsJsonObject().get("assets").getAsJsonArray();
+                for (int i = 0; i < assets.size(); i++) {
+                    JsonObject obj = assets.get(i).getAsJsonObject();
+
+                    String[] fileName = obj.get("name").getAsString().split("\\.");
+
+                    String fileExtension = fileName[fileName.length - 1];
+
+                    FileHelper.download(obj.get("browser_download_url").getAsString(), Paths.get(".toolbox").resolve("launch." + fileExtension));
+
+                    FileHelper.writeFile(Paths.get(".toolbox/VERSION"), response.get(0).getAsJsonObject().get("tag_name").getAsString());
                 }
-            });
+            }
         } catch (Exception e) {
             System.out.println("Update failed");
             e.printStackTrace();
@@ -70,23 +65,19 @@ public class UpdateChecker {
         }
 
         System.out.println("Update successful");
-        System.out.println("Cleaning up...");
-        FileHelper.deleteDirectory(Paths.get(".toolbox").resolve("update"));
-        FileHelper.delete(Paths.get(".toolbox").resolve("UPDATE_IN_PROGRESS"));
-
-
         System.out.println("Done. Relaunching toolbox...");
         System.out.println();
 
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         Menu.pressEnterToCont(input);
-
-        launchJar("Toolbox2.0.jar", "", true);
     }
 
-    private static void launchJar(String jar, String args, Boolean waitfor) {
+    private static void launchJar(String jar, List<String> args, Boolean waitfor) {
+        String[] launchCommands = {"java", "-jar", jar};
+
+        args.addAll(0, List.of(launchCommands));
+
         try {
-            ProcessBuilder launcher = new ProcessBuilder("java", "-jar", jar, args)
+            ProcessBuilder launcher = new ProcessBuilder(args)
                     .directory(new File(System.getProperty("user.dir")))
                     .inheritIO();
 
@@ -121,5 +112,28 @@ public class UpdateChecker {
             }
         }
         return comparisonResult;
+    }
+
+    public static String getVersion() {
+        Path versionFile = Paths.get(".toolbox/VERSION");
+        if (FileHelper.exists(versionFile)) {
+            return FileHelper.readFile(versionFile);
+        } else {
+            return "0.0";
+        }
+    }
+
+    public static void runToolbox() {
+        launchJar(".toolbox/launch.jar", getToolboxRunArgs(), true);
+    }
+
+    public static List<String> getToolboxRunArgs() {
+        List<String> arguments = new ArrayList<String>();
+
+        arguments.add("--runToolbox");
+
+        arguments.addAll(List.of(CMDArgsParser.args));
+
+        return arguments;
     }
 }
