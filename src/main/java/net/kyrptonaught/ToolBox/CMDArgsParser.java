@@ -39,6 +39,8 @@ public class CMDArgsParser {
         return null;
     }
 
+    public static boolean autoUpdateToolbox() {return containsArgs("--autoUpdateToolbox");}
+
     public static boolean updateServer() {
         return containsArgs("--updateServer");
     }

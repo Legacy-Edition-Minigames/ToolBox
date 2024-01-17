@@ -507,6 +507,13 @@ public class Menu {
             System.out.println();
             System.out.print("Select Option: ");
 
+            if(CMDArgsParser.autoUpdateToolbox()){
+                System.out.println("Auto Accepting update...");
+                UpdateBootstrapper.installUpdate();
+                UpdateBootstrapper.runToolbox();
+                return ;
+            }
+
             int selection = readInt(input);
             if (selection == 1) {
                 if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -543,6 +550,13 @@ public class Menu {
                 System.out.println();
                 System.out.print("Select Option: ");
 
+                if(CMDArgsParser.autoUpdateToolbox()){
+                    System.out.println("Auto Accepting update...");
+                    UpdateBootstrapper.installUpdate();
+                    UpdateBootstrapper.runToolbox();
+                    return ;
+                }
+
                 int selection = readInt(input);
                 if (selection == 1) {
                     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -559,6 +573,7 @@ public class Menu {
                     System.out.println("Installing update");
                     UpdateBootstrapper.installUpdate();
                     UpdateBootstrapper.runToolbox();
+                    return;
                 }
             }
         }
