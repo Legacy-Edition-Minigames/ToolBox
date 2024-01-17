@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateChecker {
+public class UpdateBootstrapper {
     public static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     public static String URL = "https://github.com/Legacy-Edition-Minigames/ToolBox/releases";
 

@@ -497,7 +497,7 @@ public class Menu {
 
     public static void checkForUpdate(BufferedReader input) {
         System.out.println("Checking for Toolbox Updates...");
-        String installedVersion = UpdateChecker.getInstalledVersion();
+        String installedVersion = UpdateBootstrapper.getInstalledVersion();
         if (installedVersion.equals("0.0")) {
             System.out.println("Toolbox is missing files require to run. The required files will be downloaded automatically.");
             System.out.println();
@@ -511,7 +511,7 @@ public class Menu {
             if (selection == 1) {
                 if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                     try {
-                        Desktop.getDesktop().browse(new URI(UpdateChecker.URL));
+                        Desktop.getDesktop().browse(new URI(UpdateBootstrapper.URL));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -520,8 +520,8 @@ public class Menu {
                 checkForUpdate(input);
             } else if (selection == 2) {
                 System.out.println("Installing latest version");
-                UpdateChecker.installUpdate();
-                UpdateChecker.runToolbox();
+                UpdateBootstrapper.installUpdate();
+                UpdateBootstrapper.runToolbox();
                 return;
             } else if (selection == 0) {
                 System.out.println("Exiting...");
@@ -529,7 +529,7 @@ public class Menu {
             }
         }
 
-        String update = UpdateChecker.isUpdateAvailable();
+        String update = UpdateBootstrapper.isUpdateAvailable();
         if (update != null) {
             Path versionFile = Paths.get(".toolbox/VERSION");
             if (FileHelper.exists(versionFile)) {
@@ -547,7 +547,7 @@ public class Menu {
                 if (selection == 1) {
                     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                         try {
-                            Desktop.getDesktop().browse(new URI(UpdateChecker.URL));
+                            Desktop.getDesktop().browse(new URI(UpdateBootstrapper.URL));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -557,13 +557,13 @@ public class Menu {
 
                 } else if (selection == 2) {
                     System.out.println("Installing update");
-                    UpdateChecker.installUpdate();
-                    UpdateChecker.runToolbox();
+                    UpdateBootstrapper.installUpdate();
+                    UpdateBootstrapper.runToolbox();
                 }
             }
         }
         System.out.println("Already up to date");
-        UpdateChecker.runToolbox();
+        UpdateBootstrapper.runToolbox();
     }
 
     public static void clearConsole() {
