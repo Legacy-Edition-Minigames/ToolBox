@@ -8,7 +8,6 @@ import net.kyrptonaught.ToolBox.holders.RunningServer;
 
 import java.awt.*;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -20,21 +19,16 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Menu {
-    public static boolean SKIP_SHUTDOWN_TASKS = false;
-
-
     public static State state;
     public static Object stateData;
 
     public static void startStateMachine(String[] args) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if(!SKIP_SHUTDOWN_TASKS) {
-                System.out.println();
-                System.out.println();
-                System.out.println("SHUTTING DOWN");
-                System.out.println("Attempting to stop running servers");
-                ServerRunner.exit();
-            }
+            System.out.println();
+            System.out.println();
+            System.out.println("SHUTTING DOWN");
+            System.out.println("Attempting to stop running servers");
+            ServerRunner.exit();
         }));
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
@@ -503,12 +497,43 @@ public class Menu {
 
     public static void checkForUpdate(BufferedReader input) {
         System.out.println("Checking for Toolbox Updates...");
+        String installedVersion = UpdateChecker.getInstalledVersion();
+        if (installedVersion.equals("0.0")) {
+            System.out.println("Toolbox is missing files require to run. The required files will be downloaded automatically.");
+            System.out.println();
+            System.out.println("1. View Latest Release");
+            System.out.println("2. Download");
+            System.out.println("0. Exit");
+            System.out.println();
+            System.out.print("Select Option: ");
+
+            int selection = readInt(input);
+            if (selection == 1) {
+                if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                    try {
+                        Desktop.getDesktop().browse(new URI(UpdateChecker.URL));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                clearConsole();
+                checkForUpdate(input);
+            } else if (selection == 2) {
+                System.out.println("Installing latest version");
+                UpdateChecker.installUpdate();
+                UpdateChecker.runToolbox();
+                return;
+            } else if (selection == 0) {
+                System.out.println("Exiting...");
+                System.exit(0);
+            }
+        }
 
         String update = UpdateChecker.isUpdateAvailable();
         if (update != null) {
             Path versionFile = Paths.get(".toolbox/VERSION");
             if (FileHelper.exists(versionFile)) {
-                System.out.println("Current version: Toolbox 2.0 v" + UpdateChecker.getVersion());
+                System.out.println("Current version: Toolbox 2.0 v" + installedVersion);
                 System.out.println();
                 System.out.println("An update for Toolbox is available: v" + update);
                 System.out.println();
@@ -532,39 +557,8 @@ public class Menu {
 
                 } else if (selection == 2) {
                     System.out.println("Installing update");
-                    UpdateChecker.runAndUpdate();
-                }
-            }
-
-            if (!FileHelper.exists(versionFile)) {
-                System.out.println("Toolbox not installed");
-                System.out.println();
-                System.out.println("Download latest version: v" + update + "?");
-                System.out.println();
-                System.out.println("1. View Release");
-                System.out.println("2. Download latest release");
-                System.out.println("0. Exit");
-                System.out.println();
-                System.out.print("Select Option: ");
-
-                int selection = readInt(input);
-                if (selection == 1) {
-                    if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                        try {
-                            Desktop.getDesktop().browse(new URI(UpdateChecker.URL));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    clearConsole();
-                    checkForUpdate(input);
-
-                } else if (selection == 2) {
-                    System.out.println("Installing latest version");
-                    UpdateChecker.runAndUpdate();
-                } else if (selection == 0) {
-                    System.out.println("Exiting...");
-                    System.exit(0);
+                    UpdateChecker.installUpdate();
+                    UpdateChecker.runToolbox();
                 }
             }
         }

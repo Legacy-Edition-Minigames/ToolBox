@@ -3,6 +3,7 @@ package net.kyrptonaught.ToolBox;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.kyrptonaught.ToolBox.IO.FileHelper;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -20,22 +21,13 @@ public class UpdateChecker {
 
         if (!response.isEmpty()) {
             String latestRelease = response.get(0).getAsJsonObject().get("tag_name").getAsString();
-            if (compareVersions(getVersion(), latestRelease) == -1)
+            if (compareVersions(getInstalledVersion(), latestRelease) == -1)
                 return latestRelease;
             return null;
         }
 
         System.out.println("Failed to check for Toolbox Updates");
         return null;
-    }
-
-    public static void runAndUpdate() {
-        String latestRelease = isUpdateAvailable();
-        if (latestRelease != null) {
-            installUpdate();
-        }
-
-        launchJar(".toolbox/launch.jar", getToolboxRunArgs(), true);
     }
 
     public static void installUpdate() {
@@ -71,23 +63,21 @@ public class UpdateChecker {
         Menu.pressEnterToCont(input);
     }
 
-    private static void launchJar(String jar, List<String> args, Boolean waitfor) {
-        String[] launchCommands = {"java", "-jar", jar};
+    public static void runToolbox() {
+        launchJar(getToolboxRunArgs());
+    }
+
+    private static void launchJar(List<String> args) {
+        String[] launchCommands = {"java", "-jar", ".toolbox/launch.jar"};
 
         args.addAll(0, List.of(launchCommands));
 
         try {
-            ProcessBuilder launcher = new ProcessBuilder(args)
+            new ProcessBuilder(args)
                     .directory(new File(System.getProperty("user.dir")))
-                    .inheritIO();
-
-            Process launchedjar = launcher.start();
-
-            Menu.SKIP_SHUTDOWN_TASKS = true;
-
-            if (waitfor) {
-                launchedjar.waitFor();
-            }
+                    .inheritIO()
+                    .start()
+                    .waitFor();
 
             System.exit(0);
         } catch (Exception e) {
@@ -114,7 +104,7 @@ public class UpdateChecker {
         return comparisonResult;
     }
 
-    public static String getVersion() {
+    public static String getInstalledVersion() {
         Path versionFile = Paths.get(".toolbox/VERSION");
         if (FileHelper.exists(versionFile)) {
             return FileHelper.readFile(versionFile);
@@ -123,17 +113,10 @@ public class UpdateChecker {
         }
     }
 
-    public static void runToolbox() {
-        launchJar(".toolbox/launch.jar", getToolboxRunArgs(), true);
-    }
-
-    public static List<String> getToolboxRunArgs() {
-        List<String> arguments = new ArrayList<String>();
-
+    private static List<String> getToolboxRunArgs() {
+        List<String> arguments = new ArrayList<>();
         arguments.add("--runToolbox");
-
         arguments.addAll(List.of(CMDArgsParser.args));
-
         return arguments;
     }
 }
