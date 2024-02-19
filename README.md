@@ -1,5 +1,5 @@
 # LEM ToolBox
-![forthebadge](https://raw.githubusercontent.com/BraveUX/for-the-badge/master/src/images/badges/made-with-java.svg)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
 
 # **Important Notice**
 
