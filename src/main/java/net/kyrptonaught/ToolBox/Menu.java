@@ -76,7 +76,7 @@ public class Menu {
         System.out.println("If you encounter any problem, try performing a clean reinstall or contact us on our Discord.");
         System.out.println("LEM-ToolBox 2.0 created by Kyrptonaught");
         System.out.println("Legacy Edition Minigames created by DBTDerpbox & Kyrptonaught");
-        System.out.println("Consider donating at Patreon! www.legacyminigames.xyz/patreon");
+        System.out.println("Consider donating at Patreon! www.legacyminigames.net/patreon");
         System.out.println();
         System.out.println("Have fun!");
         System.out.println();
