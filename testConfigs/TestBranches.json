@@ -4,6 +4,11 @@
       "name": "LEM ToolBox Testing",
       "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/toolbox-testing",
       "desc": "LEM branch for testing Toolbox"
+    },
+    {
+      "name": "Battle 1.20.1",
+      "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/battle-1.20.1",
+      "desc": "Old version of Battle for 1.20.1"
     }
   ]
 }
