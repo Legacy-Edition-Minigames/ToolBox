@@ -19,6 +19,11 @@
       "name": "April Fools 2024",
       "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/aprilfools/2024/battle",
       "desc": "April Fools event from 2024 [1.20.4]"
+    },
+    {
+      "name": "Rewrite Testing",
+      "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/rewrite",
+      "desc": "Rewrite Testing [1.21.4]"
     }
   ],
   "config_version": 1
