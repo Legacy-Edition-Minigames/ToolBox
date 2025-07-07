@@ -94,6 +94,7 @@ public class FileHelper {
     public static String readFileFromZip(Path zipFile, String fileName) {
         try (ZipFile zip = new ZipFile(zipFile.toFile())) {
             ZipEntry entry = zip.getEntry(fileName);
+            if (entry == null) entry = zip.getEntry(fileName.replaceAll("\\\\", "/"));
 
             return new String(zip.getInputStream(entry).readAllBytes());
         } catch (Exception e) {

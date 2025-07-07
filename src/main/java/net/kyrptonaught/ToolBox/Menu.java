@@ -167,7 +167,7 @@ public class Menu {
         System.out.println();
         System.out.println("""
                 Choose an action below:
-                                
+                
                 1. Start Server
                 2. Check for Updates
                 3. Verify Integrity
@@ -176,9 +176,9 @@ public class Menu {
                 6. Rename Server
                 7. Reinstall
                 8. Delete
-                                
+                
                 0. Back
-                 """);
+                """);
 
         System.out.print("Action: ");
         int selectedAction = readInt(input);
@@ -286,12 +286,12 @@ public class Menu {
         System.out.println();
         System.out.println("""
                 Choose an action below:
-                                
+                
                 1. Open Console
                 2. Stop Server
-                                
+                
                 0. Back
-                 """);
+                """);
 
         System.out.print("Action: ");
         int selectedAction = readInt(input);
@@ -384,13 +384,13 @@ public class Menu {
 
         System.out.println("""
                 Choose how to import:
-                                
+                
                 1. Discover in /installs folder
                 2. Select from local file system
                 3. Download from URL
-                                
+                
                 0. Back
-                 """);
+                """);
 
         System.out.print("Option: ");
         int selectedAction = readInt(input);
@@ -486,7 +486,7 @@ public class Menu {
 
         System.out.println("""
                 Do you accept the Minecraft's EULA?
-                                
+                
                 For your server to run you must accept Minecraft's EULA.
                 The Minecraft's EULA contains information and rules about what you can do and can't do while using the game.
                 Agreement of the Minecraft's EULA is strictly needed, otherwise your server would be illegal to operate and thus, won't open.
