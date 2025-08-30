@@ -6,6 +6,7 @@ import net.kyrptonaught.ToolBox.configs.BranchesConfig;
 import net.kyrptonaught.ToolBox.holders.InstalledServerInfo;
 import net.kyrptonaught.ToolBox.holders.RunningServer;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -175,7 +176,8 @@ public class Menu {
                 5. Accept EULA
                 6. Rename Server
                 7. Reinstall
-                8. Delete
+                8. Open Directory
+                9. Delete
                 
                 0. Back
                 """);
@@ -256,6 +258,12 @@ public class Menu {
                 pressEnterToCont(input);
             }
         } else if (selectedAction == 8) {
+            try {
+                Desktop.getDesktop().open(serverInfo.getPath().toFile());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (selectedAction == 9) {
             System.out.println("This server and all data associated with it will be permanently deleted.");
             System.out.println("This is irreversible.");
             System.out.println();
