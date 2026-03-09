@@ -1,12 +1,13 @@
+# **Important Notice**
+
+## This is an outdated, BROKEN version of ToolBox, it will not be functional in its current state.
+
+### If you want to selfhost a LEM server, use the [2.0/java version](https://github.com/Legacy-Edition-Minigames/ToolBox/tree/java)
+
 # LEB ToolBox
 ![runs-on-windows-_-linux-_-macos](https://user-images.githubusercontent.com/61473628/185755896-5c8999d0-70a6-4d65-be25-d767d3e090a3.svg)
 ![contains-good-enough-unoptimized-code](https://user-images.githubusercontent.com/61473628/185755898-db74d120-a79d-430c-9aa5-66b173cbffd9.svg)
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
-
-
-# **Important Notice**
-
-## This repository is currently **not supported**, you are free to try to use it but don't expect it to work.
 
 All-in-one tools to manage your own LEB server.
 
