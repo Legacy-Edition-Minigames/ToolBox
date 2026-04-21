@@ -123,15 +123,59 @@ public class Menu {
 
         System.out.println();
         System.out.println("New Servers");
-        if (!branches.branches.isEmpty()) {
+        if (!branches.branches.isEmpty())
             for (BranchesConfig.BranchInfo branch : branches.branches) {
                 serverOptions++;
                 System.out.println(serverOptions + ". " + branch.name + " : " + branch.desc);
                 options.put(serverOptions, () -> setState(State.INSTALLER, branch));
             }
-        } else {
-            System.out.println("--NONE--");
-        }
+        serverOptions++;
+        System.out.println(serverOptions + ". Custom (Specify custom toolbox.json)");
+        options.put(serverOptions, () -> {
+            System.out.println("Create a custom server");
+            System.out.println();
+
+            System.out.println("""
+                    Choose how to import a Branch Config:
+                    
+                    1. Select from local file system
+                    2. Download from URL
+                    
+                    0. Back
+                    """);
+
+            System.out.print("Option: ");
+            int selectedAction = readInt(input);
+            System.out.println();
+
+            if (selectedAction == 1) {
+                System.out.println("Please enter the path of the toolbox.json file (You can also drag and drop the file here)");
+                System.out.print("Path: ");
+                String path = readLine(input).trim();
+                path = "file://" + path.replaceAll("^[\"|']|[\"|']$", "");
+
+                System.out.println();
+                System.out.println("Loading...");
+                BranchConfig config = FileHelper.download(path, BranchConfig.class);
+                AutoHash.autoHash(config);
+                System.out.println();
+                BranchesConfig.CustomBranch custom = new BranchesConfig.CustomBranch(config, path);
+                setState(State.INSTALLER, custom);
+            } else if (selectedAction == 2) {
+                System.out.println("Please enter the URL of the toolbox.json file");
+                System.out.print("URL: ");
+                String path = readLine(input).trim();
+                path = path.replaceAll("^[\"|']|[\"|']$", "");
+
+                System.out.println();
+                System.out.println("Loading...");
+                BranchConfig config = FileHelper.download(path, BranchConfig.class);
+                AutoHash.autoHash(config);
+                System.out.println();
+                BranchesConfig.CustomBranch custom = new BranchesConfig.CustomBranch(config, path);
+                setState(State.INSTALLER, custom);
+            }
+        });
 
         System.out.println();
         System.out.println("Import Servers");
@@ -141,12 +185,39 @@ public class Menu {
         System.out.println();
         System.out.println("Other Options");
         System.out.println("0. Exit");
-
         options.put(0, () -> setState(State.EXIT));
 
-        System.out.println();
+        if (CMDArgsParser.containsArgs("--admin")) {
+            System.out.println("-1. Update Branch Config");
+            options.put(-1, () -> {
+                System.out.println("Please enter the path of the toolbox branch config file (You can also drag and drop the file here)");
+                System.out.print("Path: ");
+                String path = readLine(input).trim();
+                path = path.replaceAll("^[\"|']|[\"|']$", "");
 
-        System.out.print("Select Server: ");
+                BranchConfig config = FileHelper.download("file://" + path, BranchConfig.class);
+                System.out.print("Enter Game Version (Blank for " + config.game_version + "): ");
+                String version = readLine(input);
+                if (version.isBlank()) version = config.game_version;
+                config.game_version = version;
+                System.out.println();
+                System.out.println("Updating Config...");
+                System.out.println("Loader: " + config.loader);
+                System.out.println("Version: " + config.game_version);
+                System.out.println();
+
+                for (BranchConfig.Dependency dependency : config.dependencies) {
+                    Installer.checkForModrinthUpdate(dependency, version, config.loader);
+                }
+                FileHelper.writeFile(Path.of(path), ConfigLoader.serializeToolboxInstall(config));
+
+                System.out.println();
+                pressEnterToCont(input);
+            });
+        }
+
+        System.out.println();
+        System.out.print("Select Option: ");
         int selection = readInt(input);
 
 
@@ -164,6 +235,7 @@ public class Menu {
         System.out.println();
         System.out.println(serverInfo.getName() + " (" + info.name + ")");
         System.out.println(info.desc);
+        System.out.println(serverInfo.getBranchConfig().game_version + "(" + serverInfo.getBranchConfig().loader + ")");
         System.out.println(info.url);
         System.out.println();
         System.out.println("""
@@ -181,6 +253,7 @@ public class Menu {
                 
                 0. Back
                 """);
+
 
         System.out.print("Action: ");
         int selectedAction = readInt(input);
@@ -342,8 +415,13 @@ public class Menu {
         System.out.println("Loading branch: " + branchInfo.name + " (" + branchInfo.url + ")");
         System.out.println();
 
-        String url = GithubHelper.convertRepoToToolboxConfig(branchInfo.url);
-        BranchConfig branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
+        BranchConfig branch;
+        if (branchInfo instanceof BranchesConfig.CustomBranch custom)
+            branch = custom.config;
+        else {
+            String url = GithubHelper.convertRepoToToolboxConfig(branchInfo.url);
+            branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
+        }
 
         if (branch == null) {
             System.out.println();
@@ -365,13 +443,14 @@ public class Menu {
         System.out.println("It's recommended to use at least 3GB of RAM to ensure LEM will work as intended.");
         System.out.println();
         System.out.print("RAM Allocation (GB): ");
-        int allocatedRam = readInt(input);
+        String allocatedRam = readLine(input);
         System.out.println();
 
         InstalledServerInfo serverInfo = new InstalledServerInfo(branch, branchInfo);
         serverInfo.setName(enteredServerName);
+        if (branchInfo instanceof BranchesConfig.CustomBranch) serverInfo.customInstall = true;
         serverInfo.setPath();
-        if (allocatedRam < 1) allocatedRam = 3;
+        if (allocatedRam.isBlank()) allocatedRam = "3";
         serverInfo.setRAMArgs(allocatedRam);
 
         System.out.println("Creating toolbox instance in " + serverInfo.getPath());

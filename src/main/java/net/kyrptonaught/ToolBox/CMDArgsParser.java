@@ -71,13 +71,14 @@ public class CMDArgsParser {
         return containsArgs("--installServer");
     }
 
-    public static int getNewServerRam() {
+    public static String getNewServerRam() {
         for (int i = 0; i < args.length - 1; i++) {
             if (args[i].equalsIgnoreCase("--newServerRam") && !args[i + 1].startsWith("--")) {
-                return Integer.parseInt(args[i + 1]);
+                return args[i + 1];
             }
         }
-        return 3;
+
+        return "3";
     }
 
     public static BranchesConfig.BranchInfo getNewServerBranch() {

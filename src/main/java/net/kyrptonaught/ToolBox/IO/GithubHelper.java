@@ -6,6 +6,7 @@ public class GithubHelper {
     }
 
     public static String convertRepoToToolboxConfig(String repo) {
+        if (repo.startsWith("file://")) return repo;
         return repo.replace("github.com", "raw.githubusercontent.com").replace("tree/", "") + "/.toolbox/toolbox.json";
     }
 

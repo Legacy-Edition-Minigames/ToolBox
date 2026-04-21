@@ -18,6 +18,8 @@ public class InstalledServerInfo {
 
     private String installName;
 
+    public boolean customInstall;
+
     private final HashMap<String, String> launchARGS = new HashMap<>();
 
     public InstalledServerInfo(BranchConfig branchConfig, BranchesConfig.BranchInfo branchInfo) {
@@ -40,7 +42,7 @@ public class InstalledServerInfo {
         installName = name;
     }
 
-    public void setRAMArgs(int ram) {
+    public void setRAMArgs(String ram) {
         setCustomLaunchArgs("<ram>", "-Xmx" + ram + "G -Xms" + ram + "G");
     }
 
@@ -61,6 +63,10 @@ public class InstalledServerInfo {
 
     public BranchesConfig.BranchInfo getBranchInfo() {
         return branchInfo;
+    }
+
+    public BranchConfig getBranchConfig() {
+        return branchConfig;
     }
 
     public void setPath(Path path) {

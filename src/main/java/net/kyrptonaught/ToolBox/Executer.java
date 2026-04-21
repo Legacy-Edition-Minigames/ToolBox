@@ -35,6 +35,7 @@ public class Executer {
     public static void updateServer(InstalledServerInfo serverInfo) {
         String url = GithubHelper.convertRepoToToolboxConfig(serverInfo.getBranchInfo().url);
         BranchConfig branch = ConfigLoader.parseToolboxConfig(FileHelper.download(url));
+        if (serverInfo.customInstall) AutoHash.autoHash(branch);
         serverInfo.updateBranchConfig(branch);
         Installer.installAndCheckForUpdates(serverInfo);
     }

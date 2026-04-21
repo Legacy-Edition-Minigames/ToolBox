@@ -9,11 +9,12 @@ public class InstalledDependencyInfo extends BranchConfig.Dependency {
     public List<String> installedFiles;
 
     public InstalledDependencyInfo(BranchConfig.Dependency dependency) {
+        this.type = dependency.type;
         this.name = dependency.name;
         this.displayName = dependency.displayName;
         this.url = dependency.url;
         this.location = dependency.location;
-        this.gitRepo = dependency.gitRepo;
-        this.unzip = dependency.unzip;
+        this.optional = dependency.optional;
+        this.ignore = dependency.ignore;
     }
 }

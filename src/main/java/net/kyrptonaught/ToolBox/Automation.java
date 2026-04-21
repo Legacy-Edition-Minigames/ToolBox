@@ -63,8 +63,8 @@ public class Automation {
         if (name != null) serverInfo.setName(name);
         serverInfo.setPath();
 
-        int allocatedRam = CMDArgsParser.getNewServerRam();
-        if (allocatedRam < 1) allocatedRam = 3;
+        String allocatedRam = CMDArgsParser.getNewServerRam();
+        if (allocatedRam.isBlank()) allocatedRam = "3";
         serverInfo.setRAMArgs(allocatedRam);
 
         Installer.installAndCheckForUpdates(serverInfo);

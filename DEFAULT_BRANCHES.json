@@ -3,27 +3,27 @@
     {
       "name": "Battle 1.20.4",
       "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/battle-1.20.4",
-      "desc": "Latest version of Battle for 1.20.4 (Recommended)"
-    },
-    {
-      "name": "LEM ToolBox Testing",
-      "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/toolbox-testing",
-      "desc": "LEM branch for testing Toolbox [1.20.4]"
+      "desc": "Latest Version of Battle 1.0 [1.20.4] (Recommended)"
     },
     {
       "name": "Battle 1.20.1",
       "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/battle-1.20.1",
-      "desc": "Old version of Battle for 1.20.1"
+      "desc": "Archived Version of Battle [1.20.1]"
     },
     {
       "name": "April Fools 2024",
       "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/aprilfools/2024/battle",
-      "desc": "April Fools event from 2024 [1.20.4]"
+      "desc": "April Fools Event from 2024. (Terraria) [1.20.4]"
     },
     {
-      "name": "Rewrite Testing",
+      "name": "April Fools 2026",
+      "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/aprilfools/2026/battle",
+      "desc": "April Fools Event from 2026. (MODTOOLS!!!!!) [1.20.4]"
+    },
+    {
+      "name": "Battle 2.0",
       "url": "https://github.com/Legacy-Edition-Minigames/Minigames/tree/rewrite",
-      "desc": "Rewrite Testing [1.21.8]"
+      "desc": "Battle 2.0 / Rewrite [26.1.2]"
     }
   ],
   "config_version": 1
