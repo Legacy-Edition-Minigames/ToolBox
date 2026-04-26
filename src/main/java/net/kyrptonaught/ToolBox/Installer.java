@@ -134,7 +134,7 @@ public class Installer {
         clearOldFiles(serverInfo, dependency.installedFiles);
 
         List<String> installedFiles;
-        if (dependency.type == BranchConfig.TYPE.ZIP) {
+        if (dependency.type == BranchConfig.TYPE.ZIP || dependency.type == BranchConfig.TYPE.GIT) {
             installedFiles = FileHelper.unzipFile(downloadPath, destination, true);
         } else {
             installedFiles = FileHelper.copyFile(downloadPath, destination.resolve(dependency.name));
@@ -150,7 +150,7 @@ public class Installer {
         Path destination = serverInfo.getDependencyInstallPath(dependency);
         FileHelper.createDir(destination);
 
-        if (dependency.type == BranchConfig.TYPE.ZIP) {
+        if (dependency.type == BranchConfig.TYPE.ZIP || dependency.type == BranchConfig.TYPE.GIT) {
             List<String> installedFiles = new ArrayList<>(List.copyOf(dependency.installedFiles));
             if (installedFiles != null) {
                 Path unzipPath = serverInfo.getTempPath(dependency);
