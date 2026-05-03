@@ -43,7 +43,7 @@ public class InstalledServerInfo {
     }
 
     public void setRAMArgs(String ram) {
-        setCustomLaunchArgs("<ram>", "-Xmx" + ram + "G -Xms" + ram + "G");
+        setCustomLaunchArgs("<ram>", "-Xmx" + ram + "M -Xms" + ram + "M");
     }
 
     public void setCustomLaunchArgs(String key, String args) {

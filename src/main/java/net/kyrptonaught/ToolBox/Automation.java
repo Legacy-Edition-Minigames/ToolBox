@@ -65,7 +65,8 @@ public class Automation {
 
         String allocatedRam = CMDArgsParser.getNewServerRam();
         if (allocatedRam.isBlank()) allocatedRam = "3";
-        serverInfo.setRAMArgs(allocatedRam);
+        String mb = String.valueOf((int) (Double.parseDouble(allocatedRam) * 1024));
+        serverInfo.setRAMArgs(mb);
 
         Installer.installAndCheckForUpdates(serverInfo);
         if (CMDArgsParser.doesNewServerAgreeToEULA()) {

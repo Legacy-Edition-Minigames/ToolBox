@@ -451,7 +451,8 @@ public class Menu {
         if (branchInfo instanceof BranchesConfig.CustomBranch) serverInfo.customInstall = true;
         serverInfo.setPath();
         if (allocatedRam.isBlank()) allocatedRam = "3";
-        serverInfo.setRAMArgs(allocatedRam);
+        String mb = String.valueOf((int) (Double.parseDouble(allocatedRam) * 1024));
+        serverInfo.setRAMArgs(mb);
 
         System.out.println("Creating toolbox instance in " + serverInfo.getPath());
         Installer.installAndCheckForUpdates(serverInfo);
