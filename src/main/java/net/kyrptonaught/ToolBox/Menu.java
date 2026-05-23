@@ -206,9 +206,8 @@ public class Menu {
                 System.out.println("Version: " + config.game_version);
                 System.out.println();
 
-                for (BranchConfig.Dependency dependency : config.dependencies) {
-                    Installer.checkForModrinthUpdate(dependency, version, config.loader);
-                }
+                AutoHash.autoHash(config);
+
                 FileHelper.writeFile(Path.of(path), ConfigLoader.serializeToolboxInstall(config));
 
                 System.out.println();

@@ -13,6 +13,11 @@ public class ConfigLoader {
             .setPrettyPrinting()
             .create();
 
+    public static Gson gson2 = new Gson().newBuilder()
+            .setLenient()
+            .disableHtmlEscaping()
+            .create();
+
     public static BranchesConfig parseBranches(String json) {
         return gson.fromJson(json, BranchesConfig.class);
     }

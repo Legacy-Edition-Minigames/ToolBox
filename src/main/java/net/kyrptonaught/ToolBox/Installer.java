@@ -1,6 +1,5 @@
 package net.kyrptonaught.ToolBox;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.kyrptonaught.ToolBox.IO.ConfigLoader;
 import net.kyrptonaught.ToolBox.IO.FileHelper;
@@ -211,24 +210,5 @@ public class Installer {
             return ConfigLoader.parseInstalledDependency(FileHelper.readFile(serverInfo.getInstalledDependencyPath(dependency)));
         }
         return null;
-    }
-
-    public static void checkForModrinthUpdate(BranchConfig.Dependency dependency, String gameVersion, String loader) {
-        if (dependency.type == BranchConfig.TYPE.MODRINTH) {
-            JsonObject urlOBJ = ConfigLoader.gson.fromJson(dependency.url, JsonObject.class);
-            String id = urlOBJ.get("id").getAsString();
-            String version = urlOBJ.get("version").getAsString();
-
-            JsonArray obj = FileHelper.download("https://api.modrinth.com/v2/project/" + id + "/version?game_versions=[%22" + gameVersion + "%22]&loaders=[%22" + loader.toLowerCase() + "%22]&include_changelog=false", JsonArray.class);
-            if (obj.isEmpty()) {
-                System.out.println(dependency.name + "(" + id + "): Skipping");
-                return;
-            }
-            urlOBJ.addProperty("version", obj.get(0).getAsJsonObject().get("id").getAsString());
-
-            System.out.println(dependency.name + "(" + id + "): " + version + " -> " + obj.get(0).getAsJsonObject().get("version_number").getAsString() + "(" + urlOBJ.get("version").getAsString() + ")");
-
-            dependency.url = ConfigLoader.serializeToolboxInstall(urlOBJ);
-        }
     }
 }
