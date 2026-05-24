@@ -1,4 +1,4 @@
-# LEM ToolBox
+# ![LEM Toolbox](https://github.com/user-attachments/assets/ac63610e-e2d3-4309-bed7-3f2f7d450bac) LEM ToolBox
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
 
